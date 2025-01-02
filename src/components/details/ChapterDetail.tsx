@@ -18,7 +18,6 @@ const ChapterDetail = ({ chapterId, lessonId }: any) => {
     const { toast } = useToast();
     const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
     const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
-    const previewVideoSource = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_SOURCE;
     const { chaptersDetail } = ChapterApi()
     const [chapter, setChapter]: any = useState({});
     const [loading, setLoading]: any = useState(false);
@@ -152,7 +151,7 @@ const ChapterDetail = ({ chapterId, lessonId }: any) => {
                                                                         src:
                                                                             (data?.path.endsWith(".m3u8")
                                                                                 ? previewVideo
-                                                                                : previewVideoSource) + data?.path,
+                                                                                : previewVideo) + data?.path,
                                                                         type: VideoExtension(data?.mimeType || data?.path),
                                                                     },
                                                                 ],

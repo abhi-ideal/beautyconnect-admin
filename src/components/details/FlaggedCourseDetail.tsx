@@ -20,7 +20,6 @@ const FlaggedCourseDetail = (props: any) => {
     const { flaggedReasonList } = ReportApi();
     const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
     const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
-    const previewVideoSource = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_SOURCE;
     const [reason, setReason]: any = useState({});
     const [loading, setLoading]: any = useState(false);
 
@@ -135,7 +134,7 @@ const FlaggedCourseDetail = (props: any) => {
                                                 const videoJsOptions = {
                                                     autoplay: false, controls: true, responsive: true, fluid: false, aspectRatio: "16:9",
                                                     sources: [{
-                                                        src: (album?.path.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (album?.path ? album?.path : album?.url),
+                                                        src: (album?.path.endsWith('.m3u8') ? previewVideo : previewVideo) + (album?.path ? album?.path : album?.url),
                                                         type: VideoExtension(album?.mimeType ? album.mimeType : album?.path),
                                                     }],
                                                 };
@@ -145,7 +144,7 @@ const FlaggedCourseDetail = (props: any) => {
                                                     <CarouselItem key={i}>
                                                         {album?.mimeType?.includes("image") ?
                                                             <Image src={previewImgUrl + album.path} alt={album.name} width={250} height={330} className="w-[250px]" />
-                                                            : <ReactVideoPlayer url={(album?.path.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (album?.path ? album?.path : album?.url)} controls={true} width="" height="" />
+                                                            : <ReactVideoPlayer url={(album?.path.endsWith('.m3u8') ? previewVideo : previewVideo) + (album?.path ? album?.path : album?.url)} controls={true} width="" height="" />
                                                             // <div className='video-full'> <VideoPlayer options={videoJsOptions} onReady={handlePlayerReady} /></div>
                                                             }
                                                     </CarouselItem>

@@ -13,19 +13,16 @@ export default function dashboardApi() {
     try {
       const api = (data?.startDate !== "" ? '?startDate='+ moment(data?.startDate).format('YYYY-MM-DD')+'&' : "")+(data?.endDate !== "" ? 'endDate=' + moment(data?.endDate).format('YYYY-MM-DD') : "");
       const url1 = routes.DASHBOARD();
-      const url2 = routes.JOB_COUNT();
       const accessToken = await getAccessToken();
       const response1 :any = (await fetch(url1+api, { headers: { Authorization: 'Bearer ' + accessToken } }));
-      const response2 :any = (await fetch(url2+api, { headers: { Authorization: 'Bearer ' + accessToken } }));
 
       const responseData1 = await response1.json();
-      const responseData2 = await response2.json();
-      if (!(response1.ok || response2.ok)) {
-          if (response1?.status === 401 || response1?.status === 403 || response2?.status === 401 || response2?.status === 403) {
+      if (!(response1.ok)) {
+          if (response1?.status === 401 || response1?.status === 403 ) {
                errorHandle(response1?.status);
           }
       }
-      return { responseData1, responseData2 };
+      return { responseData1 };
     } catch (error:any) {
       return { error: true, errorMessage: error?.message };
     }

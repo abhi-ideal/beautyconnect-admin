@@ -25,7 +25,6 @@ const CourseDetail = (props: any) => {
     const [courseContentList, setCourseContentList]: any = useState([]);
     const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
     const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
-    const previewVideoSource = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_SOURCE;
     const { id, type } = props?.data
     const [loading, setLoading]: any = useState(false);
     const [showPDF, setShowPDF]: any = useState(false);

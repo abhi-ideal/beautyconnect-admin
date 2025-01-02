@@ -19,13 +19,15 @@ const LocationInput = (props: any) => {
     }
   }, [path == "/location"]);
 
+  const mapKey= ""; //process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY;
+  const currentLocation=""; // NEXT_PUBLIC_GOOGLE_CURRENT_LOCATION
   const getCurrentLocation = () => {
     setIsLoading(true);
     if (navigator.geolocation) {
 
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          const res: any = await axios.get(`${process.env.NEXT_PUBLIC_GOOGLE_CURRENT_LOCATION}?latlng=${position.coords.latitude},${position.coords.longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`);
+          const res: any = await axios.get(`${currentLocation}?latlng=${position.coords.latitude},${position.coords.longitude}&key=${mapKey}`);
           let address_components: any = res?.data?.results[0];
           address_components.latitude = position?.coords?.latitude;
           address_components.longitude = position?.coords?.longitude;
@@ -43,7 +45,7 @@ const LocationInput = (props: any) => {
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`,
+    googleMapsApiKey: `${mapKey}`,
     libraries: ["places"]
   });
 

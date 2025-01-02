@@ -4,7 +4,6 @@ const feedBaseUrl: any = `${process.env.NEXT_PUBLIC_FEED_API}`;
 const commonBaseUrl: any = `${process.env.NEXT_PUBLIC_COMMON_API}`;
 const ContentHost: any = `${process.env.NEXT_PUBLIC_CONENTHOST}`;
 const authBaseUrl: any = `${process.env.NEXT_PUBLIC_AUTH_API}`;
-const JobHost: any = `${process.env.NEXT_PUBLIC_JOB_API}`;
 const courseHost :any= `${process.env.NEXT_PUBLIC_COURSE_API}`
 
 const routes = {
@@ -33,16 +32,6 @@ const routes = {
       params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
       params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
     }${
-      params?.direction !== "" ? `orderType=${params?.direction}&` : ""
-    }offset=${params?.offset}&limit=${params?.limit}`,
-  JOB_LIST: (params: any) => 
-    `${JobHost}jobs-list?${
-      params?.title !== "" ? `title=${params?.title}&` : ""}${
-      params?.description !== "" ? `description=${params?.description}&` : ""}${
-      !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""}${
-      params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
-      params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
-      params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""}${
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""
     }offset=${params?.offset}&limit=${params?.limit}`,
   COURSE_LIST: (params: any) => 
@@ -109,15 +98,6 @@ const routes = {
       params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""}${
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""
     }offset=${params?.offset}&limit=${params?.limit}`,
-  JOB_REPORT_LIST:(params:any)=>
-    `${JobHost}report-list?${
-      params?.name !== "" ? `name=${params?.name}&` : ""}${
-      !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""}${
-      params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
-      params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
-      params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""}${
-      params?.direction !== "" ? `orderType=${params?.direction}&` : ""
-    }offset=${params?.offset}&limit=${params?.limit}`,
   COURSE_REPORT_LIST:(params:any)=>
       `${courseHost}report-list?${
         params?.name !== "" ? `name=${params?.name}&` : ""}${
@@ -175,7 +155,6 @@ const routes = {
   CHILD_COMMENT_LIST:(params:any)=>
     `${feedBaseUrl}feed/${params?.id}/comment?parentId=${params?.commentId}?offset=${params?.offset}&limit=${params?.limit}`,
   DASHBOARD: () => `${userBaseUrl}dashboard`,
-  JOB_COUNT: () => `${JobHost}job-count/`,
   CATEGORY:() => `${commonBaseUrl}category`,
   USER_UPDATE: () => `${userBaseUrl}profile/`,
   USER_DETAIL: (id: any) => `${userBaseUrl}profile/${id}`,
@@ -187,8 +166,6 @@ const routes = {
   UPDATE_PROFILE: () => `${userBaseUrl}profile`,
   USER_REPORT:(id:any)=>`${userBaseUrl}users/report/${id}`,
   FEED_REPORT:(id:any)=>`${feedBaseUrl}feeds/report/${id}`,
-  JOB_REPORT_DETAIL:(id:any)=>`${JobHost}report-detail/${id}`,
-  JOB_REPORT_DELETE:(id:any)=>`${JobHost}report-delete/${id}`,
   COURSE_REPORT_DETAIL:(id:any)=>`${courseHost}report-detail/${id}`,
   COURSE_REPORT_DELETE:(id:any)=>`${courseHost}report-delete/${id}`,
   IMAGE_URL:() => `${commonBaseUrl}uploadUrl`,
@@ -202,8 +179,6 @@ const routes = {
   SKILL:()=>`${commonBaseUrl}skills`,
   SKILL_DELETE:(id:any)=>`${userBaseUrl}skills`,
   SKILL_UPDATE:(id:any)=>`${userBaseUrl}skills`,
-  JOB_DETAIL:(id:any)=>`${JobHost}admin-jobs-details/${id}`,
-  JOB_UPDATE:(id:any)=>`${JobHost}status-update/${id}`,
   POST:(id:any)=>`${feedBaseUrl}feed/${id}`,
   POST_DETAIL:(id:any)=>`${feedBaseUrl}feed/${id}`,
   COURSE:(id:any)=>`${courseHost}course/${id}`,

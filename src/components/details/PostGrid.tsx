@@ -45,7 +45,6 @@ const PostGrid = (props: any) => {
   const { toast } = useToast();
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
   const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
-  const previewVideoSource = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_SOURCE;
   const [open, setOpen] = React.useState(false);
   const [slide, setSlide]:any = React.useState([]);
     const [slideIndex, setSlideIndex] = useState<number>(0); 
