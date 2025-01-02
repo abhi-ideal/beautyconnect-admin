@@ -1,0 +1,415 @@
+"use client"
+import Link from "next/link";
+import { ContentLayout } from "@/components/admin-panel/content-layout";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tag, RotateCcw, Users, MicVocal, Package, Gem, BriefcaseBusiness, StickyNote } from "lucide-react";
+import { CartesianGrid, XAxis, LabelList, YAxis, Line, LineChart } from "recharts"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent
+} from "@/components/ui/chart";
+import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import dashboardApi from "@/api/dashboard";
+import { CalendarDateRangePicker } from '@/components/ui/date-range-picker';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
+import Image from "next/image";
+import moment from "moment";
+import { Badge } from "@/components/ui/badge"
+
+const userChartConfig = {
+  users: {
+    label: "Users",
+    color: "cyan",
+  },
+  jobs: {
+    label: "Jobs",
+    color: "blue",
+  },
+  courses: {
+    label: "Courses",
+    color: "lime",
+  },
+  feeds: {
+    label: "Feeds",
+    color: "orange",
+  },
+} satisfies ChartConfig
+
+
+export default function DashboardPage() {
+  const { toast } = useToast();
+  const currentDate = moment();
+  const firstOfMonth = currentDate.clone().startOf('month');
+  const [date, setDate] = React.useState<any>();
+  const [grapgDate, setGraphDate] = React.useState<any>({
+    from: firstOfMonth.toDate(),
+    to: currentDate.toDate(),
+  });
+  const today = new Date();
+
+  const disabledDates = {
+    after: today
+  };
+
+  const { getDashboardCount, getGraphData }: any = dashboardApi();
+  const [dashboardCount, setDashboardCount]: any = useState({});
+  const [chartUser, setChartUser]: any = useState([]);
+  const [loading, setLoading]: any = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    // getData()
+  }, [])
+
+  useEffect(() => {
+    // getGraph();
+  }, [grapgDate?.to])
+
+  const monthName: any = ["Jan", "Fab", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const getGraph = async () => {
+    const body = {
+      from: grapgDate?.from ? grapgDate?.from : '',
+      to: grapgDate?.to ? grapgDate?.to : '',
+    }
+    await getGraphData(body).then((res: any) => {
+      let loop = new Date(body.from);
+      const filterDay=[]
+      const filterMonths :any= [];
+      while (loop <= body.to) {
+        filterDay.push(loop.getDate());
+        loop.setDate(loop.getDate() + 1);
+      }
+      const start = moment(body?.from).startOf("month");
+      const end = moment(body.to).endOf("month");
+      for ( let currentMonth = start.clone(); currentMonth.isSameOrBefore(end); currentMonth.add(1, "month")) {
+        filterMonths.push(currentMonth.format('MM'));
+      };
+      let result=[];
+      if (res?.type==="monthly") {
+        filterDay.map((day:number)=>{
+          const userCount = res?.usersGraph?.find((item: any) => item?.day === day)?.counts || 0;
+          const jobCount = res?.jobsGraph?.find((item: any) => item?.day === day)?.counts || 0;
+          const courseCount = res?.coursesGraph?.find((item: any) => item?.day === day)?.counts || 0;
+          const feedCount = res?.feedsGraph?.find((item: any) => item?.day === day)?.counts || 0;
+          result.push(
+            {  
+              month: day,
+              users: userCount,
+              jobs: jobCount,
+              courses: courseCount,
+              feeds: feedCount
+            }
+          );
+        })
+      } else if(res?.type==="yearly") {
+        result = filterMonths?.map((i:number) => {
+            const userCount = res?.usersGraph?.find((item:any) => item?.month == i)?.counts || 0;
+            const jobCount = res?.jobsGraph?.find((item:any) => item?.month == i)?.counts || 0;
+            const courseCount = res?.coursesGraph?.find((item:any) => item?.month == i)?.counts || 0;
+            const feedCount = res?.feedsGraph?.find((item:any) => item?.month == i)?.counts || 0;
+        
+            return {
+                month:monthName[Number(i-1)],
+                users: userCount,
+                jobs: jobCount,
+                courses: courseCount,
+                feeds: feedCount
+            };
+      });
+    }
+      setChartUser(result);
+    })
+  }
+
+  const getData = async () => {
+
+    const body = {
+      startDate: date?.from ? date?.from : '',
+      endDate: date?.to ? date?.to : '',
+    }
+    setLoading(true)
+    await getDashboardCount(body).then((res: any) => {
+      if (!res?.error) {
+        const result = { ...res?.responseData1, ...res?.responseData2 };
+        setDashboardCount(result);
+        setLoading(false)
+      } else {
+        toast({
+          title: res?.errorMessage ? res?.errorMessage : "Uh oh! Something went wrong.",
+          variant: "destructive", description: res?.error
+        });
+        setLoading(true)
+        setDashboardCount({});
+      }
+    })
+  }
+  const shimmer = [...Array(4)];
+  const resetDate = (type: string) => {
+    if (type == 'dashboard') {
+      setDate(null);
+      getData();
+    } else {
+      setGraphDate({
+        from: firstOfMonth.toDate(),
+        to: currentDate.toDate(),
+      });
+      getGraph();
+    }
+  };
+
+  return (
+    <ContentLayout title="Dashboard">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Dashboard</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-4 md:p-8">
+
+        <div className="flex items-center justify-between space-y-2">
+          {/* <h2 className="text-3xl font-bold tracking-tight">
+            Hi, Welcome back 👋
+          </h2> */}
+          <div className="hidden items-center space-x-2 md:flex">
+            <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} />
+            <Button disabled={loading} onClick={getData} >Date Filter</Button>
+            <Button disabled={loading} onClick={() => resetDate('dashboard')} ><RotateCcw /></Button>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
+            {shimmer.map((index) => (
+              <Card key={index} x-chunk="dashboard-01-chunk-3">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <Skeleton className="h-4 w-[150px]" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-4 w-[150px]" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
+          <Link href="/users">
+            <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{dashboardCount?.totalUsers || 0}</div>
+              </CardContent>
+            </Card>
+            </Link>
+
+
+            <Link href="/posts">
+                <Card x-chunk="dashboard-01-chunk-3">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total Posts
+                    </CardTitle>
+                    <StickyNote className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {dashboardCount?.totalFeedPost
+                        ? dashboardCount?.totalFeedPost
+                        : 0}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              
+
+              <Link href="/courses">
+                <Card x-chunk="dashboard-01-chunk-3">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total Courses
+                    </CardTitle>
+                    <StickyNote className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {dashboardCount?.totalFeedPost
+                        ? dashboardCount?.totalFeedPost
+                        : 0}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              {/* <Link href="/skills">
+            <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Skills</CardTitle>
+                <Gem className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{dashboardCount?.totalSkills || 0}</div>
+              </CardContent>
+            </Card>
+            </Link> */}
+            <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer" >
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Course Revenue</CardTitle>
+                <Gem className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{dashboardCount?.totalSkills || 0}</div>
+              </CardContent>
+            </Card>
+
+  
+          </div>)}
+
+
+
+      </main>
+
+
+      <div className="w-full flex flex-col gap-6 p-6 sm:p-8">
+        <div className="grid w-full gap-4 md:gap-6">
+          <Card className="w-full">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="font-bold tracking-tight">Chart</CardTitle>
+                <Badge className={`bg-${userChartConfig?.users?.color}-500`}>{userChartConfig?.users?.label}</Badge>
+                <Badge className={`bg-${userChartConfig?.courses?.color}-500`}>{userChartConfig?.courses?.label}</Badge>
+                <Badge className={`bg-${userChartConfig?.feeds?.color}-500`}>{userChartConfig?.feeds?.label}</Badge>
+                <Badge className={`bg-${userChartConfig?.jobs?.color}-500`}>{userChartConfig?.jobs?.label}</Badge>
+                <div className="hidden items-center space-x-2 md:flex">
+                  <CalendarDateRangePicker date={grapgDate} setDate={setGraphDate} disabledDates={disabledDates} />
+                  <Button disabled={loading} onClick={() => resetDate('graph')} className="flex items-center justify-center"><RotateCcw /></Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {!chartUser.length ? (
+                <div className="flex justify-center py-20">
+                  <Image src="/no-data.svg" alt="No Data" width={320} height={320} priority className="size-[150px]"/>
+                </div>
+              ) : (
+                <ChartContainer config={userChartConfig}>
+                  <LineChart
+                    accessibilityLayer
+                    data={chartUser}
+                    margin={{
+                      top: 20,
+                      left: 20,
+                      right: 20,
+                      bottom: 40, // Adjusted for X-axis label
+                    }}
+                  >
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="month"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                    // tickFormatter={(value) => value.slice(0, 3)}
+                    />
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      tickCount={5}
+                    />
+                    <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                    <Line
+                      dataKey="feeds"
+                      type="monotone"
+                      stroke="var(--color-feeds)"
+                      strokeWidth={2}
+                      dot={{ fill: "var(--color-feeds)" }}
+                      activeDot={{ r: 6 }}
+                    >
+                      <LabelList
+                        position="top"
+                        offset={12}
+                        className="fill-foreground"
+                        fontSize={12}
+                      />
+                    </Line>
+                    <Line
+                      dataKey="users"
+                      type="monotone"
+                      stroke="var(--color-users)"
+                      strokeWidth={2}
+                      dot={{ fill: "var(--color-users)" }}
+                      activeDot={{ r: 6 }}
+                    >
+                      <LabelList
+                        position="top"
+                        offset={12}
+                        className="fill-foreground"
+                        fontSize={12}
+                      />
+                    </Line>
+                    <Line
+                      dataKey="jobs"
+                      type="monotone"
+                      stroke="var(--color-jobs)"
+                      strokeWidth={2}
+                      dot={{ fill: "var(--color-jobs)" }}
+                      activeDot={{ r: 6 }}
+                    >
+                      <LabelList
+                        position="top"
+                        offset={12}
+                        className="fill-foreground"
+                        fontSize={12}
+                      />
+                    </Line>
+                    <Line
+                      dataKey="courses"
+                      type="monotone"
+                      stroke="var(--color-courses)"
+                      strokeWidth={2}
+                      dot={{ fill: "var(--color-courses)" }}
+                      activeDot={{ r: 6 }}
+                    >
+                      <LabelList
+                        position="top"
+                        offset={12}
+                        className="fill-foreground"
+                        fontSize={12}
+                      />
+                    </Line>
+                  </LineChart>
+                </ChartContainer>
+              )}
+            </CardContent>
+          </Card>
+
+        </div>
+      </div>
+
+    </ContentLayout>
+  );
+}

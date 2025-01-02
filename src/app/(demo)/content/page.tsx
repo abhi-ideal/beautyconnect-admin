@@ -1,0 +1,97 @@
+"use client";
+import Link from "next/link";
+import { ContentLayout } from "@/components/admin-panel/content-layout";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import { SidebarNav } from "@/components/ui/sidebar-nav";
+import Image from "next/image";
+import { Loader2 } from "lucide-react";
+import ContentApi from "@/api/contentApi";
+
+export default function ContentPage() {
+  const { getContentFiles } = ContentApi();
+  const [value, setValue]: any = useState("");
+  const [circleLoader, setCircleLoader]: any = useState(false);
+
+  useEffect(() => { getData(); }, []);
+
+  const getData = async () => {
+    setCircleLoader(true);
+    await getContentFiles('privacy_policy').then((res: any) => {
+      if (!res?.error) {
+        setValue(res?.responseData?.content);
+        setCircleLoader(false);
+      } else {
+        setCircleLoader(false);
+        setValue("");
+      }
+    });
+  };
+
+  const sidebarNavItems = [
+    { title: "Privacy Policy", href: "content/privacy_policy" },
+    { title: "Terms & Conditions", href: "content/terms_and_conditions" },
+  ];
+
+  return (
+    <>
+      <ContentLayout title="Content">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Content</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="hidden space-y-6 p-3 md:block">
+          <Separator />
+          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+            <aside className="-mx-4 lg:w-1/5">
+              <SidebarNav items={sidebarNavItems} />
+            </aside>
+            <div className="flex-[1_0_0%] [&>div>*:nth-last-child(-n_+_1)]:justify-end">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-center">{sidebarNavItems[0]?.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 h-[calc(100vh_-_374px)] overflow-y-auto">
+                  {circleLoader ? (
+                    <div className="p-6 h-full flex justify-center items-center">
+                      <Loader2 className="my-28 dark:text-white h-[100px] w-[100px] text-primary animate-spin" />
+                    </div>
+                  ) : !value ? (
+                    <div className="p-6 h-full flex flex-col justify-center items-center">
+                      <Image src="/no-data.svg" alt="Logo" width={320} height={320} priority className="size-[150px]"/>
+                      <span className="font-semibold text-lg">No Record Found</span>
+                    </div>
+                  ) : (
+                    <div
+                      contentEditable="false"
+                      dangerouslySetInnerHTML={{ __html: value }}
+                    ></div>
+                  )}
+                </CardContent>
+
+                <Separator className="my-2" />
+                <CardFooter>
+                  <Link href={!circleLoader ? `/${sidebarNavItems[0]?.href}` : "#"}>
+                    <Button disabled={circleLoader} >Edit {sidebarNavItems[0]?.title}</Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </ContentLayout>
+    </>
+  );
+}
