@@ -99,6 +99,8 @@ export const useGetLessons = ({
         pagination,
         courseId
       }),
+      refetchOnWindowFocus: false, // Disable refetching on window focus
+      staleTime: 300000, // Set stale time to 5 minutes (optional)
   });
   return { allLessonsData, isAllLessonsDataLoading };
 };

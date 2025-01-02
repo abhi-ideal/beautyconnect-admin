@@ -90,7 +90,7 @@ export default function TanStackBasicTableFilterComponent<TData>({
 
         <Tooltip delayDuration={100}>
           <TooltipTrigger>
-          <Button onClick={()=>reset()}><RotateCcw /></Button>
+          <Button disabled={!date} onClick={()=>reset()}><RotateCcw /></Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
             <p>Reset</p>

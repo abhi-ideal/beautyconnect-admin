@@ -99,6 +99,8 @@ export const useGetChapters = ({
         pagination,
         lessonId
       }),
+      refetchOnWindowFocus: false, // Disable refetching on window focus
+      staleTime: 300000, // Set stale time to 5 minutes (optional)
   });
   return { allChaptersData, isAllChaptersDataLoading };
 };

@@ -54,7 +54,8 @@ const getAllUsersFn: ({
 
   const storedTime: any = sessionStorage.getItem("userSession");
   const currentTime = new Date();
-  const LFT = storedTime && Math.abs(currentTime.getTime() - new Date(storedTime).getTime()) <= 3000 ? new Date(storedTime).getTime() : "";
+  const LFT = new Date(storedTime).getTime();
+  // const LFT = storedTime && Math.abs(currentTime.getTime() - new Date(storedTime).getTime()) <= 3000 ? new Date(storedTime).getTime() : "";
   // set sorting
   let sorting_param = "";
   let direction = ""
@@ -109,6 +110,8 @@ export const useGetUsers = ({
         columnFilters,
         pagination
       }),
+      refetchOnWindowFocus: false, // Disable refetching on window focus
+      staleTime: 300000, // Set stale time to 5 minutes (optional)
   }); 
   return { allUsersData, isAllUsersDataLoading };
 };

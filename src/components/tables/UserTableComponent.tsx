@@ -60,13 +60,13 @@ const UserTableComponent = () => {
   const [allUsers, setAllUsers]: any = useState([]);
   const [lastFetchTime, setLastFetchTime] = useState<any>(null);
   const [timeSinceFetch, setTimeSinceFetch] = useState<string>("");
-
+  
   useEffect(() => {
     const storedTime = sessionStorage.getItem("userSession");
     if (storedTime) {
       setLastFetchTime(new Date(storedTime));
     } else {
-      resetLastTime();
+      resetLastTime('setTime');
     }
     if(allUsersData?.error){
       404 != allUsersData?.status && toast({
@@ -80,7 +80,7 @@ const UserTableComponent = () => {
 
   useEffect(() => {
     if (lastFetchTime) {
-      const interval = setInterval(() => {
+      const updateTimeSinceFetch = () => {
         const currentTime = new Date();
         const diffInSeconds = Math.floor((currentTime.getTime() - lastFetchTime.getTime()) / 1000);
         if (diffInSeconds < 60) {
@@ -89,22 +89,24 @@ const UserTableComponent = () => {
           const diffInMinutes = Math.floor(diffInSeconds / 60);
           setTimeSinceFetch(`${diffInMinutes} minutes ago`);
         }
-      }, 5000);
+      };
+      updateTimeSinceFetch();
+      const interval = setInterval(updateTimeSinceFetch, 5000);
       return () => clearInterval(interval);
     }
   }, [lastFetchTime]);
 
-  const resetLastTime = () => {
+  const resetLastTime = (type:string) => {
     const currentTime = new Date();
     sessionStorage.setItem("userSession", currentTime.toISOString());
-    setColumnFilters((prev: any) => {
+    type=='restart' && setColumnFilters((prev: any) => {
       const updatedArr = [...prev];
       const filterMap = new Map(updatedArr.map(item => [item.id, item]));
       filterMap.set('session', { id: 'session', value: currentTime.toISOString() });
       return Array.from(filterMap.values());
     });
     setLastFetchTime(currentTime);
-    setTimeSinceFetch("0 seconds ago");
+    setTimeSinceFetch("Just now");
   };
 
   async function updateData(data: any) {
@@ -306,10 +308,10 @@ const UserTableComponent = () => {
 
   return (
     <>
-      <div className="gap-4 flex items-center px-8 justify-end">
-        Last API fetch: {timeSinceFetch || "..."}
-        <Button onClick={() => resetLastTime()} ><RotateCcw /></Button>
-      </div>
+      {timeSinceFetch && <div className="gap-2 flex items-center px-8 justify-end text-sm">
+        Last fetched {timeSinceFetch}
+        <Button onClick={() => resetLastTime('restart')} className="p-0 h-6 w-6 flex items-center justify-center text-sm"><RotateCcw /></Button>
+      </div>}
       <TanStackBasicTable
         isTableDataLoading={isAllUsersDataLoading}
         paginatedTableData={allUsers}

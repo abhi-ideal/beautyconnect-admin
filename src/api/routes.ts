@@ -35,7 +35,7 @@ const routes = {
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""
     }offset=${params?.offset}&limit=${params?.limit}`,
   COURSE_LIST: (params: any) => 
-      `${courseHost}admin/course?${
+      `${courseHost}admin/courses?${
         params?.title !== "" ? `title=${params?.title}&` : ""}${
         params?.description !== "" ? `description=${params?.description}&` : ""}${
         !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""}${

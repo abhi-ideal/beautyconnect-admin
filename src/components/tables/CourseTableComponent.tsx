@@ -165,24 +165,24 @@ const CourseTableComponent = () => {
 
   const categoryColumns: ColumnDef<Course>[] = [
     {
-      header: "User",
-      accessorFn: (row: Course) => row?.userDetails?.image,
+      header: "Image",
+      accessorFn: (row: Course) => row?.media,
       enableSorting: false,
       enableColumnFilter: false,
-      cell: (info) => {
+      cell: (info:any) => {
         const imageUrl = info.getValue();
         const bgColor = color[info?.row?.index % color.length ]
         return (
           <div className="flex">
           <Avatar>
             <AvatarImage
-              src={typeof imageUrl === "string" ? previewImgUrl+imageUrl : undefined}
+              src={previewImgUrl+imageUrl}
             />
             <AvatarFallback className={bgColor}>
-              {formatName(info.row.original.userDetails?.name) || "N/A"}
+              {formatName(info.row.original?.title) || "N/A"}
             </AvatarFallback>
           </Avatar>
-          <p className="m-2">{info.row.original?.userDetails?.name||"N/A"}</p>
+          {/* <p className="m-2">{titleCase(info.row.original?.title)||"N/A"}</p> */}
           </div>
         );
       }
@@ -192,17 +192,21 @@ const CourseTableComponent = () => {
       accessorKey: "title",
       accessorFn: (row: Course) => row?.title,
       cell: (info) => {
-        const desc = info.getValue<string>();
-        const index = info.row.index;
-        const isExpanded = expandedDesc[index] || false;
-        return <div className="w-80">{shortName(desc, isExpanded)}
-        {desc && desc.length >= 28 && (
-          <button className="text-cyan-500" onClick={() => toggleSectionExpanded(index)}>{isExpanded ? "Read less" : "Read more"}</button>
-        )}
-      </div>
+        const title = info.getValue<string>();
+        return <div className="text-truncate"> {title ? title : 'N/A'} </div>;
       },
       enableSorting: true,
       enableColumnFilter: true
+    },
+    {
+      header: "Description",
+      accessorKey: "description",
+      cell: (info) => {
+        const description = info.getValue<string>();
+        return <div className="text-truncate"> {description ? description : 'N/A'} </div>;
+      },
+      enableSorting: false,
+      enableColumnFilter: true,
     },
     {
       header: "Amount",
@@ -215,16 +219,46 @@ const CourseTableComponent = () => {
       enableColumnFilter: false
     },
     {
-      header: "Course Type",
-      accessorKey: "courseType",
-      accessorFn: (row: Course ) => row.courseType,
+      header: "Rating",
+      accessorKey: "rating",
       cell: (info) => {
-        const courseType:any = info.getValue();
-        return (<div className={`flex m-2`}>{ titleCase(courseType) || "N/A"}</div>)
+        const rating:any = info.getValue();
+        return <div className={`flex m-2`}> {rating || 0 }</div>
       },
       enableSorting: true,
       enableColumnFilter: false
     },
+    {
+      header: "Total Lesson",
+      accessorKey: "totalLesson",
+      cell: (info) => {
+        const totalLesson:any = info.getValue();
+        return <div className={`flex m-2`}> {totalLesson || 0 }</div>
+      },
+      enableSorting: true,
+      enableColumnFilter: false
+    },
+    {
+      header: "Total Purchase",
+      accessorKey: "totalPurchase",
+      cell: (info:any) => {
+        const totalPurchase = info.getValue();
+        return <div className={`flex m-2`}> {totalPurchase || 0 }</div>
+      },
+      enableSorting: true,
+      enableColumnFilter: false
+    },
+    // {
+    //   header: "Course Type",
+    //   accessorKey: "courseType",
+    //   accessorFn: (row: Course ) => row.courseType,
+    //   cell: (info) => {
+    //     const courseType:any = info.getValue();
+    //     return (<div className={`flex m-2`}>{ titleCase(courseType) || "N/A"}</div>)
+    //   },
+    //   enableSorting: true,
+    //   enableColumnFilter: false
+    // },
     {
       header: "Category",
       accessorKey: "category",
