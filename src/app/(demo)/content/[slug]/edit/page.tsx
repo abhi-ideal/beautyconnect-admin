@@ -66,6 +66,12 @@ const ContentEditorPage = ({ params }: any) => {
     };
     await updateContent(contentData, id).then(async (res: any) => {
       if (!res?.error) {
+        setLoading(false);
+        router.push(`/content/${id}`);
+        toast({
+            title: "Update Content successfully",
+            description: res?.message
+        });
         await invalidate(id)
             .then((resposne: any) => {
               if (!resposne?.error){
@@ -102,7 +108,7 @@ const ContentEditorPage = ({ params }: any) => {
   };
   const sidebarNavItems = [
     { title: "Privacy Policy", href: "/content/privacy_policy", id: "privacy_policy" },
-    { title: "Terms & Conditions", href: "/content/terms_and_conditions", id: "terms_and_conditions" },
+    { title: "Terms & Conditions", href: "/content/terms_condition", id: "terms_condition" },
   ];
   return (
     <>

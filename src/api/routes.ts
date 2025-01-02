@@ -182,6 +182,7 @@ const routes = {
   POST:(id:any)=>`${feedBaseUrl}feed/${id}`,
   POST_DETAIL:(id:any)=>`${feedBaseUrl}feed/${id}`,
   COURSE:(id:any)=>`${courseHost}course/${id}`,
+  ADD_COURSE:()=>`${courseHost}course`,
   SIGN_URL:(id:any)=>`${commonBaseUrl}getSignUrl?url=${id}`,
   COURSECONTENTDETAIL:(param:any)=>`${courseHost}courseContent/${param?.id}?contentId=${param?.contentId}`,
   FLAGGED_REASONS:()=>`${ContentHost}base/dev/base.json`

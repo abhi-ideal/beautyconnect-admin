@@ -18,7 +18,7 @@ import { Course } from '@/types/Courses';
 import { useGetCourses } from '@/api/useGetCourses';
 import CourseApi from '@/api/courseApi';
 
-const CourseTableComponent = () => {
+const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
   const { logout }=AuthService();
   const router = useRouter();
   const { toast } = useToast();
@@ -151,7 +151,8 @@ const CourseTableComponent = () => {
   }
 
   const details = (data: any, header:string) => {
-    header!="title" && router.push(`courses/${data?.id}`)
+    // header!="title" && 
+    // router.push(`courses/${data?.id}`)
   };
 
   const toggleSectionExpanded = (index:any) => {
@@ -259,15 +260,24 @@ const CourseTableComponent = () => {
     //   enableSorting: true,
     //   enableColumnFilter: false
     // },
+    // {
+    //   header: "Category",
+    //   accessorKey: "category",
+    //   accessorFn: (row: Course ) => row?.category?.[0],
+    //   cell: (info) => {
+    //     const title:any = info.getValue();
+    //     return (<div className={`flex m-2`}>{ titleCase(title) || "N/A"}</div>)
+    //   },
+    //   enableSorting: false,
+    //   enableColumnFilter: false
+    // },
     {
-      header: "Category",
-      accessorKey: "category",
-      accessorFn: (row: Course ) => row?.category?.[0],
+      header: "Created At",
+      accessorKey: "createdAt",
       cell: (info) => {
-        const title:any = info.getValue();
-        return (<div className={`flex m-2`}>{ titleCase(title) || "N/A"}</div>)
+        const createdAt = info.getValue<string>();
+        return format(new Date(createdAt), "dd MMM, yy 'at' h:mm a");
       },
-      enableSorting: false,
       enableColumnFilter: false
     },
     {
@@ -280,15 +290,7 @@ const CourseTableComponent = () => {
       },
       enableSorting: false
     },
-    {
-      header: "Created At",
-      accessorKey: "createdAt",
-      cell: (info) => {
-        const createdAt = info.getValue<string>();
-        return format(new Date(createdAt), "dd MMM, yy 'at' h:mm a");
-      },
-      enableColumnFilter: false
-    },
+ 
     {
       id: "actions",
       header: "Action",
@@ -317,6 +319,11 @@ const CourseTableComponent = () => {
               <DropdownMenuItem onClick={() => deleteData(rowData)}>
                 Delete
               </DropdownMenuItem>
+              {/* <DropdownMenuItem
+                onClick={() => router.push(`courses/${rowData.id}`)}
+              >
+                View Detail
+              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
         );

@@ -34,7 +34,7 @@ export default function ContentDetailPage({ params }: any) {
   };
   const sidebarNavItems = [
     { title: "Privacy Policy", href: "/content/privacy_policy", id: "privacy_policy" },
-    { title: "Terms & Conditions", href: "/content/terms_and_conditions", id: "terms_and_conditions" },
+    { title: "Terms & Conditions", href: "/content/terms_condition", id: "terms_condition" },
   ];
 
   return (

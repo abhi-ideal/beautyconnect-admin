@@ -33,7 +33,8 @@ export default function TanStackBasicTable<TData, TValue>({
   columnFilters = [],
   statusFilter,
   details,
-  setColumnFilters
+  setColumnFilters,
+  hideFilter
 }: TableProps<TData, TValue>) {
   const table = useReactTable({
     data: paginatedTableData?.results || [],
@@ -82,13 +83,14 @@ export default function TanStackBasicTable<TData, TValue>({
   }, [columnFilters, setPagination]);
 
   const shimmer = [...Array(20)];
+
   return (
     <div className="p-8">
-      <TanStackBasicTableFilterComponent
+      {!hideFilter &&  <TanStackBasicTableFilterComponent
         table={table}
         setColumnFilters={setColumnFilters}
         statusFilter={statusFilter}
-      />
+      />}
 
       {isTableDataLoading ? (
         <div className="flex flex-col space-y-3 border">

@@ -302,6 +302,7 @@ const FlaggedPostTableComponent = () => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
+        hideFilter={true}
       />
     </>
   );

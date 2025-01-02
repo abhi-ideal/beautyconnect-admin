@@ -50,13 +50,13 @@ export function getMenuList(pathname: string): Group[] {
           icon: StickyNote,
           submenus: []
         },
-        // {
-        //   href: "/courses",
-        //   label: "Courses",
-        //   active: pathname.includes("/courses"),
-        //   icon: FileSpreadsheet,
-        //   submenus: []
-        // },
+        {
+          href: "/courses",
+          label: "Courses",
+          active: pathname.includes("/courses"),
+          icon: FileSpreadsheet,
+          submenus: []
+        },
         {
           href: "/skills",
           label: "Specializations",

@@ -9,6 +9,33 @@ export default function CourseApi() {
     const dispatch = useAppDispatch();
     const { toast } = useToast();
 
+    //add new course
+    const addCourse = async (info: any) => {
+        try {
+            const url = routes.ADD_COURSE();
+            const accessToken = await getAccessToken();
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + accessToken
+                },
+                body: JSON.stringify(info)
+            };
+            const response = await fetch(url, options);            
+            const responseData = await response.json();
+            if (!response.ok) {
+                if (response?.status === 401 || response?.status === 403) {
+                     errorHandle(response?.status);
+                }
+            }
+            return responseData;
+        } catch (error:any) {
+            return { error: true, errorMessage: error?.message };
+          }
+    };
+
+
     const updateCourses = async (data: any, id:any) => {
         try {
             const url = routes.COURSE(id);
@@ -154,5 +181,5 @@ export default function CourseApi() {
           });
     }
 
-    return { updateCourses, coursesDetail, deleteCourse, contentListApi, courseContentDetail, SignVideoUrl }
+    return {addCourse, updateCourses, coursesDetail, deleteCourse, contentListApi, courseContentDetail, SignVideoUrl }
 }

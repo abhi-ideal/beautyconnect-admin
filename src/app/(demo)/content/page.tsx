@@ -33,7 +33,7 @@ export default function ContentPage() {
 
   const sidebarNavItems = [
     { title: "Privacy Policy", href: "content/privacy_policy" },
-    { title: "Terms & Conditions", href: "content/terms_and_conditions" },
+    { title: "Terms & Conditions", href: "content/terms_condition" },
   ];
 
   return (

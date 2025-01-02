@@ -24,6 +24,7 @@ import { Spinner } from "../ui/spinner";
 const formSchema = z.object({
   title: z.string().trim().min(1, { message: "Title is required." }),
   Image: z.string().trim().min(1, { message: "Image is required." }),
+  Icon: z.string().trim().min(1, { message: "Icon is required." }),
   // description: z
   //     .string()
   //     .min(3, { message: "Description must be at least 3 characters." })
@@ -36,13 +37,17 @@ const AddEditSkill = (props: any) => {
   const { getPresignedPostData, uploadFileToS3 } = ImageApi();
   const { toast } = useToast();
   const [showUploadImage, setShowUploadImage]: any = useState({});
+  const [showUploadIcon, setShowUploadIcon]: any = useState({});
+  
   const [progress, setProgress]: any = React.useState();
+  const [progressIcon, setProgressIcon]: any = React.useState();
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
   const imageHaveType = ["jpg", "jpeg", "png"];
 
   const [formValues, setFormValues]: any = useState({
     title: editData?.title ? editData?.title : "",
     Image: editData?.image ? editData?.image : "",
+    Icon: editData?.icon ? editData?.icon : "",
     // description: editData?.description ? editData?.description : ""
   });
 
@@ -59,6 +64,7 @@ const AddEditSkill = (props: any) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
   const body = {
     "title": values.title,
+    "icon" : values.Icon,
     "image": {
         "mimeType": showUploadImage.mimeType,
         "path": values?.Image,
@@ -70,7 +76,8 @@ const AddEditSkill = (props: any) => {
     if (type == "Edit") {
       const payload = {
           ...(editData?.title != values?.title && { "title": values?.title }),
-          ...(editData?.image != values?.Image && { "image": body?.image })
+          ...(editData?.image != values?.Image && { "image": body?.image }),
+          ...(editData?.icon != values?.Icon && { "icon": body?.icon })
       }
       const length = Object.keys(payload).length;
       if (length>0){
@@ -81,6 +88,7 @@ const AddEditSkill = (props: any) => {
                       if (editData?.id == res?.id) {
                           payload?.title && (res.title = payload?.title);
                           payload?.image && (res.image = 'skills/'+payload?.image?.path);
+                          payload?.icon && (res.icon = 'skills/'+payload?.icon);
                           //   payload?.description && (res.description = payload?.description);
                         return res;
                       } else {
@@ -112,7 +120,8 @@ const AddEditSkill = (props: any) => {
           const newSkills = {
             id: res?.id,
             title: values?.title,
-            image: values?.Image,
+            image: "skills/"+values?.Image,
+            icon: "skills/"+values?.Icon,
             status: "active",
             createdAt: new Date(),
           };
@@ -139,7 +148,8 @@ const AddEditSkill = (props: any) => {
   }
 
   // function is to select image.
-  const selectFile = async (event: any) => {
+  const selectFile = async (event: any, type:any) => {
+
     const img = new Image();
     let fileRatio: any;
     img.onload = () => {
@@ -148,10 +158,10 @@ const AddEditSkill = (props: any) => {
     img.src = URL.createObjectURL(event.target.files[0]);
     const selectedFile = event.target.files[0];
     if (selectedFile) {
-      setProgress(10);
-      //   setImageChanged(true)
+      type == "icon" ?  setProgressIcon(10) :  setProgress(10);
+    
       if (imageHaveType.includes(selectedFile?.name.split(".").pop())) {
-        setProgress(30);
+        type == "icon" ?  setProgressIcon(30) :  setProgress(30);
         const epochNow = new Date().getTime();
         const randomFileName =
           "dev-3U-" + epochNow + "." + selectedFile.name.split(".").pop();
@@ -160,12 +170,9 @@ const AddEditSkill = (props: any) => {
           fileType: selectedFile?.type,
         };
         await getPresignedPostData(sendData).then(async (data: any) => {
-          setProgress(60);
+          type == "icon" ?  setProgressIcon(60) :  setProgress(60);
           if (data) {
-            // setTimeout(() => {
-            // setShowUploadImage(previewImgUrl +'temp/'+ randomFileName)
-            setProgress(80);
-            // }, 2000)
+            type == "icon" ?  setProgressIcon(80) :  setProgress(80);
             await uploadFileToS3(data, selectedFile).then(() => {
               const mimeType = selectedFile?.type;
               const content = {
@@ -174,16 +181,15 @@ const AddEditSkill = (props: any) => {
                 ratio: fileRatio ? fileRatio : "50x50",
                 type: mimeType?.split("/")[0],
               };
-              form.setValue("Image", randomFileName);
-              setShowUploadImage(content);
-              setProgress(100);
+              type == "icon" ?  form.setValue("Icon", randomFileName) :    form.setValue("Image", randomFileName);
+              type == "icon" ? setShowUploadIcon(content) :  setShowUploadImage(content);
+              type == "icon" ?  setProgressIcon(100) :  setProgress(100);
               toast({ title: "Upload Image successfully." });
             });
           }
         });
       } else {
-        setProgress(0);
-        // setImageChanged(false)
+        type == "icon" ?  setProgressIcon(0) :  setProgress(0);
         toast({ title: "Please select image as have type jpg, jpeg or png." });
       }
     }
@@ -244,7 +250,7 @@ const AddEditSkill = (props: any) => {
                           type="file"
                           accept="image/jpg,image/png,image/jpeg"
                           className="hidden"
-                          onChange={selectFile}
+                          onChange={(e)=> selectFile(e,"image")}
                         />
                       </div>
                     </FormControl>
@@ -254,6 +260,62 @@ const AddEditSkill = (props: any) => {
               />
             </div>
             {progress && <Progress value={progress} className="w-[15%]" />}
+
+
+
+
+
+
+            {/* Icon */}
+            <div className="space-y-2 min-w-full">
+              <FormField
+                control={form.control}
+                name="Icon"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Icon</FormLabel>
+                    <FormControl>
+                      <div className="relative w-20 h-20">
+                        <Avatar className="w-20 h-20 border border-gray-700">
+                          <AvatarImage
+                            src={
+                              showUploadIcon?.path
+                                ? showUploadIcon?.path
+                                : previewImgUrl+ editData?.icon
+                            }
+                            alt="Specialization Image"
+                          />
+                          <AvatarFallback>
+                            {formatName("Icon image")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <label
+                          htmlFor="icon-upload"
+                          className={`absolute bottom-0 right-0 p-1 bg-white dark:bg-black rounded-full cursor-pointer`}
+                        >
+                          <Camera className="w-5 h-5" />
+                        </label>
+                        <input
+                          id="icon-upload"
+                          type="file"
+                          accept="image/jpg,image/png,image/jpeg"
+                          className="hidden"
+                          onChange={(e)=> selectFile(e,"icon")}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            {progressIcon && <Progress value={progressIcon} className="w-[15%]" />}
+
+
+
+
+
+
 
             {/* 
                         <div className="space-y-2">

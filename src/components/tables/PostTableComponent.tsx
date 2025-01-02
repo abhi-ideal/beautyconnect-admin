@@ -148,7 +148,7 @@ const PostTableComponent = () => {
   }
   const details = (data: any, header:string) => {
     // header!='description'&& 
-    header!='Post' &&router.push(`posts/${data?.id}`)
+    // header!='Post' &&router.push(`posts/${data?.id}`)
   }
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
   const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
@@ -290,11 +290,11 @@ const PostTableComponent = () => {
               <DropdownMenuItem onClick={() => deleteData(rowData)}>
                 Delete
               </DropdownMenuItem>
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 onClick={() => router.push(`posts/${rowData.id}`)}
               >
                 Post Detail
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
         );

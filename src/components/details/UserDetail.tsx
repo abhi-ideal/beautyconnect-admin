@@ -8,6 +8,7 @@ import { useToast } from "../ui/use-toast";
 import { format } from "date-fns";
 import { Loader2 } from 'lucide-react';
 import { Badge } from '../ui/badge';
+import moment from 'moment';
 
 
 const UserDetail = (props: any) => {
@@ -88,10 +89,10 @@ const UserDetail = (props: any) => {
                         <h3 className="text-xl font-semibold">{type == "User" ? 'User' : 'Employer'} Details:</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <InfoRow label="Role" value={titleCase(userInfo?.role) || 0} />
+                                {/* <InfoRow label="Role" value={titleCase(userInfo?.role) || 0} /> */}
                                 <InfoRow label="Gender" value={titleCase(userInfo?.gender) || "N/A"} />
                                 <InfoRow label="Mobile Number" value={userInfo?.mobileNumber || 0} />
-                                <InfoRow label="Date of Birth" value={userInfo?.dob || "N/A"} />
+                                <InfoRow label="Date of Birth" value={userInfo?.dob ? moment(userInfo.dob, "DD/MM/YYYY").format("DD/MMM/YYYY") : "N/A"} />
                                 <InfoRow label="Following" value={userInfo?.totalFollowing || 0} />
                                 <InfoRow label="Followers" value={userInfo?.totalFollower || 0} />
                                 <InfoRow label="Posts" value={userInfo?.totalPost || 0} />
@@ -102,8 +103,8 @@ const UserDetail = (props: any) => {
                                 
                                 {/* <InfoRow label="Role" value={userInfo?.role || "N/A"} /> */}
                                 {/* <InfoRow label="Profession" value={userInfo?.professionType || "N/A"} /> */}
-                                <InfoRow label="Distance" value={userInfo?.distance || 0} />
-                                <InfoRow label="Slot Duration" value={userInfo?.slotDuration || 0} />
+                                {/* <InfoRow label="Distance" value={userInfo?.distance || 0} /> */}
+                                {/* <InfoRow label="Slot Duration" value={userInfo?.slotDuration || 0} /> */}
                                 <InfoRow label="Street" value={userInfo?.address?.street || "N/A"} />
                                 <InfoRow label="City" value={userInfo?.address?.city || "N/A"} />
                                 <InfoRow label="State" value={userInfo?.address?.state || "N/A"} />

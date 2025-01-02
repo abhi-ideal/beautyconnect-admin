@@ -59,11 +59,11 @@ const getAllCoursesFn: ({
   }
   const offset = (page - 1) * per_page
   const url = routes.COURSE_LIST({
-    title: title,
-    description: description,
+    title: title?.trim(),
+    description: description?.trim(),
     from:from,
     to:to,
-    status: status,
+    status: status?.toLowerCase(),
     sorting_param: sorting_param,
     direction: direction,
     offset: offset,

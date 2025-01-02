@@ -19,6 +19,7 @@ export interface TableProps<TData, TValue> {
   setSorting?: Dispatch<SetStateAction<SortingState>>;
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: any;
+  hideFilter?:any;
 
   //Dispatch<SetStateAction<ColumnFiltersState>>;
 }
