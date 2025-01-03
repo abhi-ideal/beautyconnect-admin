@@ -46,7 +46,7 @@ export default function AccountPage() {
           <AvatarImage
             src={
               user?.profile
-                ?  previewImgUrl+'temp/'+ user?.profile
+                ?  previewImgUrl+ user?.profile
                 : ""
             }
           />

@@ -62,7 +62,7 @@ export function UserNav() {
                   <AvatarImage
                     src={
                       user?.profile
-                        ? previewImgUrl+'temp/'+ user?.profile
+                        ? previewImgUrl+ user?.profile
                         : ""
                     }
                     alt="Avatar"

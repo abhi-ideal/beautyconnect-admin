@@ -6,9 +6,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { formatName, titleCase } from '@/lib/utils';
 import { useToast } from "../ui/use-toast";
 import { format } from "date-fns";
-import { Loader2 } from 'lucide-react';
+import { Loader2, MapPin } from 'lucide-react';
 import { Badge } from '../ui/badge';
 import moment from 'moment';
+import { Button } from '../ui/button';
 
 
 const UserDetail = (props: any) => {
@@ -52,13 +53,22 @@ const UserDetail = (props: any) => {
             <div>{value}</div>
         </div>
     );
+
+    
+    const handleNavigateToMap = () => {
+        if (userInfo?.address?.latitude && userInfo?.address?.longitude) {
+          const googleMapsUrl = `https://www.google.com/maps?q=${userInfo?.address?.latitude},${userInfo?.address?.longitude}`;
+          window.open(googleMapsUrl, '_blank');
+        }
+      };
+
     return (
         <>
             <div className="max-w-12xl flex flex-col gap-6 p-6 sm:p-8">
                 <Card className="flex flex-col p-6 space-y-6">
                     <div className="flex flex-col items-center border-b pb-6">
                         <Avatar className="w-24 h-24">
-                            <AvatarImage src={userInfo ? previewImgUrl+ 'temp/' + userInfo?.profile : ""} />
+                            <AvatarImage src={userInfo ? previewImgUrl+ userInfo?.profile : ""} />
                             <AvatarFallback className="bg-orange-500">
                                 {formatName(userInfo?.name) || "N/A"}
                             </AvatarFallback>
@@ -113,9 +123,26 @@ const UserDetail = (props: any) => {
                                 <InfoRow label="Longitude" value={userInfo?.address?.longitude || 0} />
                                 {/* <InfoRow label="SignIn Provider" value={userInfo?.signInProvider || "N/A"} /> */}
                                 {/* <InfoRow label="Languages" value={userInfo?.knowLanguages || "N/A"} /> */}
-                                { userInfo?.skills?.map((skill:any)=>{
+                                {/* { userInfo?.skills?.map((skill:any)=>{
                                     return <InfoRow label={skill?.title} value={skill?.description || "N/A"} />
-                                })}
+                                })} */}
+                                              <div className="flex items-center gap-x-10 rounded-sm">
+                  <div className="font-bold w-1/3">Location</div>
+                  <div className="font-extralight text-sm space-y-2 grow shrink-0 basis-[0%]">
+                    {userInfo?.address?.latitude && userInfo?.address?.longitude ? (
+                      <Button
+                        variant="link"
+                        className="flex items-center text-blue-600 hover:underline p-0"
+                        onClick={handleNavigateToMap}
+                      >
+                        <MapPin className="mr-1 h-5 w-5" />
+                        Map
+                      </Button>
+                    ) : (
+                      <span>N/A</span>
+                    )}
+                  </div>
+                </div>
                             </div>
                         </div>
                     </div>

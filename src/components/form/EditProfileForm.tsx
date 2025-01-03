@@ -192,7 +192,7 @@ const EditProfileForm = () => {
              <div className="relative w-20 h-20">
               <Avatar className="w-20 h-20">
                 <AvatarImage
-                  src={showUploadImage?.path ? showUploadImage?.path : previewImgUrl+'temp/'+ user?.profile}
+                  src={showUploadImage?.path ? showUploadImage?.path : previewImgUrl+ user?.profile}
                 />
                 <AvatarFallback>{formatName(user?.name)}</AvatarFallback>
               </Avatar>

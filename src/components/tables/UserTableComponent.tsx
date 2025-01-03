@@ -210,7 +210,7 @@ const UserTableComponent = () => {
           <div className="flex">
           <Avatar>
             <AvatarImage
-              src={previewImgUrl+'temp/'+imageUrl}
+              src={previewImgUrl+imageUrl}
             />
             <AvatarFallback className={bgColor}>
               {formatName(info.row.original?.name) || "N/A"}
@@ -292,7 +292,7 @@ const UserTableComponent = () => {
                   : "N/A"}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => deleteData(rowData)}>
-                *Delete
+                Delete
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => router.push(`users/${rowData.id}`)}
