@@ -43,20 +43,20 @@ export function getMenuList(pathname: string): Group[] {
           icon: Users,
           submenus: []
         },
-        {
-          href: "/posts",
-          label: "Posts",
-          active: pathname.includes("/posts"),
-          icon: StickyNote,
-          submenus: []
-        },
-        {
-          href: "/courses",
-          label: "Courses",
-          active: pathname.includes("/courses"),
-          icon: FileSpreadsheet,
-          submenus: []
-        },
+        // {
+        //   href: "/posts",
+        //   label: "Posts",
+        //   active: pathname.includes("/posts"),
+        //   icon: StickyNote,
+        //   submenus: []
+        // },
+        // {
+        //   href: "/courses",
+        //   label: "Courses",
+        //   active: pathname.includes("/courses"),
+        //   icon: FileSpreadsheet,
+        //   submenus: []
+        // },
         {
           href: "/skills",
           label: "Specializations",
@@ -64,24 +64,24 @@ export function getMenuList(pathname: string): Group[] {
           icon: Gem,
           submenus: []
         },
-        {
-          href: "/flaggedUsers",
-          label: "Flagged",
-          active: pathname.includes("/flagged"),
-          icon: Flag,
-          submenus: [
-            {
-              href: "/flagged-users",
-              label: "Users",
-              active: pathname.includes("/flagged-users")
-            },
-            {
-              href: "/flagged-posts",
-              label: "Posts",
-              active: pathname.includes("/flagged-posts")
-            },
-          ]
-        },
+        // {
+        //   href: "/flaggedUsers",
+        //   label: "Flagged",
+        //   active: pathname.includes("/flagged"),
+        //   icon: Flag,
+        //   submenus: [
+        //     {
+        //       href: "/flagged-users",
+        //       label: "Users",
+        //       active: pathname.includes("/flagged-users")
+        //     },
+        //     {
+        //       href: "/flagged-posts",
+        //       label: "Posts",
+        //       active: pathname.includes("/flagged-posts")
+        //     },
+        //   ]
+        // },
       ]
     },
     {
