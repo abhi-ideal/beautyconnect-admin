@@ -34,7 +34,7 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
 const PostGrid = (props: any) => {
-  const { postDetail , postComments, viewMoreComments } = PostApi();
+  const { postDetail, postComments, viewMoreComments } = PostApi();
   const [postInfo, setPostInfo]: any = useState(null);
   const [commentInfo, setCommentInfo]: any = useState([]);
   const [offset, setOffset] = useState(0);
@@ -46,8 +46,8 @@ const PostGrid = (props: any) => {
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
   const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
   const [open, setOpen] = React.useState(false);
-  const [slide, setSlide]:any = React.useState([]);
-    const [slideIndex, setSlideIndex] = useState<number>(0); 
+  const [slide, setSlide]: any = React.useState([]);
+  const [slideIndex, setSlideIndex] = useState<number>(0);
   const [expandedSections, setExpandedSections] = useState<{
     [key: string]: boolean;
   }>({});
@@ -59,10 +59,9 @@ const PostGrid = (props: any) => {
     }));
   };
 
-
   useEffect(() => {
     getPostDetails(id);
-    getPostComments(id);
+    getPostComments(id,0, "rendom");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   const getPostDetails = async (id: any) => {
@@ -70,7 +69,6 @@ const PostGrid = (props: any) => {
     await postDetail(id).then((res: any) => {
       if (!res.error) {
         setPostInfo(res?.result);
-      setTotalComments(res?.result?.totalComment);
         setCircleLoader(false);
       } else {
         setCircleLoader(false);
@@ -79,22 +77,29 @@ const PostGrid = (props: any) => {
     });
   };
 
-  const getPostComments = async (id: string, offset = 0) => {
+  const getPostComments = async (id: string, offset = 0, type:any) => {
     setIsLoader(true);
     const res = await postComments(id, offset);
     if (!res.error) {
-      setCommentInfo((prev: any) => [...prev, ...res?.results]);
+      setTotalComments(res?.counts);
+      type == 'viewMore'?  setCommentInfo((prev: any) => [...prev, ...res?.results]) : setCommentInfo(res?.results)
+     
       setOffset(offset + 5);
       // setTotalComments(res.count);
     }
     setIsLoader(false);
   };
 
-  const moreComments = async (parentId: any, offset = 0) => {
+
+  const [replyInfo, setReplyInfo]: any = useState(null);
+  const moreReply = async (parentId: any, offset = 0) => {
     setIsLoader(true);
     const res = await viewMoreComments({ id, parentId, offset });
     if (!res.error) {
-      const newComments = res?.results || [];
+      const newReplies= res?.results || {};
+      setReplyInfo(newReplies)
+
+  
       // setCommentInfo((prevComments:any) => {
       //   const updateComments = (comments: any) => {
       //     return comments.map((comment: any) => {
@@ -110,7 +115,9 @@ const PostGrid = (props: any) => {
       //   };
       //   return updateComments(prevComments);
       // });
-      setReplyComment(commentInfo, newComments, parentId, "");
+
+      // setReplyComment(commentInfo, newReplies, parentId, "");
+
     }
     setIsLoader(false);
   };
@@ -157,51 +164,49 @@ const PostGrid = (props: any) => {
     }
   };
 
+
+  // hide replies 
   const hideReplies = (parentId: string) => {
-    console.log("parentId", parentId);
-
-    setCommentInfo((prevComments: any) => {
-      const updateComments = (comments: any) =>
-        comments.map((comment: any) => {
-          console.log("looping comment", comment);
-
-          if (comment.id === parentId) {
-            return { ...comment, children: [] };
-          }
-          return comment;
-        });
-      return updateComments(prevComments);
-    });
+    setReplyInfo(null)
+    // setReplyInfo((prevComments: any) => {
+    //   const updateComments = (comments: any) =>
+    //     comments.parentComment.map((reply: any) => {
+    //       if (reply.id === parentId) {
+    //         return { ...reply, parentComment: [] };
+    //       }
+    //       return reply;
+    //     });
+    //   return updateComments(prevComments);
+    // });
   };
-
 
   const playerRef = useRef(null);
   const playPauseVideo = () => {
-      const options = {
-          root: null,
-          rootMargin: "0px",
-          threshold: 0.8
-      };
-      const callback = (entries: any[]) => {
-          entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                  entry.target.play();
-              } else {
-                  entry.target.pause();
-              }
-          });
-      };
-      const observer = new IntersectionObserver(callback, options);
-      const videos = document.querySelectorAll("video");
-      videos.forEach((vide) => {
-          observer.observe(vide);
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.8,
+    };
+    const callback = (entries: any[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.play();
+        } else {
+          entry.target.pause();
+        }
       });
+    };
+    const observer = new IntersectionObserver(callback, options);
+    const videos = document.querySelectorAll("video");
+    videos.forEach((vide) => {
+      observer.observe(vide);
+    });
   };
   const handlePlayerReady = (player: any) => {
-      playerRef.current = player;
-      playPauseVideo();
+    playerRef.current = player;
+    playPauseVideo();
   };
-  
+
   if (circleLoader) {
     return (
       <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
@@ -221,7 +226,7 @@ const PostGrid = (props: any) => {
           priority
           className="size-[150px]"
         />
-<span className="font-semibold text-lg">No Record Found</span>
+        <span className="font-semibold text-lg">No Record Found</span>
       </div>
     );
   }
@@ -250,57 +255,60 @@ const PostGrid = (props: any) => {
               </h2>
               <p className="text-muted-foreground">
                 {" "}
-                {postInfo?.createdAt
+                {postInfo?.users?.createdAt
                   ? format(
-                      new Date(postInfo?.createdAt),
+                      new Date(postInfo?.users?.createdAt),
                       "dd MMM, yy 'at' h:mm a"
                     )
                   : "N/A"}
               </p>
-              {/* <div className="text-sm text-gray-500 pt-2">
-                {postInfo?.status ? (
+              <div className="text-sm text-gray-500 pt-2">
+                {postInfo?.users?.status ? (
                       <Badge
                         className={
-                          postInfo.status.toLowerCase() === "active"
+                          postInfo?.users?.status?.toLowerCase() === "active"
                             ? "bg-green-500 text-white"
                             : "bg-red-500 text-white"
                         }
                       >
-                        {titleCase(postInfo.status)}
+                        {titleCase(postInfo?.users?.status)}
                       </Badge>
                     ) : (
                       "N/A"
                     )}
-              </div> */}
+              </div>
             </div>
           </CardHeader>
           <CardContent className="p-4 pt-0 space-y-4">
             <p className="text-muted-foreground text-lg">
               {postInfo?.description ? postInfo?.description : "N/A"}
             </p>
-              <div className="relative aspect-video">
+            <div className="relative aspect-video">
               <Carousel className="relative w-full">
                 <div className="relative border border-gray-300 rounded-lg overflow-hidden">
                   <CarouselContent>
-                  {postInfo?.contents?.length > 0 ? (
+                    {postInfo?.contents?.length > 0 ? (
                       postInfo.contents.map((data: any, i: any) => (
-                        <CarouselItem key={i} className="aspect-video"
-                        onClick={() => { 
-                          setOpen(true);
-                          setSlideIndex(i); 
-                          setSlide(
-                            postInfo?.contents.map((item: any) => ({
-                              src: item?.file && item?.file?.trim() !== "" 
-                                ? `${previewImgUrl}${item?.file}` 
-                                : "/default_image.png",
-                            }))
-                          );
-                        }}
+                        <CarouselItem
+                          key={i}
+                          className="aspect-video"
+                          onClick={() => {
+                            setOpen(true);
+                            setSlideIndex(i);
+                            setSlide(
+                              postInfo?.contents.map((item: any) => ({
+                                src:
+                                  item?.file && item?.file?.trim() !== ""
+                                    ? `${previewImgUrl}${item?.file}`
+                                    : "/default_image.png",
+                              }))
+                            );
+                          }}
                         >
                           <Image
                             src={
                               data?.file && data.file.trim() !== ""
-                                ? previewImgUrl+ data.file
+                                ? previewImgUrl + data.file
                                 : "/default_image.png"
                             }
                             width={448}
@@ -354,32 +362,32 @@ const PostGrid = (props: any) => {
                 </span>
               </div> */}
             </div>
-            <div  className="flex items-center gap-2">
-            {/* <Flag className="h-5 w-5" /> */}
-            <span>
-            {postInfo?.status ? (
-                      <Badge
-                        className={
-                          postInfo.status.toLowerCase() === "active"
-                            ? "bg-green-500 text-white"
-                            : "bg-red-500 text-white"
-                        }
-                      >
-                        {titleCase(postInfo.status)}
-                      </Badge>
-                    ) : (
-                      "N/A"
-                    )}
-            </span>
-            <span>
-            {postInfo?.createdAt
+            <div className="flex items-center gap-2">
+              {/* <Flag className="h-5 w-5" /> */}
+              <span>
+                {postInfo?.status ? (
+                  <Badge
+                    className={
+                      postInfo.status.toLowerCase() === "active"
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
+                    }
+                  >
+                    {titleCase(postInfo.status)}
+                  </Badge>
+                ) : (
+                  "N/A"
+                )}
+              </span>
+              <span>
+                {postInfo?.createdAt
                   ? format(
                       new Date(postInfo?.createdAt),
                       "dd MMM, yy 'at' h:mm a"
                     )
                   : "N/A"}
-            </span>
-          </div>
+              </span>
+            </div>
           </CardFooter>
         </Card>
 
@@ -398,7 +406,7 @@ const PostGrid = (props: any) => {
                   width={320}
                   height={320}
                 />
-                 <span className="font-semibold text-lg">No Record Found</span>
+                <span className="font-semibold text-lg">No Record Found</span>
               </div>
             ) : (
               commentInfo.map((comment: any, index: number) => (
@@ -413,9 +421,7 @@ const PostGrid = (props: any) => {
 
                     <div className="flex-1">
                       <div className="bg-muted rounded-lg p-3">
-                        <p className="font-semibold">
-                          {comment?.users?.name}
-                        </p>
+                        <p className="font-semibold">{comment?.users?.name}</p>
                         <p
                           className="text-sm break-words whitespace-pre-wrap"
                           style={{ wordBreak: "break-word" }}
@@ -451,34 +457,34 @@ const PostGrid = (props: any) => {
                       </div>
                     </div>
                   </div>
-                  {comment.totalCount > 0 && (
+                  {comment.totalCount > 0 && replyInfo && (
                     <div className="mt-2 ml-8">
-                      {/* <Button
+                      <Button
                         className="mt-2"
                         variant="link"
                         onClick={() => hideReplies(comment.id)}
                       >
                         Hide Replies
-                      </Button> */}
+                      </Button>
                       {renderNestedComments(
-                        comment.children,
-                        moreComments,
+                        replyInfo,
+                        moreReply,
                         isLoader,
                         hideReplies
                       )}
                     </div>
                   )}
-                  {comment.totalCount > (comment.children?.length || 0) && (
+                  {(comment.totalCount > 0) && (comment.totalCount !== replyInfo?.parentComment?.length) && (
                     <span className="flex justify-end">
                       <Button
                         className="mt-2"
                         variant="link"
                         onClick={() =>
-                          moreComments(comment.id, comment.offset || 0)
+                          moreReply(comment.id, 0)
                         }
                       >
                         View{" "}
-                        {comment.totalCount - (comment.children?.length || 0)}{" "}
+                        {comment.totalCount  - (replyInfo?.parentComment?.length || 0)}{" "}
                         More Replies
                       </Button>
                     </span>
@@ -492,12 +498,9 @@ const PostGrid = (props: any) => {
                   className="gap-1 w-auto mt-4"
                   disabled={isLoader}
                   variant="link"
-                  onClick={() => getPostComments(id, offset)}
+                  onClick={() => getPostComments(id, offset, "viewMore")}
                 >
-                  <b>
-                    View {totalComments - (commentInfo?.length || 0)} More
-                    Comments
-                  </b>
+                  <b>View {totalComments - (commentInfo?.length || 0)} More Comments</b>
                   {isLoader && <Spinner size="small" />}
                 </Button>
               </span>
@@ -505,13 +508,13 @@ const PostGrid = (props: any) => {
           </CardContent>
         </Card>
       </div>
-            {/* Lightbox */}
-<Lightbox
-  open={open}
-  close={() => setOpen(false)}
-  index={slideIndex} 
-  slides={slide}
-/>
+      {/* Lightbox */}
+      <Lightbox
+        open={open}
+        close={() => setOpen(false)}
+        index={slideIndex}
+        slides={slide}
+      />
     </>
   );
 };

@@ -188,12 +188,48 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
     {
       header: "Title",
       accessorKey: "title",
-      accessorFn: (row: Skill) => row.title,
-      cell: (info) => {
-        const title:any = info.getValue();
-        return (<div className={`flex m-2 text-truncate`}>{ titleCase(title) || "N/A"}</div>)
-      },
+      accessorFn: (row: any) => ({
+        icon: row?.icon,
+        title: row?.title,
+      }),
+      enableSorting: false,
+      enableColumnFilter: true,
+      cell: (info: any) => {
+        const { icon, title } = info.getValue();
+        return (
+          <div className="flex items-center">
+            <Avatar className="mr-3 border border-gray-700">
+              <AvatarImage
+                src={
+                  icon
+                    ? previewImgUrl+"skills/"+icon
+                    : ""
+                }
+                alt={title || "icon"}
+              />
+              <AvatarFallback>{formatName(title || "N/A")}</AvatarFallback>
+            </Avatar>
+            <div>
+              <div className="font-semibold text-truncate">
+                {title ? titleCase(title?.trim()) : "N/A"}
+              </div>
+              {/* <div className="text-sm text-muted-foreground text-truncate">
+                {email || "N/A"}
+              </div> */}
+            </div>
+          </div>
+        );
+      }
     },
+    // {
+    //   header: "Title",
+    //   accessorKey: "title",
+    //   accessorFn: (row: Skill) => row.title,
+    //   cell: (info) => {
+    //     const title:any = info.getValue();
+    //     return (<div className={`flex m-2 text-truncate`}>{ titleCase(title) || "N/A"}</div>)
+    //   },
+    // },
     // {
     //   header: "Description",
     //   accessorKey: "description",

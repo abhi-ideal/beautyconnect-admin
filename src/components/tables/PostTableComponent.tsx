@@ -148,7 +148,7 @@ const PostTableComponent = () => {
   }
   const details = (data: any, header:string) => {
     // header!='description'&& 
-    // header!='Post' &&router.push(`posts/${data?.id}`)
+    header!='Post' &&router.push(`posts/${data?.id}`)
   }
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
   const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
@@ -190,7 +190,7 @@ const PostTableComponent = () => {
               {formatName(info.row.original?.users?.name)||"N/A"}
             </AvatarFallback>
           </Avatar>
-          <p className="m-2">{info.row.original?.users?.name?.trim()||"N/A"}</p>
+          <p className="m-2">{titleCase(info.row.original?.users?.name?.trim())||"N/A"}</p>
           </div>
         );
       }
