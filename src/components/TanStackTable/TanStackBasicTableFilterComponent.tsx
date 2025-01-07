@@ -168,7 +168,7 @@ export default function TanStackBasicTableFilterComponent<TData>({
                               />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value=" ">Select</SelectItem>
+                              {/* <SelectItem value=" ">Select</SelectItem> */}
                               {
                                 statusFilter.map((status:any, i:number)=>{
                                   return (

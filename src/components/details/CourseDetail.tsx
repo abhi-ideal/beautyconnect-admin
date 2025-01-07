@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { CardHeader, Card, CardTitle, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { formatName } from '@/lib/utils';
+import { formatName, titleCase } from '@/lib/utils';
 import { useToast } from "../ui/use-toast";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -16,6 +16,7 @@ import { Button } from '../ui/button';
 import { Eye, Loader2 } from 'lucide-react';
 import Cookies from 'js-cookie';
 import ReactVideoPlayer from '../demo/ReactVideoPlayer';
+import { Badge } from '../ui/badge';
 const CourseDetail = (props: any) => {
     const { toast } = useToast();
     const { coursesDetail, contentListApi, courseContentDetail, SignVideoUrl } = CourseApi();
@@ -31,11 +32,11 @@ const CourseDetail = (props: any) => {
     const url:any='https://smedia.thedentalnetwork.co.uk/2V-1731391794383-3608193927565312/2V-1731391794383-3608193927565312.m3u8';
 
     useEffect(() => {
-        getcourseInfoDetaits(id);
+        getcourseInfoDetails(id);
         // getCourseContentList(id);
         // getVideoURL(url,2);
     }, [id]);
-    const getcourseInfoDetaits = async (id: any) => {
+    const getcourseInfoDetails = async (id: any) => {
         setLoading(true);
         await coursesDetail(id).then((res: any) => {
             if (!res.error) {
@@ -152,8 +153,8 @@ const CourseDetail = (props: any) => {
         playPauseVideo();
     };
     const InfoRow = ({ label, value }: any) => (
-        <div className="flex items-start gap-2">
-            <div className="font-bold">{label}:</div>
+        <div className="flex items-start gap-20">
+            <div className="font-bold min-w-36">{label}:</div>
             <div>{value}</div>
         </div>
     );
@@ -207,7 +208,7 @@ const CourseDetail = (props: any) => {
                 {/* Single Card Design */}
                 <Card className="flex flex-col p-6 space-y-6">
                     {/* User Details Section */}
-                    <div className="flex flex-col items-center gap-4 border-b pb-6">
+                    {/* <div className="flex flex-col items-center gap-4 border-b pb-6">
                         <h3 className="text-xl font-semibold">User Details</h3>
                         <Link href={`/users/${courseInfo?.userDetails?.id}`}>
                             <Avatar className="w-24 h-24">
@@ -220,7 +221,35 @@ const CourseDetail = (props: any) => {
                                 {courseInfo?.userDetails?.name || "N/A"}
                             </div>
                         </Link>
+                    </div> */}
+
+
+<div className="flex flex-col items-center border-b pb-6">
+                        <Avatar className="w-24 h-24">
+                            <AvatarImage src={courseInfo ? previewImgUrl+ courseInfo?.media : ""} />
+                            <AvatarFallback className="bg-orange-500">
+                                {formatName(courseInfo?.title) || "N/A"}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="text-gray-600 mt-4">
+                        {courseInfo?.status ? (
+                  <Badge
+                    className={
+                        courseInfo.status.toLowerCase() === "active"
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
+                    }
+                  >
+                    {titleCase(courseInfo.status)}
+                  </Badge>
+                ) : (
+                  <span className="text-sm text-gray-500">N/A</span>
+                )}
+
+                        </div>
+       
                     </div>
+
 
                     {/* Job Details Section - Two Column Layout */}
                     <div className="space-y-4">
@@ -228,17 +257,15 @@ const CourseDetail = (props: any) => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <InfoRow label="Title" value={courseInfo?.title || "N/A"} />
-                                <InfoRow label="Status" value={courseInfo?.status || "N/A"} />
+                                {/* <InfoRow label="Status" value={titleCase(courseInfo?.status) || "N/A"} /> */}
                                 <InfoRow label="Amount" value={courseInfo?.amount || 0} />
-                                <InfoRow label="Total Rating" value={courseInfo?.totalRating || 0} />
-                                <InfoRow label="Featured" value={courseInfo?.isFeatured ? "Yes" : "No"} />
-                                <InfoRow label="Experience (From)" value={courseInfo?.fromExperience || 0} />
-                                <InfoRow label="Experience (To)" value={courseInfo?.toExperience || 0} />
+                                <InfoRow label="Rating" value={courseInfo?.rating || 0} />
+                                <InfoRow label="Total Lesson" value={courseInfo?.totalLesson || 0} />
+                                <InfoRow label="Total Purchase" value={courseInfo?.totalPurchase || 0} />
                             </div>
                             <div>
                                 <InfoRow label="Description" value={courseInfo?.description || "N/A"} />
-                                <InfoRow label="Average Rating" value={courseInfo?.avgRating || 0} />
-                                <InfoRow label="Course Type" value={courseInfo?.courseType || "N/A"} />
+                                <InfoRow label="Rating Count" value={courseInfo?.ratingCount?.[0]?.count || 0} />
                                 <InfoRow label="Created At" value={courseInfo?.createdAt ? format(new Date(courseInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"} />
                                 <InfoRow label="Category" value={courseInfo?.category || "N/A"} />
                             </div>

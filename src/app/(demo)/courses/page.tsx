@@ -29,14 +29,14 @@ export default function CoursesPage() {
       </BreadcrumbItem>
     </BreadcrumbList>
   </Breadcrumb>
-  {/* <Button className="ml-auto" onClick={() => setOpen(true)}>
+  <Button className="ml-auto" onClick={() => setOpen(true)}>
     Add Course
-  </Button> */}
+  </Button>
 </div>
 
 <div className="text-left">
   <Dialog open={open} onOpenChange={setOpen}>
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent className="sm:max-w-[550px]">
       <DialogHeader>
         <DialogTitle>Create Course</DialogTitle>
       </DialogHeader>

@@ -195,7 +195,7 @@ const UserTableComponent = () => {
     router.push(`users/${data?.id}`)
   }
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
-  const color=["bg-orange-500","bg-lime-500","bg-cyan-500","bg-blue-500","bg-rose-500"];
+  const color=["bg-[#FFC1BB]","bg-orange-500","bg-lime-500","bg-cyan-500","bg-blue-500","bg-rose-500"];
   const userColumns: ColumnDef<User>[] = [
     {
       header: "User Name",

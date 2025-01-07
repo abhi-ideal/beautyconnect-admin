@@ -146,7 +146,7 @@ const FlaggedUserTableComponent = () => {
     header!='description'&& header!='mark' && router.push(`flagged-users/${data?.actionId}`)
   }
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
-  const color=["bg-orange-500","bg-lime-500","bg-cyan-500","bg-blue-500","bg-rose-500"];
+  const color=["bg-[#FFC1BB]","bg-orange-500","bg-lime-500","bg-cyan-500","bg-blue-500","bg-rose-500"];
   const userColumns: ColumnDef<flaggedUser>[] = [
     {
       header: "Reported by",
@@ -219,7 +219,7 @@ const FlaggedUserTableComponent = () => {
       header: "Marks",
       accessorKey: "mark",
       cell:(info) =>{
-        return <Button className="bg-sky-500 hover:bg-sky-700 ..." onClick={() => deleteData(info.row.original)}>Mark Us UnFlagged</Button>
+        return <Button className="dark:bg-white bg-[#18181B]" onClick={() => deleteData(info.row.original)}>Mark Us UnFlagged</Button>
       },
       enableSorting: true,
       enableColumnFilter: false

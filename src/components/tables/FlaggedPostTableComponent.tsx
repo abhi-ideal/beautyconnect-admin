@@ -115,7 +115,7 @@ const FlaggedPostTableComponent = () => {
   async function deleteData(data: any) {
     Swal.fire({
       // title: "Delete",
-      text: `Are you sure you want to UnFlagged this record ?`,
+      text: `Are you sure you want to UnFlagged this post ?`,
       showCancelButton: true,
       confirmButtonColor: `#18181B`,
       cancelButtonColor: "white",
@@ -152,7 +152,8 @@ const FlaggedPostTableComponent = () => {
     header!='mark' &&router.push(`flagged-posts/${data?.actionId}`)
   }
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
-  const color = ["bg-orange-500", "bg-lime-500", "bg-cyan-500", "bg-blue-500", "bg-rose-500"];
+  const previewVideoPoster = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_POSTER;
+  const color = ["bg-[#FFC1BB]","bg-orange-500", "bg-lime-500", "bg-cyan-500", "bg-blue-500", "bg-rose-500"];
   const postColumns: ColumnDef<flaggedPost>[] = [
     {
       header: "Post",
@@ -163,10 +164,12 @@ const FlaggedPostTableComponent = () => {
         const imageUrl :any = info.getValue();
         return (
           <>
-            {
-            imageUrl?.mimeType.includes("video") ? <SquarePlay className="h-14 w-10 text-muted-foreground"/> : 
-            <Image src={ imageUrl?.file ? previewImgUrl + imageUrl?.file : "/default_image.png" } width={50} height={50} alt="NA"/>
-            }
+           {(imageUrl?.mimeType.includes("video") || imageUrl?.mimeType.includes("m3u8")) ? ( imageUrl?.poster ? <Image src={ previewVideoPoster + imageUrl?.poster } width={50} height={50} className="w-[45px] h-[45px]"  alt="NA"/> : <SquarePlay className="h-14 w-10 text-muted-foreground"/>) : 
+            <>
+            <div className="border-gray-600">
+              <Image src={ imageUrl?.file ? previewImgUrl + imageUrl?.file : "/default_image.png"} width={50} height={50} className="w-[45px] h-[45px]"  alt="NA"/>
+            </div> 
+            </>}
           </>
         );
       }
@@ -202,7 +205,7 @@ const FlaggedPostTableComponent = () => {
         return <div className="text-truncate"> {description ? description : 'N/A'} </div>;
       },
       enableSorting: true,
-      enableColumnFilter: false
+      enableColumnFilter: true
     },
     // {
     //   header: "Description",
@@ -248,7 +251,7 @@ const FlaggedPostTableComponent = () => {
       header: "Marks",
       accessorKey: "mark",
       cell:(info) =>{
-        return <Button className="bg-sky-500 hover:bg-sky-700 ..." onClick={() => deleteData(info.row.original)}>Mark Us UnFlagged</Button>
+        return <Button className=" dark:bg-white bg-[#18181B]" onClick={() => deleteData(info.row.original)}>Mark Us UnFlagged</Button>
       },
       enableSorting: true,
       enableColumnFilter: false
@@ -302,7 +305,7 @@ const FlaggedPostTableComponent = () => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
-        hideFilter={true}
+        hideFilter={false}
       />
     </>
   );

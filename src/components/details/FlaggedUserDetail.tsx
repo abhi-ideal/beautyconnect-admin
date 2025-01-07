@@ -147,8 +147,7 @@ const FlaggedUserDetail = (props: any) => {
 
   return (
     <>
-      <div className="p-4"></div>
-      <div className="container mx-auto p-4">
+      <div className="mx-auto pt-8">
         <div className="flex flex-col gap-8">
           {/* user Details */}
           <Card>
@@ -220,7 +219,7 @@ const FlaggedUserDetail = (props: any) => {
                       }
                       alt={userInfo?.userData?.name || "User Image"}
                     />
-                    <AvatarFallback className="bg-orange-500">
+                    <AvatarFallback className="bg-[#FFC1BB]">
                       {formatName(userInfo?.userData?.name) || "N/A"}
                     </AvatarFallback>
                   </Avatar>
@@ -314,7 +313,7 @@ const FlaggedUserDetail = (props: any) => {
                                           report?.users?.profile
                                     }
                                   />
-                                  <AvatarFallback className="bg-orange-500">
+                                  <AvatarFallback className="bg-[#FFC1BB]">
                                     {formatName(report?.users?.name) || "DI"}
                                   </AvatarFallback>
                                 </Avatar>

@@ -52,8 +52,8 @@ export default function ContentPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="hidden space-y-6 p-3 md:block">
-          <Separator />
+        <div className="hidden space-y-6 p-3 md:block pt-8">
+          {/* <Separator /> */}
           <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
             <aside className="-mx-4 lg:w-1/5">
               <SidebarNav items={sidebarNavItems} />

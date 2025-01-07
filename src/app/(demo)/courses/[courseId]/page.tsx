@@ -11,6 +11,8 @@ import { ArrowLeft } from 'lucide-react';
 const queryClient = new QueryClient();
 
 const CourseDetailPage = ({ params }: any) => {
+    const [allLessons, setAllLessons]: any = useState([]);
+
     return (
         <ContentLayout title="Course Details">
             <Breadcrumb>
@@ -23,7 +25,7 @@ const CourseDetailPage = ({ params }: any) => {
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
                         <BreadcrumbLink asChild>
-                            <Link href="/courses">Course</Link>
+                            <Link href="/courses">Courses</Link>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -39,7 +41,7 @@ const CourseDetailPage = ({ params }: any) => {
                 <h1 className="text-4xl font-semibold">Lessons</h1>
             </div>
             <QueryClientProvider client={queryClient}>
-                <LessonTableComponent courseId={params.courseId} />
+                <LessonTableComponent courseId={params.courseId} allLessons={allLessons}  setAllLessons={setAllLessons} />
             </QueryClientProvider>
         </ContentLayout>
     )

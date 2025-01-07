@@ -5,6 +5,8 @@ import { ColumnDef, ColumnFiltersState, PaginationState, SortingState } from "@t
 import { useState, useEffect } from "react";
 import TanStackBasicTable from "../TanStackTable/TanStackBasicTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { useToast } from "../ui/use-toast";
@@ -17,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Course } from '@/types/Courses';
 import { useGetCourses } from '@/api/useGetCourses';
 import CourseApi from '@/api/courseApi';
+import AddEditCourse from '../form/AddEditCourse';
 
 const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
   const { logout }=AuthService();
@@ -29,7 +32,6 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
   const [open, setOpen] = useState(false);
   const [editData, setEditData]: any = useState({});
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
-
   // column filters state of the table
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const debouncedColumnFilters: ColumnFiltersState = useDebounce(columnFilters, 1000);
@@ -81,7 +83,7 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
               ));
             setAllCourses({ ...allCourses, results: deletedData });
             toast({
-              title: "Delete",
+              title: "Course deleted sucessfully.",
               description: res?.message
             });
           } else {
@@ -126,7 +128,7 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
               });
               setAllCourses({ ...allCourses, results: updatedCategory });
               toast({
-                title: "Update",
+                title: "Status updated sucessfully.",
                 description: res?.message
               });
             } else {
@@ -152,7 +154,7 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
 
   const details = (data: any, header:string) => {
     // header!="title" && 
-    // router.push(`courses/${data?.id}`)
+    router.push(`courses/${data?.id}`)
   };
 
   const toggleSectionExpanded = (index:any) => {
@@ -319,6 +321,9 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
               <DropdownMenuItem onClick={() => deleteData(rowData)}>
                 Delete
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => update(rowData)}>
+                Update
+              </DropdownMenuItem>
               {/* <DropdownMenuItem
                 onClick={() => router.push(`courses/${rowData.id}`)}
               >
@@ -346,6 +351,16 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
         details={details}
         statusFilter={["Active", "Inactive"]}
       />
+        <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[550px]">
+          <DialogHeader>
+            <DialogTitle>Edit Course</DialogTitle>
+          </DialogHeader>
+          <AddEditCourse
+            props={{ setOpen, type: "Edit", editData, setEditData, allCourse, setAllCourse }}
+          ></AddEditCourse>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

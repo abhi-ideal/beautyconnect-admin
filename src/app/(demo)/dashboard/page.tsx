@@ -70,11 +70,11 @@ export default function DashboardPage() {
   const [loading, setLoading]: any = useState(false);
   const router = useRouter();
   useEffect(() => {
-    // getData()
+    getData()
   }, [])
 
   useEffect(() => {
-    // getGraph();
+    getGraph();
   }, [grapgDate?.to])
 
   const monthName: any = ["Jan", "Fab", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

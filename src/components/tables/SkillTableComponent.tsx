@@ -178,7 +178,7 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
             <AvatarImage
               src={resolvedImageUrl} 
             />
-            <AvatarFallback>
+            <AvatarFallback className="bg-[#FFC1BB]" >
               {formatName(info.row.original.title) || "DI"}
             </AvatarFallback>
           </Avatar>
@@ -196,6 +196,8 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
       enableColumnFilter: true,
       cell: (info: any) => {
         const { icon, title } = info.getValue();
+        const color=["bg-[#FFC1BB]","bg-orange-500","bg-lime-500","bg-cyan-500","bg-blue-500","bg-rose-500"];
+        const bgColor = color[info?.row?.index % color.length ]
         return (
           <div className="flex items-center">
             <Avatar className="mr-3 border border-gray-700">
@@ -207,7 +209,7 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
                 }
                 alt={title || "icon"}
               />
-              <AvatarFallback>{formatName(title || "N/A")}</AvatarFallback>
+              <AvatarFallback className={bgColor}>{formatName(title || "N/A")}</AvatarFallback>
             </Avatar>
             <div>
               <div className="font-semibold text-truncate">

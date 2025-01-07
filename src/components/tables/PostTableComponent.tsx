@@ -17,6 +17,8 @@ import Swal from "sweetalert2";
 import { format } from "date-fns";
 import AuthService from "@/api/auth/AuthService";
 import Image from 'next/image'
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 const PostTableComponent = () => {
   const { logout } = AuthService();
@@ -151,8 +153,12 @@ const PostTableComponent = () => {
     header!='Post' &&router.push(`posts/${data?.id}`)
   }
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
-  const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
-  const color = ["bg-orange-500", "bg-lime-500", "bg-cyan-500", "bg-blue-500", "bg-rose-500"];
+  const previewVideoPoster = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_POSTER;
+  const color = ["bg-[#FFC1BB]","bg-orange-500", "bg-lime-500", "bg-cyan-500", "bg-blue-500", "bg-rose-500"];
+   const [open, setOpen] = useState(false);
+    const [slide, setSlide]: any = useState([]);
+    const [slideIndex, setSlideIndex] = useState<number>(0);
+  
   const postColumns: ColumnDef<Post>[] = [
     {
       header: "Post",
@@ -161,12 +167,27 @@ const PostTableComponent = () => {
       enableColumnFilter: false,
       cell: (info) => {
         const imageUrl :any = info.getValue();
+
+        const handleClick = () => {
+          // Create slide data for Lightbox
+          const slides = info.row.original.contents.map((content: any) => ({
+            src: content.file ? previewImgUrl + content.file : "/default_image.png",
+            type: content.mimeType.includes("video") ? "video" : "image",
+            poster: content.poster ? previewVideoPoster + content.poster : undefined,
+          }));
+    
+          setSlide(slides);
+          setSlideIndex(info.row.index); // Set the current slide index
+          setOpen(true); // Open the Lightbox
+        };
+
+
         return (
           <>
-           {(imageUrl?.mimeType.includes("video") || imageUrl?.mimeType.includes("m3u8")) ? ( imageUrl?.poster ? <Image src={ previewVideo + imageUrl?.poster } width={50} height={50} className="w-[45px] h-[45px]"  alt="NA"/> : <SquarePlay className="h-14 w-10 text-muted-foreground"/>) : 
+           {(imageUrl?.mimeType.includes("video") || imageUrl?.mimeType.includes("m3u8")) ? ( imageUrl?.poster ? <Image src={ previewVideoPoster + imageUrl?.poster } width={50} height={50} className="w-[45px] h-[45px]"  alt="NA"/> : <SquarePlay className="h-14 w-10 text-muted-foreground"/>) : 
             <>
             <div className="border-gray-600">
-              <Image src={ imageUrl?.file ? previewImgUrl + imageUrl?.file : "/default_image.png"} width={50} height={50} className="w-[45px] h-[45px]"  alt="NA"/>
+              <Image  onClick={()=> imageUrl?.file ? handleClick() : null} src={ imageUrl?.file ? previewImgUrl + imageUrl?.file : "/default_image.png"} width={50} height={50} className="w-[45px] h-[45px]"  alt="NA"/>
             </div> 
             </>}
           </>
@@ -290,11 +311,11 @@ const PostTableComponent = () => {
               <DropdownMenuItem onClick={() => deleteData(rowData)}>
                 Delete
               </DropdownMenuItem>
-              {/* <DropdownMenuItem
+              <DropdownMenuItem
                 onClick={() => router.push(`posts/${rowData.id}`)}
               >
-                Post Detail
-              </DropdownMenuItem> */}
+                View Detail
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -316,6 +337,13 @@ const PostTableComponent = () => {
         details={details}
         statusFilter={["Active", "Inactive"]}
       />
+      
+<Lightbox
+  open={open}
+  close={() => setOpen(false)}
+  index={slideIndex}
+  slides={slide}
+/>
     </>
   );
 };

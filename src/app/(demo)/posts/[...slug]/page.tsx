@@ -7,7 +7,7 @@ import PostGrid from '@/components/details/PostGrid';
 
 const PostDetailPage = ({ params }: any) => {
   return (
-    <ContentLayout title="Post">
+    <ContentLayout title="Post Details">
     <Breadcrumb>
         <BreadcrumbList>
             <BreadcrumbItem>

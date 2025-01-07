@@ -41,7 +41,8 @@ const FlaggedPostDetail = (props: any) => {
     const { id }: any = props?.data;
     const { flaggedPostDetail, flaggedReasonList, deleteFlaggedPost } = ReportApi();
     const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
-    const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
+    const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_HOST;
+    const previewVideoSource = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_SOURCE;
     const [reason, setReason]: any = useState({});
     const [loading, setLoading]: any = useState(false);
 
@@ -191,7 +192,7 @@ const FlaggedPostDetail = (props: any) => {
                         }
                         alt={postInfo?.feedData?.users?.name || "User Image"}
                       />
-                      <AvatarFallback>
+                      <AvatarFallback className="bg-[#FFC1BB]" >
                         {postInfo?.feedData?.users?.name
                           ? formatName(postInfo?.feedData?.users?.name)
                           : "DI"}
@@ -280,34 +281,11 @@ const FlaggedPostDetail = (props: any) => {
                       <CarouselContent>
                         {postInfo?.feedData?.contents?.length > 0 ? (
                                         postInfo?.feedData?.contents?.map((album: any, i: number) => {
-                                            let dimensions: any;
-                                            if (album?.ratio) {
-                                                if (album?.ratio?.includes("*")) {
-                                                    !album?.ratio.split("*")?.includes("null") ? (dimensions = album?.ratio.split("*")) : (dimensions = ["500", "500"]);
-                                                } else {
-                                                    !album?.ratio.split("x")?.includes("null") ? (dimensions = album?.ratio.split("x")) : (dimensions = ["500", "500"]);
-                                                }
-                                            } else {
-                                                dimensions = ["500", "500"];
-                                            };
-                                            const w = dimensions[0] ? parseInt(dimensions[0]) : 16;
-                                            const h = dimensions[1] ? parseInt(dimensions[1]) : 9;
-                                            const r = gcd(w, h);
-                                            const videoJsOptions = {
-                                                autoplay: false, controls: true, responsive: true, fluid: false, aspectRatio: "16:9",
-                                                sources: [{
-                                                    src: (album?.file.endsWith('.m3u8') ? previewVideo : previewVideo) + (album?.file ? album?.file : album?.url),
-                                                    type: VideoExtension(album?.mimeType ? album.mimeType : album?.file),
-                                                }],
-                                            };
-                                            console.log('______________________', videoJsOptions);
-                                            
                                             return (
                                                 <CarouselItem key={i} className="h-64" >
                                                     {album?.mimeType?.includes("image") ?
                                                         <Image src={previewImgUrl + album.file} alt={album.name} width={250} height={330} className="object-contain rounded-md w-full h-full bg-[#8080802e]"/>
-                                                        : <ReactVideoPlayer url={(album?.file.endsWith('.m3u8') ? previewVideo : previewVideo) + (album?.file ? album?.file : album?.url)} controls={true} width="" height="" />
-                                                        // <div className='video-full'> <VideoPlayer options={videoJsOptions} onReady={handlePlayerReady} /></div>
+                                                        : <ReactVideoPlayer url={(album?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (album?.file ? album?.file : album?.url)} controls={true} width="" height="" />
                                                         }
                                                 </CarouselItem>
                                             )
@@ -316,7 +294,7 @@ const FlaggedPostDetail = (props: any) => {
                           <CarouselItem className="h-64">
                             <Link href={postInfo?.id ? `/post/${postInfo?.id}`: "#"}>
                               <Image
-                                src="/defaultCover.png"
+                                src="/default_image.png"
                                 width={720}
                                 height={256}
                                 alt="Default Cover Image"
@@ -337,13 +315,18 @@ const FlaggedPostDetail = (props: any) => {
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-1">
                       <ThumbsUp className="w-5 h-5" />
-                      <span>{postInfo?.feedData?.totalLike ? postInfo?.feedData?.totalLike : 0}</span>
+                      <span>
+                  {postInfo?.feedData?.totalLike ? postInfo?.feedData?.totalLike : 0}{" "}
+                  {postInfo?.feedData?.totalLike > 1 ? "likes" : "like"}
+                </span>
                     </div>
                     <div className="flex items-center gap-1">
                       <MessageCircle className="w-5 h-5" />
                       <span>
-                        {postInfo?.feedData?.totalComment ? postInfo?.feedData?.totalComment : 0}
-                      </span>
+                  {" "}
+                  {postInfo?.feedData?.totalComment ? postInfo?.feedData?.totalComment : 0}{" "}
+                  {postInfo?.feedData?.totalComment > 1 ? "comments" : "comment"}
+                </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -418,7 +401,7 @@ const FlaggedPostDetail = (props: any) => {
                                           : previewImgUrl + report?.users?.profile
                                       }
                                     />
-                                    <AvatarFallback className="bg-orange-500" >
+                                    <AvatarFallback className="bg-[#FFC1BB]" >
                                       {formatName(report?.users?.name) ||
                                         "DI"}
                                     </AvatarFallback>

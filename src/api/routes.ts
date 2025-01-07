@@ -55,9 +55,9 @@ const routes = {
         params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""}${
         params?.direction !== "" ? `orderType=${params?.direction}&` : ""
       }offset=${params?.offset}&limit=${params?.limit}`,
-
+      
   LESSON_LIST: (params: any) =>
-      `${courseHost}admin-lessons?${
+      `${courseHost}admin/lessons?${
         params?.courseId !== "" ? `courseId=${params?.courseId}&` : ""}${
         params?.title !== "" ? `title=${params?.title}&` : ""}${
         !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""}${
@@ -91,7 +91,8 @@ const routes = {
     }offset=${params?.offset}&limit=${params?.limit}`,
   FEED_REPORT_LIST:(params:any)=>
     `${feedBaseUrl}feeds-report?${
-      params?.name !== "" ? `name=${params?.name}&` : ""}${
+      params?.reportedBy !== "" ? `reportedBy=${params?.reportedBy}&` : ""}${
+        params?.description !== "" ? `description=${params?.description}&` : ""}${
       !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""}${
       params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
       params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
@@ -146,7 +147,7 @@ const routes = {
     }offset=${params?.offset}&limit=${params?.limit}`,
   COURSECONTENTLIST: (params: any) => 
     `${courseHost}courseContent/${params?.id}?offset=${params?.offset}&limit=${params?.limit}`,
-  USERGRAPG: (params: any)=>`${userBaseUrl}users-graph?${
+  USERGRAPG: (params: any)=>`${userBaseUrl}userGraph?${
     params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
     params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}` : ""
   }`,
@@ -154,7 +155,7 @@ const routes = {
     `${feedBaseUrl}feed/${params?.id}/comment?offset=${params?.offset}&limit=${params?.limit}`,
   CHILD_COMMENT_LIST:(params:any)=>
     `${feedBaseUrl}feed/${params?.id}/comment?parentId=${params?.commentId}?offset=${params?.offset}&limit=${params?.limit}`,
-  DASHBOARD: () => `${userBaseUrl}dashboard`,
+  DASHBOARD: () => `${userBaseUrl}userAnalytics`,
   CATEGORY:() => `${commonBaseUrl}category`,
   USER_UPDATE: () => `${userBaseUrl}profile/`,
   USER_DETAIL: (id: any) => `${userBaseUrl}profile/${id}`,
@@ -183,6 +184,9 @@ const routes = {
   POST_DETAIL:(id:any)=>`${feedBaseUrl}feed/${id}`,
   COURSE:(id:any)=>`${courseHost}course/${id}`,
   ADD_COURSE:()=>`${courseHost}course`,
+  ADD_LESSON:()=>`${courseHost}/course-lesson/`,
+  UPDATE_LESSON:(id:any)=>`${courseHost}lesson/${id}`,
+  DELETE_LESSON:(id:any)=>`${courseHost}lesson/${id}`,
   SIGN_URL:(id:any)=>`${commonBaseUrl}getSignUrl?url=${id}`,
   COURSECONTENTDETAIL:(param:any)=>`${courseHost}courseContent/${param?.id}?contentId=${param?.contentId}`,
   FLAGGED_REASONS:()=>`${ContentHost}base/dev/base.json`

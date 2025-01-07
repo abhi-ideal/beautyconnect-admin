@@ -16,7 +16,8 @@ const getAllFlaggedPostsFn: ({
     per_page = pagination.pageSize;
 
   // set filter
-  let name = "",
+  let reportedBy = "",
+  description = "",
     from = "",
     to = "",
     status = ""
@@ -26,7 +27,10 @@ const getAllFlaggedPostsFn: ({
       value = filter.value;
     switch (id) {
       case "name":
-        name = value as string;
+        reportedBy = value as string;
+        break;
+      case "description":
+        description = value as string;
         break;
       case "from":
         from = value as string;
@@ -55,7 +59,8 @@ const getAllFlaggedPostsFn: ({
   }
   const offset = (page - 1) * per_page
   const url = routes.FEED_REPORT_LIST({
-    name: name?.trim(),
+    reportedBy: reportedBy?.trim(),
+    description: description?.trim(),
     from: from,
     to: to,
     status: status?.toLowerCase(),

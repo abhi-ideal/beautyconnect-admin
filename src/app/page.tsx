@@ -23,7 +23,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/hooks";
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
-
+import moment from 'moment';
 import { useTheme } from "next-themes";
 
 const formSchema = z.object({
@@ -40,7 +40,7 @@ export default function HomePage() {
   const route = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { theme } = useTheme();
- 
+   const currentYear = moment().format('YYYY'); 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -138,7 +138,7 @@ export default function HomePage() {
               <footer className="text-sm">
                 <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
                   <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
-                    © 2024, Beauty Connect Admin
+                    © {currentYear}, Beauty Connect Admin
                   </p>
                 </div>
               </footer>
@@ -275,7 +275,7 @@ export default function HomePage() {
               <footer className="text-sm">
                 <div className="container flex flex-col items-center justify-center gap-4 lg:h-24 md:flex-row">
                   <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
-                    © 2024, Beauty Connect Admin
+                    © {currentYear}, Beauty Connect Admin
                   </p>
                 </div>
               </footer>

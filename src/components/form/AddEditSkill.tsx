@@ -215,9 +215,9 @@ const AddEditSkill = (props: any) => {
                 )}
               />
             </div>
-
+<div className="flex justify-between" >
             {/* Image */}
-            <div className="space-y-2 min-w-full">
+            <div className="space-y-2">
               <FormField
                 control={form.control}
                 name="Image"
@@ -235,8 +235,8 @@ const AddEditSkill = (props: any) => {
                             }
                             alt="Specialization Image"
                           />
-                          <AvatarFallback>
-                            {formatName("Default image")}
+                          <AvatarFallback className="bg-[#FFC1BB]" >
+                            Image
                           </AvatarFallback>
                         </Avatar>
                         <label
@@ -258,8 +258,8 @@ const AddEditSkill = (props: any) => {
                   </FormItem>
                 )}
               />
+            {progress && <Progress value={progress} className="w-[100%]" />}
             </div>
-            {progress && <Progress value={progress} className="w-[15%]" />}
 
 
 
@@ -267,7 +267,7 @@ const AddEditSkill = (props: any) => {
 
 
             {/* Icon */}
-            <div className="space-y-2 min-w-full">
+            <div className="space-y-2">
               <FormField
                 control={form.control}
                 name="Icon"
@@ -285,8 +285,8 @@ const AddEditSkill = (props: any) => {
                             }
                             alt="Specialization Image"
                           />
-                          <AvatarFallback>
-                            {formatName("Icon image")}
+                          <AvatarFallback className="bg-[#FFC1BB]" >
+                            Icon
                           </AvatarFallback>
                         </Avatar>
                         <label
@@ -308,10 +308,10 @@ const AddEditSkill = (props: any) => {
                   </FormItem>
                 )}
               />
+            {progressIcon && <Progress value={progressIcon} className="w-[100%]" />}
             </div>
-            {progressIcon && <Progress value={progressIcon} className="w-[15%]" />}
 
-
+            </div>
 
 
 

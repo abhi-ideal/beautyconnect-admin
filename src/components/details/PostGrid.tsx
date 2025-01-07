@@ -41,10 +41,15 @@ const PostGrid = (props: any) => {
   const [totalComments, setTotalComments] = useState(0);
   const [circleLoader, setCircleLoader]: any = useState(false);
   const [isLoader, setIsLoader]: any = useState(false);
+  const [replyInfo, setReplyInfo]: any = useState([]);
+  const [loadingReplies, setLoadingReplies] = useState<any>({});
+  const [expandedReplies, setExpandedReplies] = useState<any>({}); 
   const { id } = props?.data;
   const { toast } = useToast();
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
-  const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO;
+  const previewVideoPoster = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_POSTER;
+  const previewVideoSource = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_SOURCE;
+  const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_HOST;
   const [open, setOpen] = React.useState(false);
   const [slide, setSlide]: any = React.useState([]);
   const [slideIndex, setSlideIndex] = useState<number>(0);
@@ -61,9 +66,11 @@ const PostGrid = (props: any) => {
 
   useEffect(() => {
     getPostDetails(id);
-    getPostComments(id,0, "rendom");
+    getPostComments(id,0, "initial");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  //fetch post details
   const getPostDetails = async (id: any) => {
     setCircleLoader(true);
     await postDetail(id).then((res: any) => {
@@ -77,108 +84,122 @@ const PostGrid = (props: any) => {
     });
   };
 
-  const getPostComments = async (id: string, offset = 0, type:any) => {
+// fetch main comment 
+  const getPostComments = async (id: string, offset = 0, type: string) => {
     setIsLoader(true);
-    const res = await postComments(id, offset);
-    if (!res.error) {
-      setTotalComments(res?.counts);
-      type == 'viewMore'?  setCommentInfo((prev: any) => [...prev, ...res?.results]) : setCommentInfo(res?.results)
-     
-      setOffset(offset + 5);
-      // setTotalComments(res.count);
-    }
-    setIsLoader(false);
-  };
-
-
-  const [replyInfo, setReplyInfo]: any = useState(null);
-  const moreReply = async (parentId: any, offset = 0) => {
-    setIsLoader(true);
-    const res = await viewMoreComments({ id, parentId, offset });
-    if (!res.error) {
-      const newReplies= res?.results || {};
-      setReplyInfo(newReplies)
-
-  
-      // setCommentInfo((prevComments:any) => {
-      //   const updateComments = (comments: any) => {
-      //     return comments.map((comment: any) => {
-      //       if (comment.id === parentId) {
-      //         return {
-      //           ...comment,
-      //           children: [...(comment?.children || []), ...newComments],
-      //           offset: (comment.offset || 0) + 5,
-      //         };
-      //       }
-      //       return comment;
-      //     });
-      //   };
-      //   return updateComments(prevComments);
-      // });
-
-      // setReplyComment(commentInfo, newReplies, parentId, "");
-
-    }
-    setIsLoader(false);
-  };
-
-  const setReplyComment = (
-    array: any,
-    replyObj: any,
-    parentId: number,
-    type: string
-  ) => {
-    if (parentId) {
-      array?.map(async (item: any, i: number) => {
-        if (parentId == item?.id) {
-          item.offset =
-            replyObj?.length < 5
-              ? item.offset + replyObj?.length
-              : item?.offset;
-          item.children = item.children ? item.children : [];
-          item.children =
-            type == "post"
-              ? [replyObj, ...item.children]
-              : item.children.concat(replyObj);
-          type != "post" ? (item.loadMore = false) : "";
-          item.totalComment =
-            item.totalComment > item.children.length
-              ? type === "post"
-                ? item.totalComment + 1
-                : item.totalComment
-              : item.children.length;
-
-          return await setCommentInfo([...commentInfo]);
+    try {
+      const res = await postComments(id, offset);
+      if (!res.error) {
+        setTotalComments(res?.counts || 0);
+        if (type === "viewMore") {
+          // Append new comments to the existing list
+          setCommentInfo((prev: any) => [...prev, ...res?.results]);
+        } else {
+          // Replace comments for initial fetch
+          setCommentInfo(res?.results || []);
         }
-        item?.children
-          ? setReplyComment(item.children, replyObj, parentId, type)
-          : "";
-      });
-    } else {
-      const updatedCommentRecord: any = commentInfo?.length
-        ? [replyObj, ...commentInfo]
-        : [replyObj];
-      setCommentInfo(updatedCommentRecord);
-      props.feeds.totalComment += 1;
-      props.setEventResponse(props.feeds.totalComment, props.index);
+        // setOffset(offset + 5);
+        setOffset(offset + res?.results?.length); 
+      }
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    } finally {
+      setIsLoader(false);
     }
   };
+  
 
 
-  // hide replies 
-  const hideReplies = (parentId: string) => {
-    setReplyInfo(null)
-    // setReplyInfo((prevComments: any) => {
-    //   const updateComments = (comments: any) =>
-    //     comments.parentComment.map((reply: any) => {
-    //       if (reply.id === parentId) {
-    //         return { ...reply, parentComment: [] };
-    //       }
-    //       return reply;
-    //     });
-    //   return updateComments(prevComments);
-    // });
+//fetch replies function
+  const fetchRepliesForComment = async (commentId: string, replyOffset = 0) => {
+    setLoadingReplies((prev: any) => ({ ...prev, [commentId]: true }));
+    const res = await viewMoreComments({id: id?.[0],commentId, replyOffset});
+    if (!res.error) {
+      const newReplies = res?.results?.parentComment || [];
+      setReplyInfo((prev: any) => ({
+        ...prev,
+        [commentId]: [...(prev[commentId] || []), ...newReplies],
+      }));
+      setExpandedReplies((prev: any) => ({ ...prev, [commentId]: true })); // Automatically expand replies
+    }
+    setLoadingReplies((prev: any) => ({ ...prev, [commentId]: false }));
   };
+
+  const toggleReplies = (commentId: string) => {
+    setExpandedReplies((prev: any) => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }));
+  };
+
+
+//render nested replies
+  const renderReplies = (replies: any[], parentId: string) => (
+    <div className="ml-8 mt-2">
+      {replies.map((reply: any) => (
+        <div key={reply.id} className="space-y-4">
+          <div className="flex gap-3">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={reply?.users?.profile} />
+              <AvatarFallback className="bg-[#FFC1BB]" >
+              {formatName(reply?.users?.name) || "NA"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <div className="bg-muted rounded-lg p-3">
+                <p className="font-semibold">{reply?.users?.name?.trim() || "N/A"}</p>
+                <p className="text-sm">{reply?.comment}</p>
+              </div>
+              <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
+              <span>
+                {reply?.totalLikes ? reply?.totalLikes : 0}{" "}
+                {reply?.totalLikes > 1 ? "likes" : "like"}
+                  </span>
+                <span>
+                  {reply?.createdAt
+                    ? `${formatDistanceToNow(new Date(reply.createdAt))} ago`
+                    : "N/A"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Handle Nested Replies */}
+          {reply.totalCount > 0 && !expandedReplies[reply.id] && (
+            <div className="flex justify-end">
+              <Button
+                variant="link"
+                onClick={() => fetchRepliesForComment(reply.id, 0)}
+                disabled={loadingReplies[reply.id]}
+              >
+                {loadingReplies[reply.id]
+                  ? "Loading..."
+                  : `View ${reply.totalCount} More Replies`}
+              </Button>
+            </div>
+          )}
+
+          {/* Show/Hide Replies Button */}
+          {replyInfo[reply.id] && expandedReplies[reply.id] && (
+            <div className="flex justify-end">
+              <Button
+                variant="link"
+                onClick={() => toggleReplies(reply.id)}
+                disabled={loadingReplies[reply.id]}
+              >
+                {expandedReplies[reply.id] ? "Hide Replies" : "Show Replies"}
+              </Button>
+            </div>
+          )}
+
+          {/* Render Nested Replies */}
+          {replyInfo[reply.id] &&
+            expandedReplies[reply.id] &&
+            renderReplies(replyInfo[reply.id], reply.id)}
+        </div>
+      ))}
+    </div>
+  );
 
   const playerRef = useRef(null);
   const playPauseVideo = () => {
@@ -235,7 +256,7 @@ const PostGrid = (props: any) => {
     <>
       <div className="p-4"></div>
 
-      <div className="grid md:grid-cols-[1fr_400px] gap-4 p-4  mx-auto">
+      <div className="grid md:grid-cols-[1fr_400px] gap-4 mx-auto">
         <Card className="bg-white dark:bg-black">
           <CardHeader className="flex flex-row items-center gap-4 p-4">
             <Avatar className="h-14 w-14 border border-gray-700">
@@ -243,7 +264,7 @@ const PostGrid = (props: any) => {
                 src={postInfo?.users?.image}
                 alt={postInfo?.users?.name || "User avatar"}
               />
-              <AvatarFallback>
+              <AvatarFallback className="bg-[#FFC1BB]" >
                 {formatName(postInfo?.users?.name || "Default Image")}
               </AvatarFallback>
             </Avatar>
@@ -288,36 +309,16 @@ const PostGrid = (props: any) => {
                 <div className="relative border border-gray-300 rounded-lg overflow-hidden">
                   <CarouselContent>
                     {postInfo?.contents?.length > 0 ? (
-                      postInfo.contents.map((data: any, i: any) => (
-                        <CarouselItem
-                          key={i}
-                          className="aspect-video"
-                          onClick={() => {
-                            setOpen(true);
-                            setSlideIndex(i);
-                            setSlide(
-                              postInfo?.contents.map((item: any) => ({
-                                src:
-                                  item?.file && item?.file?.trim() !== ""
-                                    ? `${previewImgUrl}${item?.file}`
-                                    : "/default_image.png",
-                              }))
-                            );
-                          }}
-                        >
-                          <Image
-                            src={
-                              data?.file && data.file.trim() !== ""
-                                ? previewImgUrl + data.file
-                                : "/default_image.png"
-                            }
-                            width={448}
-                            height={252}
-                            alt="Post Image"
-                            className="object-contain rounded-md size-full"
-                          />
-                        </CarouselItem>
-                      ))
+                             postInfo.contents.map((data: any, i: any) => {
+                              return (
+                              <CarouselItem key={i} className="aspect-video">
+                                { data?.mimeType?.includes("image") ?
+                                  <Image src={previewImgUrl + data?.file || "/default_image.png"} alt="Post Image" width={448} height={252} className="object-contain rounded-md size-full" />
+                                  : <ReactVideoPlayer url={(data?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (data?.file ? data?.file : data?.url)} controls={true} width="" height="" />
+                                  }
+                              </CarouselItem>
+                            )})
+                          
                     ) : (
                       <CarouselItem className="aspect-video">
                         <Image
@@ -392,121 +393,112 @@ const PostGrid = (props: any) => {
         </Card>
 
         <Card className="bg-white dark:bg-black">
-          <CardHeader className="border-b p-4">
-            <h3 className="font-semibold">
-              Comments {commentInfo.length ? `(${totalComments})` : ""}
-            </h3>
-          </CardHeader>
-          <CardContent className="p-4 space-y-4 overflow-y-auto max-h-[calc(100vh_-_200px)]">
-            {commentInfo.length === 0 ? (
-              <div className="flex flex-col justify-center items-center p-20">
-                <Image
-                  src="/no-data.svg"
-                  alt="No Comments"
-                  width={320}
-                  height={320}
-                />
-                <span className="font-semibold text-lg">No Record Found</span>
-              </div>
-            ) : (
-              commentInfo.map((comment: any, index: number) => (
-                <div key={index} className="space-y-4">
-                  <div className="flex gap-3">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={comment?.users?.profile} />
-                      <AvatarFallback>
-                        {formatName(comment?.users?.name) || "NA"}
-                      </AvatarFallback>
-                    </Avatar>
-
-                    <div className="flex-1">
-                      <div className="bg-muted rounded-lg p-3">
-                        <p className="font-semibold">{comment?.users?.name}</p>
-                        <p
-                          className="text-sm break-words whitespace-pre-wrap"
-                          style={{ wordBreak: "break-word" }}
-                        >
-                          {shortName(
-                            comment?.comment ? comment?.comment : " ",
-                            expandedSections[comment.id]
-                          )}
-                          {comment?.comment &&
-                            comment?.comment.length >= 28 && (
-                              <button
-                                className="text-cyan-500 ml-2"
-                                onClick={() =>
-                                  toggleSectionExpanded(comment.id)
-                                }
-                              >
-                                {expandedSections[comment.id]
-                                  ? "Read less"
-                                  : "Read more"}
-                              </button>
-                            )}
-                        </p>
-                      </div>
-                      <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
-                        <span>{comment?.commentLikes || 0} likes</span>
-                        <span>
-                          {comment?.createdAt
-                            ? `${formatDistanceToNow(
-                                new Date(comment.createdAt)
-                              )} ago`
-                            : "N/A"}
-                        </span>
-                      </div>
-                    </div>
+      <CardHeader className="border-b p-4">
+        <h3 className="font-semibold">
+        {totalComments > 1 ? "Comments" : "Comment"}{" "}{totalComments ? `(${totalComments})` : ""}
+        </h3>
+      </CardHeader>
+      <CardContent className="p-4 space-y-4 overflow-y-auto max-h-[calc(100vh_-_200px)]">
+        {commentInfo.length === 0 ? (
+          <div className="flex flex-col justify-center items-center p-20">
+            <Image
+              src="/no-data.svg"
+              alt="No Comments"
+              width={320}
+              height={320}
+            />
+            <span className="font-semibold text-lg">No Record Found</span>
+          </div>
+        ) : (
+          commentInfo.map((comment: any) => (
+            <div key={comment.id} className="space-y-4">
+              <div className="flex gap-3">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={comment?.users?.profile} />
+                  <AvatarFallback className="bg-[#FFC1BB]" >
+                    {formatName(comment?.users?.name) || "NA"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="bg-muted rounded-lg p-3">
+                    <p className="font-semibold">
+                      {comment?.users?.name?.trim() || "N/A"}
+                    </p>
+                    <p className="text-sm">{comment?.comment}</p>
                   </div>
-                  {comment.totalCount > 0 && replyInfo && (
-                    <div className="mt-2 ml-8">
-                      <Button
-                        className="mt-2"
-                        variant="link"
-                        onClick={() => hideReplies(comment.id)}
-                      >
-                        Hide Replies
-                      </Button>
-                      {renderNestedComments(
-                        replyInfo,
-                        moreReply,
-                        isLoader,
-                        hideReplies
-                      )}
-                    </div>
-                  )}
-                  {(comment.totalCount > 0) && (comment.totalCount !== replyInfo?.parentComment?.length) && (
-                    <span className="flex justify-end">
-                      <Button
-                        className="mt-2"
-                        variant="link"
-                        onClick={() =>
-                          moreReply(comment.id, 0)
-                        }
-                      >
-                        View{" "}
-                        {comment.totalCount  - (replyInfo?.parentComment?.length || 0)}{" "}
-                        More Replies
-                      </Button>
+                  <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
+                  <span>
+                {comment?.totalLikes ? comment?.totalLikes : 0}{" "}
+                {comment?.totalLikes > 1 ? "likes" : "like"}
+                  </span>
+
+                    <span>
+                      {comment?.createdAt
+                        ? `${formatDistanceToNow(
+                            new Date(comment.createdAt)
+                          )} ago`
+                        : "N/A"}
                     </span>
-                  )}
+                  </div>
                 </div>
-              ))
-            )}
-            {commentInfo.length < totalComments && (
-              <span className="flex justify-end">
-                <Button
-                  className="gap-1 w-auto mt-4"
-                  disabled={isLoader}
-                  variant="link"
-                  onClick={() => getPostComments(id, offset, "viewMore")}
-                >
-                  <b>View {totalComments - (commentInfo?.length || 0)} More Comments</b>
-                  {isLoader && <Spinner size="small" />}
-                </Button>
-              </span>
-            )}
-          </CardContent>
-        </Card>
+              </div>
+
+              {/* Handle Nested Replies */}
+              {comment.totalCount > 0 && !expandedReplies[comment.id] && (
+                <div className="flex justify-end">
+                  <Button
+                    variant="link"
+                    onClick={() => fetchRepliesForComment(comment.id, 0)}
+                    disabled={loadingReplies[comment.id]}
+                  >
+                    {loadingReplies[comment.id]
+                      ? "Loading..."
+                      : `View ${comment.totalCount} More Replies`}
+                  </Button>
+                </div>
+              )}
+
+              {/* Show/Hide Replies Button */}
+              {replyInfo[comment.id] && expandedReplies[comment.id] && (
+                <div className="flex justify-end">
+                  <Button
+                    variant="link"
+                    onClick={() => toggleReplies(comment.id)}
+                  >
+                    {expandedReplies[comment.id] ? "Hide Replies" : "Show Replies"}
+                  </Button>
+                </div>
+              )}
+
+              {/* Render Replies */}
+              {replyInfo[comment.id] &&
+                expandedReplies[comment.id] &&
+                renderReplies(replyInfo[comment.id], comment.id)}
+            </div>
+          ))
+        )}
+
+  {/* View More Comments Button */}
+  {commentInfo.length < totalComments && (
+      <span className="flex justify-end">
+        <Button
+          className="gap-1 w-auto mt-4"
+          disabled={isLoader}
+          variant="link"
+          onClick={() => getPostComments(id, offset, "viewMore")}
+        >
+          <b>
+            View {Math.min(5, totalComments - commentInfo.length)} More Comment
+            {totalComments - commentInfo.length > 1 ? "s" : ""}
+          </b>
+          {isLoader && <Spinner size="small" />}
+        </Button>
+      </span>
+    )}
+
+            
+      </CardContent>
+    </Card>
       </div>
       {/* Lightbox */}
       <Lightbox

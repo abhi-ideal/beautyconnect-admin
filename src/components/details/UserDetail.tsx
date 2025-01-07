@@ -64,12 +64,12 @@ const UserDetail = (props: any) => {
 
     return (
         <>
-            <div className="max-w-12xl flex flex-col gap-6 p-6 sm:p-8">
+            <div className="max-w-12xl flex flex-col gap-6 pt-8">
                 <Card className="flex flex-col p-6 space-y-6">
                     <div className="flex flex-col items-center border-b pb-6">
                         <Avatar className="w-24 h-24">
                             <AvatarImage src={userInfo ? previewImgUrl+ userInfo?.profile : ""} />
-                            <AvatarFallback className="bg-orange-500">
+                            <AvatarFallback className="bg-[#FFC1BB]">
                                 {formatName(userInfo?.name) || "N/A"}
                             </AvatarFallback>
                         </Avatar>
@@ -126,23 +126,24 @@ const UserDetail = (props: any) => {
                                 {/* { userInfo?.skills?.map((skill:any)=>{
                                     return <InfoRow label={skill?.title} value={skill?.description || "N/A"} />
                                 })} */}
-                                              <div className="flex items-center gap-x-10 rounded-sm">
-                  <div className="font-bold w-1/3">Location</div>
-                  <div className="font-extralight text-sm space-y-2 grow shrink-0 basis-[0%]">
-                    {userInfo?.address?.latitude && userInfo?.address?.longitude ? (
-                      <Button
-                        variant="link"
-                        className="flex items-center text-blue-600 hover:underline p-0"
-                        onClick={handleNavigateToMap}
-                      >
-                        <MapPin className="mr-1 h-5 w-5" />
-                        Map
-                      </Button>
-                    ) : (
-                      <span>N/A</span>
-                    )}
-                  </div>
-                </div>
+     <div className="flex items-start gap-20">
+  <div className="font-bold min-w-36">Location:</div>
+  <div className="flex items-center gap-x-2">
+    {userInfo?.address?.latitude && userInfo?.address?.longitude ? (
+      <Button
+        variant="link"
+        className="flex items-center text-blue-600 hover:underline p-0"
+        onClick={handleNavigateToMap}
+      >
+        <MapPin className="mr-1 h-5 w-5" />
+        Map
+      </Button>
+    ) : (
+      <span className="text-gray-500">N/A</span>
+    )}
+  </div>
+</div>
+
                             </div>
                         </div>
                     </div>

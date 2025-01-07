@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow
 } from "../ui/table";
+import { usePathname } from "next/navigation";
 
 export default function TanStackBasicTable<TData, TValue>({
   isTableDataLoading,
@@ -83,9 +84,11 @@ export default function TanStackBasicTable<TData, TValue>({
   }, [columnFilters, setPagination]);
 
   const shimmer = [...Array(20)];
+  const pathname = usePathname();
 
+  // className={pathname.includes('/courses/') ? 'px-0' : 'p-8'}
   return (
-    <div className="p-8">
+    <div  className="px-0 pt-4">
       {!hideFilter &&  <TanStackBasicTableFilterComponent
         table={table}
         setColumnFilters={setColumnFilters}

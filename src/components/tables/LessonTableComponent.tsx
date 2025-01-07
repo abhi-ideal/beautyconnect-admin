@@ -16,8 +16,11 @@ import AuthService from "@/api/auth/AuthService";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Lesson } from '@/types/Lessons';
 import { useGetLessons } from '@/api/useGetLessons';
+import { Card } from '../ui/card';
+import AddEditLesson from '../form/AddEditLesson';
+import LessonApi from '@/api/lessonApi';
 
-const LessonTableComponent = ({courseId}:any) => {
+const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
   const { logout } = AuthService();
   const router = useRouter();
   const { toast } = useToast();
@@ -25,7 +28,9 @@ const LessonTableComponent = ({courseId}:any) => {
   // sorting state of the table
   const [sorting, setSorting] = useState<SortingState>([]);
   const [open, setOpen] = useState(false);
+  const [type, setType] = useState('add');
   const [editData, setEditData]: any = useState({});
+  const {deleteLesson, updateLesson } = LessonApi()
 
   // column filters state of the table
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -37,7 +42,7 @@ const LessonTableComponent = ({courseId}:any) => {
     pageSize: 20 //default page size
   });
 
-  const [allLessons, setAllLessons]: any = useState([]);
+  // const [allLessons, setAllLessons]: any = useState([]);
 
   const { allLessonsData, isAllLessonsDataLoading }: any =
     useGetLessons({
@@ -58,14 +63,114 @@ const LessonTableComponent = ({courseId}:any) => {
     setAllLessons(allLessonsData);
   }, [allLessonsData]);
 
+
+
+
+
+
+
+
+  async function deleteData(data: any) {
+    Swal.fire({
+      text: `Are you sure you want to delete this Course?`,
+      showCancelButton: true,
+      confirmButtonColor: `#18181B`,
+      cancelButtonColor: "white",
+      icon: "warning",
+      customClass: {
+        cancelButton: `cancel_button`
+      },
+      confirmButtonText: "Confirm Delete"
+    }).then(async (result: any) => {
+      if (result.value) {
+        await deleteLesson(data?.id).then((res: any) => {
+          if (!res?.error) {
+            const deletedData = (allLessons.results =
+              allLessons?.results?.filter(
+                (res: any) => data?.id !== res?.id
+              ));
+              setAllLessons({ ...allLessons, results: deletedData });
+            toast({
+              title: "Lesson deleted sucessfully.",
+              description: res?.message
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: res?.errorMessage ? res?.errorMessage : "Uh oh! Something went wrong.",
+              description: res?.error
+            });
+          }
+        });
+      }
+    });
+  }
+
+
+  async function updateData(data: any) {
+    const status: any = data.status == "active" ? "inactive" : "active";
+    Swal.fire({
+      text: `Are you sure you want to ${status} this course.`,
+      showCancelButton: true,
+      confirmButtonColor: `#18181B`,
+      cancelButtonColor: "white",
+      icon: "warning",
+      customClass: {
+        cancelButton: `cancel_button`
+      },
+      confirmButtonText: `Confirm ${
+        data.status == "active" ? "Inactive" : "Active"
+      }`
+    }).then(async (result: any) => {
+      if (result.value) {
+        await updateLesson({status: status}, data.id ).then(
+          async (res: any) => {
+            if (!res.error) {       
+              const updatedCategory = allLessons?.results?.map((res: any) => {
+                if (data?.id == res?.id) {
+                  res.status = status;
+                  return res;
+                } else {
+                  return res;
+                }
+              });
+              setAllLessons({ ...allLessons, results: updatedCategory });
+              toast({
+                title: "Status updated sucessfully.",
+                description: res?.message
+              });
+            } else {
+              toast({
+                variant: "destructive",
+                title: res?.errorMessage ? res?.errorMessage : "Uh oh! Something went wrong.",
+                description: res?.error
+              });
+            }
+          }
+        );
+      }
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
   //updates data
   async function update(data: any) {
     setOpen(true);
+    setType('edit');
     setEditData(data);
   }
 
   const details = (data: any, header: string) => {
-    header != "description" && router.push(`/courses/${courseId}/lesson/${data?.id}`)
+    // header != "description" && router.push(`/courses/${courseId}/lesson/${data?.id}`)
   };
 
   const [expandedDescription, setExpandedDescription]:any = useState({});
@@ -151,10 +256,10 @@ const LessonTableComponent = ({courseId}:any) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push(`/courses/${courseId}/lesson/${rowData?.id}`)}>
+              {/* <DropdownMenuItem onClick={() => router.push(`/courses/${courseId}/lesson/${rowData?.id}`)}>
                 View Chapters
-              </DropdownMenuItem>
-              {/* 
+              </DropdownMenuItem> */}
+              
               <DropdownMenuItem onClick={() => updateData(rowData)}>
                 {
                   rowData.status ? rowData.status == "active"
@@ -164,7 +269,10 @@ const LessonTableComponent = ({courseId}:any) => {
               <DropdownMenuItem onClick={() => deleteData(rowData)}>
                 Delete
               </DropdownMenuItem>
-              */}
+             
+              <DropdownMenuItem onClick={() => update(rowData)}>
+                Update
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -174,6 +282,14 @@ const LessonTableComponent = ({courseId}:any) => {
 
   return (
     <>
+    {
+      !open ?
+      <div className="relative mt-8">
+        <div className="absolute top-0 start-0 flex gap-4">
+          <div className="flex items-center">
+            <Button onClick={() => {setType('add');setOpen(true)}}>Add Lesson</Button>
+          </div>
+        </div>
       <TanStackBasicTable
         isTableDataLoading={isAllLessonsDataLoading}
         paginatedTableData={allLessons}
@@ -186,7 +302,16 @@ const LessonTableComponent = ({courseId}:any) => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
-      />
+        />
+      </div>
+      :
+      <div className='py-6'>
+        <Card className='p-6'>
+        <div className="text-center text-2xl font-semibold">{type!='edit' ? "Add " : "Edit "}Lesson</div>
+        <AddEditLesson props={{ courseId:courseId,  setOpen, type: type, editData, setEditData, allLessons, setAllLessons }} />
+        </Card>
+      </div>
+      }
     </>
   )
 }

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/demo/mode-toggle";
 import { useTheme } from "next-themes";
+import moment from 'moment';
 
 export default function OnBoardLayout({
   children,
@@ -16,6 +17,8 @@ export default function OnBoardLayout({
 }>) {
   const { theme } = useTheme();
   const router = useRouter();
+  const currentYear = moment().format('YYYY'); 
+  
   const { isAuthenticated, isLoading } = useAppSelector((state: any) => state.auth)
   useEffect(() => {
     if(!isLoading){
@@ -87,7 +90,7 @@ export default function OnBoardLayout({
               <footer className="text-sm">
                 <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
                   <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
-                    © 2024, Beauty Connect Admin
+                    © {currentYear}, Beauty Connect Admin
                   </p>
                 </div>
               </footer>
@@ -120,7 +123,7 @@ export default function OnBoardLayout({
               <footer className="text-sm">
                 <div className="container flex flex-col items-center justify-center gap-4 lg:h-24 md:flex-row">
                   <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
-                    © 2024, Beauty Connect Admin
+                    © {currentYear}, Beauty Connect Admin
                   </p>
                 </div>
               </footer>

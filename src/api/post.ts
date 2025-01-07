@@ -99,12 +99,12 @@ export default function PostApi() {
           }
     };
 
-    const viewMoreComments = async (data:any) => {
+    const viewMoreComments = async (data:any) => { 
         try {
            const param = {
                 offset: data?.offset || 0,
                 limit: data?.limit || 5,
-                commentId:data?.parentId,
+                commentId:data?.commentId,
                 id:data?.id
             }
             const url = routes.CHILD_COMMENT_LIST(param);
