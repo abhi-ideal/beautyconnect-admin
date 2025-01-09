@@ -204,7 +204,7 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
               <AvatarImage
                 src={
                   icon
-                    ? previewImgUrl+"skills/"+icon
+                    ? previewImgUrl+icon
                     : ""
                 }
                 alt={title || "icon"}

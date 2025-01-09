@@ -179,7 +179,7 @@ const FlaggedPostTableComponent = () => {
       accessorKey: "name",
       accessorFn: (row: flaggedPost) => row.reportedUser,
       enableSorting: false,
-      enableColumnFilter: true,
+      enableColumnFilter: false,
       cell: (info) => {
         const imageUrl:any = info.getValue();
         const bgColor = color[info?.row?.index % color.length ];

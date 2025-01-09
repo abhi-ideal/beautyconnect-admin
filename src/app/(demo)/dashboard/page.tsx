@@ -43,7 +43,7 @@ const userChartConfig = {
     color: "lime",
   },
   feeds: {
-    label: "Feeds",
+    label: "Posts",
     color: "orange",
   },
 } satisfies ChartConfig
@@ -99,15 +99,15 @@ export default function DashboardPage() {
       let result=[];
       if (res?.type==="monthly") {
         filterDay.map((day:number)=>{
-          const userCount = res?.usersGraph?.find((item: any) => item?.day === day)?.counts || 0;
-          const jobCount = res?.jobsGraph?.find((item: any) => item?.day === day)?.counts || 0;
+          const userCount = res?.userGraph?.find((item: any) => item?.day === day)?.counts || 0;
+          // const jobCount = res?.jobsGraph?.find((item: any) => item?.day === day)?.counts || 0;
           const courseCount = res?.coursesGraph?.find((item: any) => item?.day === day)?.counts || 0;
           const feedCount = res?.feedsGraph?.find((item: any) => item?.day === day)?.counts || 0;
           result.push(
             {  
               month: day,
               users: userCount,
-              jobs: jobCount,
+              // jobs: jobCount,
               courses: courseCount,
               feeds: feedCount
             }
@@ -115,15 +115,15 @@ export default function DashboardPage() {
         })
       } else if(res?.type==="yearly") {
         result = filterMonths?.map((i:number) => {
-            const userCount = res?.usersGraph?.find((item:any) => item?.month == i)?.counts || 0;
-            const jobCount = res?.jobsGraph?.find((item:any) => item?.month == i)?.counts || 0;
+            const userCount = res?.userGraph?.find((item:any) => item?.month == i)?.counts || 0;
+            // const jobCount = res?.jobsGraph?.find((item:any) => item?.month == i)?.counts || 0;
             const courseCount = res?.coursesGraph?.find((item:any) => item?.month == i)?.counts || 0;
             const feedCount = res?.feedsGraph?.find((item:any) => item?.month == i)?.counts || 0;
         
             return {
                 month:monthName[Number(i-1)],
                 users: userCount,
-                jobs: jobCount,
+                // jobs: jobCount,
                 courses: courseCount,
                 feeds: feedCount
             };
@@ -142,7 +142,11 @@ export default function DashboardPage() {
     setLoading(true)
     await getDashboardCount(body).then((res: any) => {
       if (!res?.error) {
-        const result = { ...res?.responseData1, ...res?.responseData2 };
+        // console.log('res', res);
+
+        const result = { ...res?.responseData1?.result, ...res?.responseData2 };
+        // console.log('result', result);
+        
         setDashboardCount(result);
         setLoading(false)
       } else {
@@ -170,31 +174,17 @@ export default function DashboardPage() {
   };
 
   return (
-    <ContentLayout title="Dashboard">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/">Home</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Dashboard</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <ContentLayout title="">
 
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-4 md:p-8">
+      <main className="flex flex-1 flex-col gap-4 pb-4 md:gap-4">
 
         <div className="flex items-center justify-between space-y-2">
-          {/* <h2 className="text-3xl font-bold tracking-tight">
-            Hi, Welcome back 👋
-          </h2> */}
+        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+
           <div className="hidden items-center space-x-2 md:flex">
             <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} />
-            <Button disabled={loading} onClick={getData} >Date Filter</Button>
-            <Button disabled={loading} onClick={() => resetDate('dashboard')} ><RotateCcw /></Button>
+            <Button disabled={loading || !date} onClick={getData} >Date Filter</Button>
+            {date && ( <Button disabled={loading} onClick={() => resetDate('dashboard')} ><RotateCcw /></Button> )}
           </div>
         </div>
 
@@ -220,7 +210,7 @@ export default function DashboardPage() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{dashboardCount?.totalUsers || 0}</div>
+                <div className="text-2xl font-bold">{dashboardCount?.total || 0}</div>
               </CardContent>
             </Card>
             </Link>
@@ -293,16 +283,16 @@ export default function DashboardPage() {
       </main>
 
 
-      <div className="w-full flex flex-col gap-6 p-6 sm:p-8">
+      <div className="w-full flex flex-col gap-6 pt-5">
         <div className="grid w-full gap-4 md:gap-6">
           <Card className="w-full">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="font-bold tracking-tight">Chart</CardTitle>
                 <Badge className={`bg-${userChartConfig?.users?.color}-500`}>{userChartConfig?.users?.label}</Badge>
-                <Badge className={`bg-${userChartConfig?.courses?.color}-500`}>{userChartConfig?.courses?.label}</Badge>
                 <Badge className={`bg-${userChartConfig?.feeds?.color}-500`}>{userChartConfig?.feeds?.label}</Badge>
-                <Badge className={`bg-${userChartConfig?.jobs?.color}-500`}>{userChartConfig?.jobs?.label}</Badge>
+                <Badge className={`bg-${userChartConfig?.courses?.color}-500`}>{userChartConfig?.courses?.label}</Badge>
+                {/* <Badge className={`bg-${userChartConfig?.jobs?.color}-500`}>{userChartConfig?.jobs?.label}</Badge> */}
                 <div className="hidden items-center space-x-2 md:flex">
                   <CalendarDateRangePicker date={grapgDate} setDate={setGraphDate} disabledDates={disabledDates} />
                   <Button disabled={loading} onClick={() => resetDate('graph')} className="flex items-center justify-center"><RotateCcw /></Button>
@@ -341,21 +331,7 @@ export default function DashboardPage() {
                       tickCount={5}
                     />
                     <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-                    <Line
-                      dataKey="feeds"
-                      type="monotone"
-                      stroke="var(--color-feeds)"
-                      strokeWidth={2}
-                      dot={{ fill: "var(--color-feeds)" }}
-                      activeDot={{ r: 6 }}
-                    >
-                      <LabelList
-                        position="top"
-                        offset={12}
-                        className="fill-foreground"
-                        fontSize={12}
-                      />
-                    </Line>
+                   
                     <Line
                       dataKey="users"
                       type="monotone"
@@ -372,6 +348,22 @@ export default function DashboardPage() {
                       />
                     </Line>
                     <Line
+                      dataKey="feeds"
+                      type="monotone"
+                      stroke="var(--color-feeds)"
+                      strokeWidth={2}
+                      dot={{ fill: "var(--color-feeds)" }}
+                      activeDot={{ r: 6 }}
+                    >
+                      <LabelList
+                        position="top"
+                        offset={12}
+                        className="fill-foreground"
+                        fontSize={12}
+                      />
+                    </Line>
+
+                    {/* <Line
                       dataKey="jobs"
                       type="monotone"
                       stroke="var(--color-jobs)"
@@ -385,7 +377,7 @@ export default function DashboardPage() {
                         className="fill-foreground"
                         fontSize={12}
                       />
-                    </Line>
+                    </Line> */}
                     <Line
                       dataKey="courses"
                       type="monotone"
