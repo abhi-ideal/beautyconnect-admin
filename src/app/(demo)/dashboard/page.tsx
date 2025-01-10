@@ -101,8 +101,8 @@ export default function DashboardPage() {
         filterDay.map((day:number)=>{
           const userCount = res?.userGraph?.find((item: any) => item?.day === day)?.counts || 0;
           // const jobCount = res?.jobsGraph?.find((item: any) => item?.day === day)?.counts || 0;
-          const courseCount = res?.coursesGraph?.find((item: any) => item?.day === day)?.counts || 0;
-          const feedCount = res?.feedsGraph?.find((item: any) => item?.day === day)?.counts || 0;
+          const courseCount = res?.courseGraph?.find((item: any) => item?.day === day)?.counts || 0;
+          const feedCount = res?.feedGraph?.find((item: any) => item?.day === day)?.counts || 0;
           result.push(
             {  
               month: day,
@@ -117,8 +117,8 @@ export default function DashboardPage() {
         result = filterMonths?.map((i:number) => {
             const userCount = res?.userGraph?.find((item:any) => item?.month == i)?.counts || 0;
             // const jobCount = res?.jobsGraph?.find((item:any) => item?.month == i)?.counts || 0;
-            const courseCount = res?.coursesGraph?.find((item:any) => item?.month == i)?.counts || 0;
-            const feedCount = res?.feedsGraph?.find((item:any) => item?.month == i)?.counts || 0;
+            const courseCount = res?.courseGraph?.find((item:any) => item?.month == i)?.counts || 0;
+            const feedCount = res?.feedGraph?.find((item:any) => item?.month == i)?.counts || 0;
         
             return {
                 month:monthName[Number(i-1)],
@@ -190,8 +190,8 @@ export default function DashboardPage() {
 
         {loading ? (
           <div className="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
-            {shimmer.map((index) => (
-              <Card key={index} x-chunk="dashboard-01-chunk-3">
+            {shimmer.map((index, i) => (
+              <Card key={i} x-chunk="dashboard-01-chunk-3">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <Skeleton className="h-4 w-[150px]" />
                 </CardHeader>
@@ -210,7 +210,7 @@ export default function DashboardPage() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{dashboardCount?.total || 0}</div>
+                <div className="text-2xl font-bold">{dashboardCount?.totalUsers || 0}</div>
               </CardContent>
             </Card>
             </Link>
@@ -226,8 +226,8 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {dashboardCount?.totalFeedPost
-                        ? dashboardCount?.totalFeedPost
+                      {dashboardCount?.totalFeeds
+                        ? dashboardCount?.totalFeeds
                         : 0}
                     </div>
                   </CardContent>
@@ -236,7 +236,7 @@ export default function DashboardPage() {
 
               
 
-              <Link href="/courses">
+              {/* <Link href="/courses"> */}
                 <Card x-chunk="dashboard-01-chunk-3">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
@@ -246,13 +246,13 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {dashboardCount?.totalFeedPost
-                        ? dashboardCount?.totalFeedPost
+                      {dashboardCount?.totalCourse
+                        ? 0
                         : 0}
                     </div>
                   </CardContent>
                 </Card>
-              </Link>
+              {/* </Link> */}
 
               {/* <Link href="/skills">
             <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">

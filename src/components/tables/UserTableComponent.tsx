@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, RotateCcw } from "lucide-react";
+import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, RotateCcw, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "../ui/use-toast";
 import UserApi from "@/api/user";
@@ -284,20 +284,30 @@ const UserTableComponent = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => updateData(rowData)}>
-                {rowData.status
-                  ? rowData.status == "active"
-                    ? "Inactive"
-                    : "Active"
-                  : "N/A"}
+              <DropdownMenuItem onClick={() => updateData(rowData)} className="flex items-center space-x-2" >
+              {rowData.status == "active" ? 
+                (<LockKeyhole className="h-4 w-4 text-muted-foreground" />) : (
+                <LockKeyholeOpen className="h-4 w-4 text-muted-foreground" />
+                )}
+
+                  <span>
+                  {rowData.status
+                    ? rowData.status == "active"
+                      ? "Inactive"
+                      : "Active"
+                    : "N/A"}
+                </span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => deleteData(rowData)}>
-                Delete
+              <DropdownMenuItem onClick={() => deleteData(rowData)} className="flex items-center space-x-2" >
+              <Trash2 className="h-4 w-4 text-muted-foreground" />
+              <span>Delete</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => router.push(`users/${rowData.id}`)}
+                className="flex items-center space-x-2"
               >
-                User Detail
+                <Eye className="h-4 w-4 text-muted-foreground" />
+                <span>View Detail</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

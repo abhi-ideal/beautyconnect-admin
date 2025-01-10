@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import TanStackBasicTable from "../TanStackTable/TanStackBasicTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, SquarePlay } from "lucide-react";
+import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, SquarePlay } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -47,6 +47,10 @@ const FlaggedPostTableComponent = () => {
     columnFilters: debouncedColumnFilters,
     pagination
   });
+
+
+
+
 
   const [ allFlaggedPosts, setAllFlaggedPosts]: any = useState([]);
 
@@ -273,18 +277,27 @@ const FlaggedPostTableComponent = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => updateData(rowData)}>
+              <DropdownMenuItem onClick={() => updateData(rowData)} className="flex items-center space-x-2" >
+                
+              {rowData?.feedData?.status == "active" ? 
+                (<LockKeyhole className="h-4 w-4 text-muted-foreground" />) : (
+                <LockKeyholeOpen className="h-4 w-4 text-muted-foreground" />
+                )}
+                <span>
                 {rowData?.feedData?.status
                   ? rowData?.feedData?.status == "active"
                     ? "Inactive"
                     : "Active"
                   : "N/A"}
+                  </span>
               </DropdownMenuItem>
-              {/* <DropdownMenuItem
-                onClick={() => router.push(`posts/${rowData.actionId}`)}
+              <DropdownMenuItem
+                onClick={() => router.push(`flagged-posts/${rowData?.actionId}`)}
+                className="flex items-center space-x-2"
               >
-                Post Detail
-              </DropdownMenuItem> */}
+                <Eye className="h-4 w-4 text-muted-foreground" />
+                <span>View Detail</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

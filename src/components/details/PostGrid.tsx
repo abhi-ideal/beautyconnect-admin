@@ -140,7 +140,7 @@ const PostGrid = (props: any) => {
         <div key={reply.id} className="space-y-4">
           <div className="flex gap-3">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={reply?.users?.profile} />
+              <AvatarImage src={reply?.users?.profile?.startsWith("https://") ? reply?.users?.profile?.trim() :  previewImgUrl+ reply?.users?.profile?.trim()} />
               <AvatarFallback className="bg-[#FFC1BB]" >
               {formatName(reply?.users?.name) || "NA"}
               </AvatarFallback>
@@ -261,7 +261,7 @@ const PostGrid = (props: any) => {
           <CardHeader className="flex flex-row items-center gap-4 p-4">
             <Avatar className="h-14 w-14 border border-gray-700">
               <AvatarImage
-                src={postInfo?.users?.image}
+                src={ postInfo?.users?.profile?.startsWith("https://") ? postInfo?.users?.profile?.trim()  : previewImgUrl+postInfo?.users?.profile?.trim()}
                 alt={postInfo?.users?.name || "User avatar"}
               />
               <AvatarFallback className="bg-[#FFC1BB]" >
@@ -414,7 +414,7 @@ const PostGrid = (props: any) => {
             <div key={comment.id} className="space-y-4">
               <div className="flex gap-3">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={comment?.users?.profile} />
+                  <AvatarImage src={ comment?.users?.profile?.startsWith("https://") ? comment?.users?.profile?.trim() : previewImgUrl+ comment?.users?.profile?.trim()} />
                   <AvatarFallback className="bg-[#FFC1BB]" >
                     {formatName(comment?.users?.name) || "NA"}
                   </AvatarFallback>

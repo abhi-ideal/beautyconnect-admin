@@ -104,7 +104,7 @@ export const useGetPosts = ({
         pagination
       }),
       refetchOnWindowFocus: false, // Disable refetching on window focus
-      staleTime: 300000, // Set stale time to 5 minutes (optional)
+      staleTime: 0, // Set stale time to 5 minutes (optional)
   }); 
   return { allPostsData, isAllPostsDataLoading };
 };

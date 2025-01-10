@@ -63,8 +63,6 @@ const EditProfileForm = () => {
     }
   });
 
-console.log('user', user);
-
 
   useEffect(() => {
     form.reset({

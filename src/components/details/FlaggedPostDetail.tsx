@@ -45,7 +45,6 @@ const FlaggedPostDetail = (props: any) => {
     const previewVideoSource = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_SOURCE;
     const [reason, setReason]: any = useState({});
     const [loading, setLoading]: any = useState(false);
-
     const [expandedSections, setExpandedSections] = useState({
         title: false,
         description: false,
@@ -57,7 +56,6 @@ const FlaggedPostDetail = (props: any) => {
           [section]: !prevState[section],
         }));
       };
-
 
 
 
@@ -166,7 +164,7 @@ const FlaggedPostDetail = (props: any) => {
     if (loading) {
         return (
           <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-            <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-cyan-500 animate-spin" />
+            <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
           </div>
         );
     }
@@ -188,7 +186,7 @@ const FlaggedPostDetail = (props: any) => {
                         src={
                             postInfo?.feedData?.users?.profile?.startsWith("https://")
                             ? postInfo?.feedData?.users?.profile
-                            : previewImgUrl + postInfo?.feedData?.users?.profile
+                            : previewImgUrl + postInfo?.feedData?.users?.profile?.trim()
                         }
                         alt={postInfo?.feedData?.users?.name || "User Image"}
                       />
@@ -284,7 +282,7 @@ const FlaggedPostDetail = (props: any) => {
                                             return (
                                                 <CarouselItem key={i} className="h-64" >
                                                     {album?.mimeType?.includes("image") ?
-                                                        <Image src={previewImgUrl + album.file} alt={album.name} width={250} height={330} className="object-contain rounded-md w-full h-full bg-[#8080802e]"/>
+                                                        <Image src={previewImgUrl + album.file} alt={album.name || "Post Image"} width={250} height={330} className="object-contain rounded-md w-full h-full bg-[#8080802e]"/>
                                                         : <ReactVideoPlayer url={(album?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (album?.file ? album?.file : album?.url)} controls={true} width="" height="" />
                                                         }
                                                 </CarouselItem>
@@ -398,7 +396,7 @@ const FlaggedPostDetail = (props: any) => {
                                           "https://"
                                         )
                                           ? report?.users?.profile
-                                          : previewImgUrl + report?.users?.profile
+                                          : previewImgUrl + report?.users?.profile?.trim()
                                       }
                                     />
                                     <AvatarFallback className="bg-[#FFC1BB]" >

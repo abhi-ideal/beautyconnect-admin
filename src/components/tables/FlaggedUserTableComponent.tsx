@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import TanStackBasicTable from "../TanStackTable/TanStackBasicTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "../ui/use-toast";
 import UserApi from "@/api/user";
@@ -241,18 +241,27 @@ const FlaggedUserTableComponent = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => updateData(rowData)}>
+              <DropdownMenuItem onClick={() => updateData(rowData)} className="flex items-center space-x-2" >
+                
+              {rowData?.userData?.status == "active" ? 
+                (<LockKeyhole className="h-4 w-4 text-muted-foreground" />) : (
+                <LockKeyholeOpen className="h-4 w-4 text-muted-foreground" />
+                )}
+                <span>
                 {rowData?.userData?.status
                   ? rowData?.userData?.status == "active"
                     ? "Inactive"
                     : "Active"
                   : "N/A"}
+                  </span>
               </DropdownMenuItem>
-              {/* <DropdownMenuItem
-                onClick={() => router.push(`users/${rowData.id}`)}
+              <DropdownMenuItem
+                onClick={() => router.push(`flagged-users/${rowData?.actionId}`)}
+                className="flex items-center space-x-2"
               >
-                User Detail
-              </DropdownMenuItem> */}
+                <Eye className="h-4 w-4 text-muted-foreground" />
+                <span>View Detail</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

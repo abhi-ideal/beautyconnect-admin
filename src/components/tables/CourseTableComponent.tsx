@@ -8,7 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Dialog, DialogContent, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { formatName, shortName, titleCase } from "@/lib/utils";
@@ -312,23 +312,35 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => updateData(rowData)}>
+              <DropdownMenuItem onClick={() => updateData(rowData)} className="flex items-center space-x-2" >
+             
+              {rowData.status == "active" ? 
+                (<LockKeyhole className="h-4 w-4 text-muted-foreground" />) : (
+                <LockKeyholeOpen className="h-4 w-4 text-muted-foreground" />
+                )}
+             
+              <span>
                 {
                   rowData.status ? rowData.status == "active"
                     ? "Inactive" : "Active" : "N/A"
                 }
+                     </span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => deleteData(rowData)}>
-                Delete
+              <DropdownMenuItem onClick={() => deleteData(rowData)} className="flex items-center space-x-2" >
+              <Trash2 className="h-4 w-4 text-muted-foreground" />
+              <span>Delete</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => update(rowData)}>
-                Update
+              <DropdownMenuItem onClick={() => update(rowData)} className="flex items-center space-x-2" >
+              <Pencil className="h-4 w-4 text-muted-foreground" />
+              <span>Update</span>
               </DropdownMenuItem>
-              {/* <DropdownMenuItem
+              <DropdownMenuItem
                 onClick={() => router.push(`courses/${rowData.id}`)}
+                className="flex items-center space-x-2"
               >
-                View Detail
-              </DropdownMenuItem> */}
+                   <Eye className="h-4 w-4 text-muted-foreground" />
+                   <span>View Detail</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

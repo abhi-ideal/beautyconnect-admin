@@ -138,7 +138,7 @@ const FlaggedUserDetail = (props: any) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-        <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-cyan-500 animate-spin" />
+        <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
       </div>
     );
   }
@@ -214,8 +214,7 @@ const FlaggedUserDetail = (props: any) => {
                         userInfo?.userData?.profile?.startsWith("https://")
                           ? userInfo?.userData?.profile
                           : previewImgUrl +
-                            "temp/" +
-                            userInfo?.userData?.profile
+                            userInfo?.userData?.profile?.trim()
                       }
                       alt={userInfo?.userData?.name || "User Image"}
                     />
@@ -309,8 +308,7 @@ const FlaggedUserDetail = (props: any) => {
                                       )
                                         ? report?.users?.profile
                                         : previewImgUrl +
-                                          "temp/" +
-                                          report?.users?.profile
+                                          report?.users?.profile?.trim()
                                     }
                                   />
                                   <AvatarFallback className="bg-[#FFC1BB]">

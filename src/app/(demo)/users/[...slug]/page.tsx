@@ -14,7 +14,6 @@ import UserDetail from '@/components/details/UserDetail';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import FollowerFollowingTableComponent from '@/components/tables/FollowerFollowingTableComponent';
 const queryClient = new QueryClient();
 
 const UserDetailPage = ({ params }: any) => {
@@ -41,28 +40,6 @@ const UserDetailPage = ({ params }: any) => {
                 </BreadcrumbList>
             </Breadcrumb>
             <UserDetail data ={{ id: params.slug, type:"User" }}></UserDetail>
-            {/* <Card>
-                <Tabs defaultValue="follower">
-                    <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="follower" onClick={() => setType("follower")}>Follower</TabsTrigger>
-                        <TabsTrigger value="following" onClick={() => setType("following")}>Following</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="follower">
-                        <CardContent className="space-y-2">
-                            <QueryClientProvider client={queryClient}>
-                                <FollowerFollowingTableComponent type={'follower'} id={params.slug}/>
-                            </QueryClientProvider>
-                        </CardContent>
-                    </TabsContent>
-                    <TabsContent value="following">
-                        <CardContent className="space-y-2">
-                            <QueryClientProvider client={queryClient}>
-                                <FollowerFollowingTableComponent type={'following'} id={params.slug}/>
-                            </QueryClientProvider>
-                        </CardContent>
-                    </TabsContent>
-                </Tabs>
-            </Card> */}
         </ContentLayout>
     )
 }

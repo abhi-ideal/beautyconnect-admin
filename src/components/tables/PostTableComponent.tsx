@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import TanStackBasicTable from "../TanStackTable/TanStackBasicTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, SquarePlay } from "lucide-react";
+import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, SquarePlay, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "../ui/use-toast";
 import PostApi from "@/api/post";
@@ -206,7 +206,7 @@ const PostTableComponent = () => {
         return (
           <div className="flex">
           <Avatar>
-            <AvatarImage src={previewImgUrl+imageUrl.profile }/>
+            <AvatarImage src={ imageUrl.profile?.startsWith("https://") ? imageUrl.profile?.trim() : previewImgUrl+imageUrl.profile }/>
             <AvatarFallback className={bgColor}>
               {formatName(info.row.original?.users?.name)||"N/A"}
             </AvatarFallback>
@@ -301,20 +301,30 @@ const PostTableComponent = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => updateData(rowData)}>
-                {rowData.status
-                  ? rowData.status == "active"
-                    ? "Inactive"
-                    : "Active"
-                  : "N/A"}
+              <DropdownMenuItem onClick={() => updateData(rowData)} className="flex items-center space-x-2" >
+              {rowData.status == "active" ? 
+                (<LockKeyhole className="h-4 w-4 text-muted-foreground" />) : (
+                <LockKeyholeOpen className="h-4 w-4 text-muted-foreground" />
+                )}
+
+                  <span>
+                  {rowData.status
+                    ? rowData.status == "active"
+                      ? "Inactive"
+                      : "Active"
+                    : "N/A"}
+                </span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => deleteData(rowData)}>
-                Delete
+              <DropdownMenuItem onClick={() => deleteData(rowData)} className="flex items-center space-x-2" >
+              <Trash2 className="h-4 w-4 text-muted-foreground" />
+              <span>Delete</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => router.push(`posts/${rowData.id}`)}
+                className="flex items-center space-x-2"
               >
-                View Detail
+                <Eye className="h-4 w-4 text-muted-foreground" />
+                <span>View Detail</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

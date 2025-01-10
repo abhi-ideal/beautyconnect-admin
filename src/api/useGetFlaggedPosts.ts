@@ -97,7 +97,8 @@ export const useGetFlaggedPosts = ({
         pagination
       }),
       refetchOnWindowFocus: false, // Disable refetching on window focus
-      staleTime: 300000, // Set stale time to 5 minutes (optional)
+      // refetchOnReconnect: false, // Disable refetching when reconnecting to the network
+      staleTime: 0,
   });
   return { allFlaggedPostsData, isAllFlaggedPostsDataLoading };
 };

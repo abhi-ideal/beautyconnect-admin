@@ -1,16 +1,16 @@
 "use client"
 import UserApi from '@/api/user';
 import React, { useEffect, useState } from 'react'
-import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { formatName, titleCase } from '@/lib/utils';
 import { useToast } from "../ui/use-toast";
 import { format } from "date-fns";
-import { Loader2, MapPin } from 'lucide-react';
 import { Badge } from '../ui/badge';
 import moment from 'moment';
 import { Button } from '../ui/button';
-
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { Loader2, MapPin, Users, Calendar, Globe2, Flag, MessageSquare, Map } from 'lucide-react'
 
 const UserDetail = (props: any) => {
     const { toast } = useToast();
@@ -43,18 +43,12 @@ const UserDetail = (props: any) => {
     if (loading) {
         return (
           <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-          <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-cyan-500 animate-spin" />
+          <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
           </div>
         );
       }
-    const InfoRow = ({ label, value }: any) => (
-        <div className="flex items-start gap-20">
-            <div className="font-bold min-w-36">{label + " "}:</div>
-            <div>{value}</div>
-        </div>
-    );
 
-    
+
     const handleNavigateToMap = () => {
         if (userInfo?.address?.latitude && userInfo?.address?.longitude) {
           const googleMapsUrl = `https://www.google.com/maps?q=${userInfo?.address?.latitude},${userInfo?.address?.longitude}`;
@@ -62,93 +56,158 @@ const UserDetail = (props: any) => {
         }
       };
 
+
     return (
         <>
-            <div className="max-w-12xl flex flex-col gap-6 pt-8">
-                <Card className="flex flex-col p-6 space-y-6">
-                    <div className="flex flex-col items-center border-b pb-6">
-                        <Avatar className="w-24 h-24">
-                            <AvatarImage src={userInfo ? previewImgUrl+ userInfo?.profile : ""} />
-                            <AvatarFallback className="bg-[#FFC1BB]">
-                                {formatName(userInfo?.name) || "N/A"}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div className="font-bold text-lg mt-2">{titleCase(userInfo?.name) || "N/A"}</div>
-                        <div className="text-gray-600">{userInfo?.email || ""}</div>
-                        <div className="text-gray-600">{userInfo?.about || ""}</div>
-                        <div className="text-gray-600">
+   <div className="min-h-screen pt-8">
+      <Card className="mx-auto max-w-full">
+        <CardHeader className="flex flex-col items-center space-y-4 pb-8 p-2">
+          <Avatar className="h-24 w-24">
+              <AvatarImage src={userInfo ? previewImgUrl+ userInfo?.profile : ""} />
+            <AvatarFallback className="bg-[#FFC1BB] text-2xl font-medium">
+           {formatName(userInfo?.name) || "N/A"}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col items-center space-y-2">
+            <h1 className="text-2xl font-bold">{titleCase(userInfo?.name) || "N/A"}</h1>
+            <p className="text-sm text-muted-foreground">{userInfo?.email || ""}</p>
+            <p className="text-sm text-muted-foreground">{userInfo?.about || ""}</p>
                         {userInfo?.status ? (
                   <Badge
                     className={
                       userInfo.status.toLowerCase() === "active"
-                        ? "bg-green-500 text-white"
-                        : "bg-red-500 text-white"
+                        ? "bg-green-500 text-white mt-2"
+                        : "bg-red-500 text-white mt-2"
                     }
                   >
                     {titleCase(userInfo.status)}
                   </Badge>
                 ) : (
-                  <span className="text-sm text-gray-500">N/A</span>
+                  <span className="text-sm text-gray-500 mt-2">N/A</span>
                 )}
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-8">
+        <Separator/>
 
-                        </div>
-       
-                    </div>
-
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold">{type == "User" ? 'User' : 'Employer'} Details:</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                {/* <InfoRow label="Role" value={titleCase(userInfo?.role) || 0} /> */}
-                                <InfoRow label="Gender" value={titleCase(userInfo?.gender) || "N/A"} />
-                                <InfoRow label="Mobile Number" value={userInfo?.mobileNumber || 0} />
-                                <InfoRow label="Date of Birth" value={userInfo?.dob ? moment(userInfo.dob, "DD/MM/YYYY").format("DD/MMM/YYYY") : "N/A"} />
-                                <InfoRow label="Following" value={userInfo?.totalFollowing || 0} />
-                                <InfoRow label="Followers" value={userInfo?.totalFollower || 0} />
-                                <InfoRow label="Posts" value={userInfo?.totalPost || 0} />
-                                {/* <InfoRow label="Address" value={userInfo?.address || "N/A"} /> */}
-                                <InfoRow label="Created At" value={userInfo?.createdAt ? format(new Date(userInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"} />
-                            </div>
-                            <div>
-                                
-                                {/* <InfoRow label="Role" value={userInfo?.role || "N/A"} /> */}
-                                {/* <InfoRow label="Profession" value={userInfo?.professionType || "N/A"} /> */}
-                                {/* <InfoRow label="Distance" value={userInfo?.distance || 0} /> */}
-                                {/* <InfoRow label="Slot Duration" value={userInfo?.slotDuration || 0} /> */}
-                                <InfoRow label="Street" value={userInfo?.address?.street || "N/A"} />
-                                <InfoRow label="City" value={userInfo?.address?.city || "N/A"} />
-                                <InfoRow label="State" value={userInfo?.address?.state || "N/A"} />
-                                <InfoRow label="Country" value={userInfo?.address?.country || "N/A"} />
-                                <InfoRow label="Latitude" value={userInfo?.address?.latitude || 0} />
-                                <InfoRow label="Longitude" value={userInfo?.address?.longitude || 0} />
-                                {/* <InfoRow label="SignIn Provider" value={userInfo?.signInProvider || "N/A"} /> */}
-                                {/* <InfoRow label="Languages" value={userInfo?.knowLanguages || "N/A"} /> */}
-                                {/* { userInfo?.skills?.map((skill:any)=>{
-                                    return <InfoRow label={skill?.title} value={skill?.description || "N/A"} />
-                                })} */}
-     <div className="flex items-start gap-20">
-  <div className="font-bold min-w-36">Location:</div>
-  <div className="flex items-center gap-x-2">
-    {userInfo?.address?.latitude && userInfo?.address?.longitude ? (
-      <Button
-        variant="link"
-        className="flex items-center text-blue-600 hover:underline p-0"
-        onClick={handleNavigateToMap}
-      >
-        <MapPin className="mr-1 h-5 w-5" />
-        Map
-      </Button>
-    ) : (
-      <span className="text-gray-500">N/A</span>
-    )}
-  </div>
-</div>
-
-                            </div>
-                        </div>
-                    </div>
-                </Card>
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
+            <div className="grid gap-8 md:grid-cols-2">
+              <div className="space-y-6">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Gender</span>
+                  <span className="font-medium">{titleCase(userInfo?.gender) || "N/A"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Mobile</span>
+                  <span className="font-medium">{userInfo?.mobileNumber || 0}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Date of Birth</span>
+                  <span className="font-medium">{userInfo?.dob ? moment(userInfo.dob, "DD/MM/YYYY").format("DD/MMM/YYYY") : "N/A"}</span>
+                </div>
+              </div>
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">Following</span>
+                  </div>
+                  <span className="font-medium">{userInfo?.totalFollowing || 0}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">Followers</span>
+                  </div>
+                  <span className="font-medium">{userInfo?.totalFollower || 0}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">Posts</span>
+                  </div>
+                  <span className="font-medium">{userInfo?.totalPost || 0}</span>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <Separator />
+
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Location Information</h2>
+            <div className="grid gap-8 md:grid-cols-2">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">Street</span>
+                  </div>
+                  <span className="font-medium">{userInfo?.address?.street || "N/A"}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Globe2 className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">City</span>
+                  </div>
+                  <span className="font-medium">{userInfo?.address?.city || "N/A"}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Map className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">State</span>
+                  </div>
+                  <span className="font-medium">{userInfo?.address?.state || "N/A"}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Flag className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">Country</span>
+                  </div>
+                  <span className="font-medium">{userInfo?.address?.country || "N/A"}</span>
+                </div>
+              </div>
+              <div className="space-y-6">
+              <div className="flex justify-between">
+                  <span className="text-muted-foreground">Loaction</span>
+                  {userInfo?.address?.latitude && userInfo?.address?.longitude ? (
+                  <Button
+                    variant="link"
+                    className="h-auto p-0 text-blue-600 hover:text-blue-600"
+                    onClick={handleNavigateToMap}
+                  >
+                    <MapPin className="mr-1 h-6 w-6" />
+                    <span className="text-lg font-medium">Map</span>
+                  </Button>
+                ) : (
+                  <span className="font-medium">N/A</span>
+                )}
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Latitude</span>
+                  <span className="font-medium">{userInfo?.address?.latitude || "N/A"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Longitude</span>
+                  <span className="font-medium">{userInfo?.address?.longitude || "N/A"}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <span className="text-muted-foreground">Created At</span>
+            </div>
+            <span className="font-medium">{userInfo?.createdAt ? format(new Date(userInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
         </>
     )
 }
