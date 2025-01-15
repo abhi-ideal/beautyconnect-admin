@@ -232,13 +232,13 @@ const FlaggedUserDetail = (props: any) => {
                 >
                   <div className="font-bold text-lg mt-2">
                     {userInfo?.userData?.name
-                      ? titleCase(userInfo.userData.name.trim())
+                      ? titleCase(userInfo.userData.name?.trim())
                       : "N/A"}
                   </div>
                 </Link>
                 <div className="text-gray-600 pt-2">
                   {userInfo?.userData?.email
-                    ? userInfo?.userData?.email
+                    ? userInfo?.userData?.email?.trim()
                     : "N/A"}
                 </div>
                 <div className="text-gray-600 pt-2">
@@ -324,7 +324,7 @@ const FlaggedUserDetail = (props: any) => {
                                   className="hover:underline"
                                 >
                                   {report?.users?.name
-                                    ? titleCase(report.users.name.trim())
+                                    ? titleCase(report.users.name?.trim())
                                     : "N/A"}
                                 </Link>
                               </div>

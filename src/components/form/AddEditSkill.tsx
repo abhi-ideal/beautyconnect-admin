@@ -42,6 +42,8 @@ const AddEditSkill = (props: any) => {
   const [progress, setProgress]: any = React.useState();
   const [progressIcon, setProgressIcon]: any = React.useState();
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
+  const previewTempImgUrl = process.env.NEXT_PUBLIC_PREVIEW_TEMP_IMG_URL;
+
   const imageHaveType = ["jpg", "jpeg", "png"];
 
   const [formValues, setFormValues]: any = useState({
@@ -177,7 +179,7 @@ const AddEditSkill = (props: any) => {
               const mimeType = selectedFile?.type;
               const content = {
                 mimeType: mimeType,
-                path: previewImgUrl + "temp/" + randomFileName,
+                path: previewTempImgUrl + "public/" + randomFileName,
                 ratio: fileRatio ? fileRatio : "50x50",
                 type: mimeType?.split("/")[0],
               };

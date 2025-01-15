@@ -13,7 +13,7 @@ export default function ImageApi() {
     try {
     //   const fileType = file?.fileType;
       const imageData = {
-        fileName: "temp/" + file.randomFileName,
+        fileName: "public/" + file.randomFileName,
         fileType: file.fileType
       };
       const url = routes.IMAGE_URL();

@@ -313,8 +313,8 @@ const PostGrid = (props: any) => {
                               return (
                               <CarouselItem key={i} className="aspect-video">
                                 { data?.mimeType?.includes("image") ?
-                                  <Image src={previewImgUrl + data?.file || "/default_image.png"} alt="Post Image" width={448} height={252} className="object-contain rounded-md size-full" />
-                                  : <ReactVideoPlayer url={(data?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (data?.file ? data?.file : data?.url)} controls={true} width="" height="" />
+                                  <Image src={previewImgUrl + data?.file?.trim() || "/default_image.png"} alt="Post Image" width={448} height={252} className="object-contain rounded-md size-full" />
+                                  : <ReactVideoPlayer url={(data?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (data?.file ? data?.file?.trim() : data?.url?.trim())} controls={true} width="" height="" />
                                   }
                               </CarouselItem>
                             )})

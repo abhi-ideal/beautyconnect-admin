@@ -54,7 +54,7 @@ export default function DashboardPage() {
   const currentDate = moment();
   const firstOfMonth = currentDate.clone().startOf('month');
   const [date, setDate] = React.useState<any>();
-  const [grapgDate, setGraphDate] = React.useState<any>({
+  const [graphDate, setGraphDate] = React.useState<any>({
     from: firstOfMonth.toDate(),
     to: currentDate.toDate(),
   });
@@ -68,20 +68,32 @@ export default function DashboardPage() {
   const [dashboardCount, setDashboardCount]: any = useState({});
   const [chartUser, setChartUser]: any = useState([]);
   const [loading, setLoading]: any = useState(false);
+  const [openGraph, setGraphOpen] = React.useState(false);
+  const [openCount, setCountOpen] = React.useState(false);
   const router = useRouter();
+
   useEffect(() => {
-    getData()
+      getData("")
+      setCountOpen(false);
   }, [])
 
   useEffect(() => {
+    if (date?.from && date?.to){
+      getData("")
+      setCountOpen(false);
+    }
+  }, [date?.to])
+
+  useEffect(() => {
     getGraph();
-  }, [grapgDate?.to])
+    setGraphOpen(false);
+  }, [graphDate?.to])
 
   const monthName: any = ["Jan", "Fab", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const getGraph = async () => {
     const body = {
-      from: grapgDate?.from ? grapgDate?.from : '',
-      to: grapgDate?.to ? grapgDate?.to : '',
+      from: graphDate?.from ? graphDate?.from : '',
+      to: graphDate?.to ? graphDate?.to : '',
     }
     await getGraphData(body).then((res: any) => {
       let loop = new Date(body.from);
@@ -133,13 +145,13 @@ export default function DashboardPage() {
     })
   }
 
-  const getData = async () => {
-
-    const body = {
+  const getData = async (type: any) => {
+    setLoading(true)
+    const data = {
       startDate: date?.from ? date?.from : '',
       endDate: date?.to ? date?.to : '',
     }
-    setLoading(true)
+    const body = type == "reset" ? { startDate: "", endDate: "" } : data;
     await getDashboardCount(body).then((res: any) => {
       if (!res?.error) {
         // console.log('res', res);
@@ -163,13 +175,13 @@ export default function DashboardPage() {
   const resetDate = (type: string) => {
     if (type == 'dashboard') {
       setDate(null);
-      getData();
+      getData("reset");
     } else {
       setGraphDate({
         from: firstOfMonth.toDate(),
         to: currentDate.toDate(),
       });
-      getGraph();
+      // getGraph();
     }
   };
 
@@ -182,9 +194,10 @@ export default function DashboardPage() {
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
 
           <div className="hidden items-center space-x-2 md:flex">
-            <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} />
-            <Button disabled={loading || !date} onClick={getData} >Date Filter</Button>
+            <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} open={openCount} setOpen={setCountOpen} />
+            {/* <Button disabled={loading || !date} onClick={getData} >Date Filter</Button> */}
             {date && ( <Button disabled={loading} onClick={() => resetDate('dashboard')} ><RotateCcw /></Button> )}
+            {/* <Button disabled={loading} onClick={() => resetDate('dashboard')} ><RotateCcw /></Button> */}
           </div>
         </div>
 
@@ -294,7 +307,7 @@ export default function DashboardPage() {
                 <Badge className={`bg-${userChartConfig?.courses?.color}-500`}>{userChartConfig?.courses?.label}</Badge>
                 {/* <Badge className={`bg-${userChartConfig?.jobs?.color}-500`}>{userChartConfig?.jobs?.label}</Badge> */}
                 <div className="hidden items-center space-x-2 md:flex">
-                  <CalendarDateRangePicker date={grapgDate} setDate={setGraphDate} disabledDates={disabledDates} />
+                  <CalendarDateRangePicker date={graphDate} setDate={setGraphDate} disabledDates={disabledDates} open={openGraph} setOpen={setGraphOpen} />
                   <Button disabled={loading} onClick={() => resetDate('graph')} className="flex items-center justify-center"><RotateCcw /></Button>
                 </div>
               </div>

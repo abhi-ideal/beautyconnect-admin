@@ -57,8 +57,9 @@ export default function ContentApi() {
   const getPresignedPostData = async (id:any) => {
     try {
       const body = {
-        fileName: `content_pages/${id}.json`,
-        fileType: 'application/json'
+        fileName: `content_pages/dev/${id}.json`,
+        fileType: 'application/json',
+        type : "content"
       };
       const url = routes.IMAGE_URL();
       const accessFileToken = await getAccessToken();   

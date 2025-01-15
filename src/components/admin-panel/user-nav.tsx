@@ -87,7 +87,7 @@ export function UserNav() {
                 : "Admin"}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user?.email}
+              {user?.email ? user?.email?.trim() : "N/A"}
             </p>
           </div>
         </DropdownMenuLabel>

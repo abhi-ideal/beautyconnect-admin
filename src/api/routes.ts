@@ -15,8 +15,8 @@ const routes = {
       params?.userId !== "" ? `id=${params?.userId}&` : ""}${
       !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
     }${
-      params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
-      params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
+      params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
+      params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
       params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
     }${
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""
@@ -126,8 +126,8 @@ const routes = {
     }${params?.description !== "" ? `description=${params?.description}&` : ""}${
       !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
     }${
-      params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
-      params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
+      params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
+      params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
       params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
     }${
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""

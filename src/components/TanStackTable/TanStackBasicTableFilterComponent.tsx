@@ -21,7 +21,7 @@ import {
   SheetTitle,
   SheetTrigger
 } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { CalendarDateRangePicker } from '@/components/ui/date-range-picker';
 import { RotateCcw } from 'lucide-react';
@@ -39,6 +39,7 @@ export default function TanStackBasicTableFilterComponent<TData>({
   setColumnFilters
 }: TanStackBasicTableFilterComponentProps<TData>) {
   const [filterValue, setFilterValue]: any = useState([]);
+   const [openDatePicker, setOpenDatePicker] = React.useState(false);
  
   const pathname = usePathname();
 
@@ -47,6 +48,13 @@ export default function TanStackBasicTableFilterComponent<TData>({
   const disabledDates = {
     after: new Date()
   };
+
+  useEffect(() => {
+    if (date?.from && date?.to){
+      setDateValue()
+      setOpenDatePicker(false);
+    }
+  }, [date])
 
   const setDateValue=()=>{
     setColumnFilters((prev: any) => {
@@ -72,25 +80,25 @@ export default function TanStackBasicTableFilterComponent<TData>({
       <TooltipProvider>
         <Tooltip delayDuration={100}>
           <TooltipTrigger>
-          <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} />
+          <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} open={openDatePicker} setOpen={setOpenDatePicker} />
           </TooltipTrigger>
           <TooltipContent side="bottom">
             <p>Pick a date</p>
           </TooltipContent>
         </Tooltip>
 
-        <Tooltip delayDuration={100}>
+        {/* <Tooltip delayDuration={100}>
           <TooltipTrigger>
           <Button disabled={!date} onClick={()=>setDateValue()} >Date Filter</Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
             <p>Date filter</p>
           </TooltipContent>
-        </Tooltip>
+        </Tooltip> */}
 
         <Tooltip delayDuration={100}>
           <TooltipTrigger>
-          <Button disabled={!date} onClick={()=>reset()}><RotateCcw /></Button>
+          {date && <Button disabled={!date} onClick={()=>reset()}><RotateCcw /></Button> } 
           </TooltipTrigger>
           <TooltipContent side="bottom">
             <p>Reset</p>

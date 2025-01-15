@@ -201,12 +201,12 @@ const FlaggedPostDetail = (props: any) => {
                     <Link href={postInfo?.feedData?.users?.id ? `/users/${postInfo?.feedData?.users?.id}` : "#"}>
                       <h2 className="text-lg font-semibold">
                         {postInfo?.feedData?.users?.name
-                          ? titleCase(postInfo?.feedData?.users?.name.trim())
+                          ? titleCase(postInfo?.feedData?.users?.name?.trim())
                           : "N/A"}
                       </h2>
                     </Link>
                     <p className="text-sm text-muted-foreground">
-                      {postInfo?.feedData?.users?.email ? postInfo?.feedData?.users?.email : "N/A"}
+                      {postInfo?.feedData?.users?.email ? postInfo?.feedData?.users?.email?.trim() : "N/A"}
                     </p>
                   </div>
   
@@ -282,8 +282,8 @@ const FlaggedPostDetail = (props: any) => {
                                             return (
                                                 <CarouselItem key={i} className="h-64" >
                                                     {album?.mimeType?.includes("image") ?
-                                                        <Image src={previewImgUrl + album.file} alt={album.name || "Post Image"} width={250} height={330} className="object-contain rounded-md w-full h-full bg-[#8080802e]"/>
-                                                        : <ReactVideoPlayer url={(album?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (album?.file ? album?.file : album?.url)} controls={true} width="" height="" />
+                                                        <Image src={previewImgUrl + album.file?.trim() || "/default_image.png"} alt={album.name || "Post Image"} width={250} height={330} className="object-contain rounded-md w-full h-full bg-[#8080802e]"/>
+                                                        : <ReactVideoPlayer url={(album?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (album?.file ? album?.file?.trim() : album?.url?.trim())} controls={true} width="" height="" />
                                                         }
                                                 </CarouselItem>
                                             )
@@ -413,14 +413,14 @@ const FlaggedPostDetail = (props: any) => {
                                     className="hover:underline"
                                   >
                                     {report?.users?.name
-                                    ? titleCase(report.users.name.trim())
+                                    ? titleCase(report.users.name?.trim())
                                     : "N/A"}
                                   </Link>
                                 </div>
                               </TableCell>
                               <TableCell>
                                 {/* {reportReasons[report?.reasonId]} */}
-                                {report?.reasonId
+                                {report?.reasonId && report?.reasonId > 0
                                   ? reason?.map(
                                       (reason: any, i: any) => {
                                         if (reason?.id == report?.reasonId) {

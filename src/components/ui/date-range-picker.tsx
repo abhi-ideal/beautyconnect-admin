@@ -14,7 +14,8 @@ import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
 export function CalendarDateRangePicker({
-  date , setDate, disabledDates
+  date , setDate, disabledDates, open,
+  setOpen
 }: any) {
   // const [date, setDate] = React.useState<DateRange | undefined>({
   //   from: new Date(2023, 0, 20),
@@ -23,7 +24,7 @@ export function CalendarDateRangePicker({
 
   return (
     // <div className={cn('grid gap-2', )}>
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             id="date"
@@ -32,6 +33,7 @@ export function CalendarDateRangePicker({
               'w-[260px] justify-start text-left font-normal',
               !date && 'text-muted-foreground'
             )}
+            onClick={() => setOpen(!open)} // Toggle open state on button click
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (

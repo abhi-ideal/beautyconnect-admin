@@ -236,7 +236,7 @@ const selectFile = async (event:any) => {
 
         const content = {
               mimeType: mimeType,
-              path: previewImgUrl + "temp/" + randomFileName,
+              path: previewImgUrl + "public/" + randomFileName,
               ratio: imageRatio ? imageRatio : "50x50",
               poster: "",
               type: mimeType?.split("/")[0]

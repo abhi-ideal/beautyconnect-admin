@@ -48,6 +48,8 @@ const EditProfileForm = () => {
   const { getPresignedPostData, uploadFileToS3 } = ImageApi();
   const userLocalStorageKey: any = `${appConstant.NEXT_PUBLIC_USER_INFO}`;
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
+  const previewTempImgUrl = process.env.NEXT_PUBLIC_PREVIEW_TEMP_IMG_URL;
+
   const dispatch = useAppDispatch();
   const imageHaveType = ['jpg', 'jpeg','png'];
   const [formValueChanged, setFormValueChanged] = useState(false);
@@ -152,14 +154,14 @@ const EditProfileForm = () => {
       setProgress(60);
       if(data){
         // setTimeout(() => {
-          // setShowUploadImage(previewImgUrl +'temp/'+ randomFileName)
+          // setShowUploadImage(previewImgUrl +'public/'+ randomFileName)
           setProgress(80);
         // }, 2000)
         await uploadFileToS3(data, selectedFile ).then(() =>{
           const mimeType = selectedFile?.type;
           const content = {
             mimeType: mimeType,
-            path: previewImgUrl +'temp/'+ randomFileName,
+            path: previewTempImgUrl +'public/'+ randomFileName,
             ratio: fileRatio ? fileRatio : "50x50",
             type: mimeType?.split("/")[0]
           }
