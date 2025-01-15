@@ -57,6 +57,17 @@ const UserDetail = (props: any) => {
       };
 
 
+      
+      function formatMobileNumber(number: string): string {
+        const match = number.match(/^\+(\d{1,3})(\d{3})(\d{3})(\d{4})$/);
+        if (match) {
+          const [, countryCode, part1, part2, part3] = match;
+          return `+${countryCode} ${part1} ${part2} ${part3}`;
+        }
+        return number; // Return the original number if it doesn't match the expected format
+      }
+      
+
     return (
         <>
    <div className="min-h-screen pt-8">
@@ -69,9 +80,9 @@ const UserDetail = (props: any) => {
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col items-center space-y-2">
-            <h1 className="text-2xl font-bold">{titleCase(userInfo?.name) || "N/A"}</h1>
-            <p className="text-sm text-muted-foreground">{userInfo?.email || ""}</p>
-            <p className="text-sm text-muted-foreground">{userInfo?.about || ""}</p>
+            <h1 className="text-2xl font-bold">{titleCase(userInfo?.name?.trim()) || "N/A"}</h1>
+            <p className="text-sm text-muted-foreground">{userInfo?.email?.trim() || ""}</p>
+            <p className="text-sm text-muted-foreground">{userInfo?.about?.trim() || ""}</p>
                         {userInfo?.status ? (
                   <Badge
                     className={
@@ -94,35 +105,35 @@ const UserDetail = (props: any) => {
             <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-6">
-                <div className="flex justify-between">
+                <div className="flex justify-between w-80">
                   <span className="text-muted-foreground">Gender</span>
                   <span className="font-medium">{titleCase(userInfo?.gender) || "N/A"}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between w-80">
                   <span className="text-muted-foreground">Mobile</span>
-                  <span className="font-medium">{userInfo?.mobileNumber || 0}</span>
+                  <span className="font-medium">{userInfo?.mobileNumber ? formatMobileNumber(userInfo.mobileNumber) : 'N/A'}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between w-80">
                   <span className="text-muted-foreground">Date of Birth</span>
                   <span className="font-medium">{userInfo?.dob ? moment(userInfo.dob, "DD/MM/YYYY").format("DD/MMM/YYYY") : "N/A"}</span>
                 </div>
               </div>
               <div className="space-y-6">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between w-80">
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Following</span>
                   </div>
                   <span className="font-medium">{userInfo?.totalFollowing || 0}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between w-80">
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Followers</span>
                   </div>
                   <span className="font-medium">{userInfo?.totalFollower || 0}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between w-80">
                   <div className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Posts</span>
@@ -139,28 +150,28 @@ const UserDetail = (props: any) => {
             <h2 className="text-xl font-semibold mb-4">Location Information</h2>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-6">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between w-80">
                   <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Street</span>
                   </div>
                   <span className="font-medium">{userInfo?.address?.street || "N/A"}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between w-80">
                   <div className="flex items-center gap-2">
                     <Globe2 className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">City</span>
                   </div>
                   <span className="font-medium">{userInfo?.address?.city || "N/A"}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between w-80">
                   <div className="flex items-center gap-2">
                     <Map className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">State</span>
                   </div>
                   <span className="font-medium">{userInfo?.address?.state || "N/A"}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between w-80">
                   <div className="flex items-center gap-2">
                     <Flag className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Country</span>
@@ -169,8 +180,8 @@ const UserDetail = (props: any) => {
                 </div>
               </div>
               <div className="space-y-6">
-              <div className="flex justify-between">
-                  <span className="text-muted-foreground">Loaction</span>
+              <div className="flex justify-between w-80">
+                  <span className="text-muted-foreground">Location</span>
                   {userInfo?.address?.latitude && userInfo?.address?.longitude ? (
                   <Button
                     variant="link"
@@ -184,11 +195,11 @@ const UserDetail = (props: any) => {
                   <span className="font-medium">N/A</span>
                 )}
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between w-80">
                   <span className="text-muted-foreground">Latitude</span>
                   <span className="font-medium">{userInfo?.address?.latitude || "N/A"}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between w-80">
                   <span className="text-muted-foreground">Longitude</span>
                   <span className="font-medium">{userInfo?.address?.longitude || "N/A"}</span>
                 </div>
@@ -198,7 +209,7 @@ const UserDetail = (props: any) => {
 
           <Separator />
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between w-80">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-muted-foreground" />
               <span className="text-muted-foreground">Created At</span>
