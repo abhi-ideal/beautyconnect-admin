@@ -314,7 +314,8 @@ const PostGrid = (props: any) => {
                               <CarouselItem key={i} className="aspect-video">
                                 { data?.mimeType?.includes("image") ?
                                   <Image className="aspect-video max-h-[472px] max-w-full object-contain rounded-md size-full" src={previewImgUrl + data?.file?.trim() || "/default_image.png"} alt="Post Image" width={448} height={252} />
-                                  : <div className="[&_video]:aspect-video [&_video]:max-h-[472px] [&_video]:!w-auto [&_video]:max-w-full" > <ReactVideoPlayer url={(data?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (data?.file ? data?.file?.trim() : data?.url?.trim())} controls={true} width="" height="" /> </div> 
+                                  : <div className="[&_video]:m-auto [&_video]:aspect-video h-full [&>div]:size-full [&>div>div]:flex [&>div>div]:size-full [&_video]:max-h-[472px] [&_video]:!w-auto [&_video]:max-w-full" > 
+                                  <ReactVideoPlayer url={(data?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (data?.file ? data?.file?.trim() : data?.url?.trim())} controls={true} width="" height="" /> </div> 
                                   }
                               </CarouselItem>
                             )})
@@ -331,8 +332,8 @@ const PostGrid = (props: any) => {
                       </CarouselItem>
                     )}
                   </CarouselContent>
-                  <CarouselPrevious className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white dark:bg-black dark:bg-opacity-75 bg-opacity-75 rounded-full p-2 shadow-md" />
-                  <CarouselNext className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white dark:bg-black dark:bg-opacity-75 bg-opacity-75 rounded-full p-2 shadow-md" />
+                  <CarouselPrevious className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white dark:bg-black dark:bg-opacity-75  rounded-full p-2 shadow-md" />
+                  <CarouselNext className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white dark:bg-black dark:bg-opacity-75  rounded-full p-2 shadow-md" />
                 </div>
               </Carousel>
             </div>
