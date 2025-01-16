@@ -85,18 +85,12 @@ const ContentEditorPage = ({ params }: any) => {
                 }, 2000);
               } else {
                 setLoading(false);
-                toast({
-                  title: "Something went wrong!",
-                  description: resposne?.message
-              });
+              //   toast({
+              //     title: "Something went wrong!",
+              //     description: resposne?.message
+              // });
               }
             })
-            .catch((err) => {
-                toast({
-                    title: "Something went wrong!!",
-                    description: res?.message
-                });
-            });
       } else {
         setLoading(false);
         toast({

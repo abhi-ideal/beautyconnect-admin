@@ -71,6 +71,12 @@ export default function DashboardPage() {
   const [openGraph, setGraphOpen] = React.useState(false);
   const [openCount, setCountOpen] = React.useState(false);
   const router = useRouter();
+    // Check if reset button should be shown
+    const showResetButton =!(
+      moment(graphDate?.from)?.isSame(firstOfMonth, 'day') &&
+      moment(graphDate?.to)?.isSame(currentDate, 'day')
+    );
+
 
   useEffect(() => {
       getData("")
@@ -278,7 +284,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
             </Link> */}
-            <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer" >
+            <Card x-chunk="dashboard-01-chunk-1">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Course Revenue</CardTitle>
                 <Gem className="h-4 w-4 text-muted-foreground" />
@@ -308,7 +314,7 @@ export default function DashboardPage() {
                 {/* <Badge className={`bg-${userChartConfig?.jobs?.color}-500`}>{userChartConfig?.jobs?.label}</Badge> */}
                 <div className="hidden items-center space-x-2 md:flex">
                   <CalendarDateRangePicker date={graphDate} setDate={setGraphDate} disabledDates={disabledDates} open={openGraph} setOpen={setGraphOpen} />
-                  <Button disabled={loading} onClick={() => resetDate('graph')} className="flex items-center justify-center"><RotateCcw /></Button>
+                  { showResetButton &&  <Button disabled={loading} onClick={() => resetDate('graph')} className="flex items-center justify-center"><RotateCcw /></Button>}
                 </div>
               </div>
             </CardHeader>

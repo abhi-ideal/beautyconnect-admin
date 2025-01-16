@@ -282,8 +282,8 @@ const FlaggedPostDetail = (props: any) => {
                                             return (
                                                 <CarouselItem key={i} className="h-64" >
                                                     {album?.mimeType?.includes("image") ?
-                                                        <Image src={previewImgUrl + album.file?.trim() || "/default_image.png"} alt={album.name || "Post Image"} width={250} height={330} className="object-contain rounded-md w-full h-full bg-[#8080802e]"/>
-                                                        : <ReactVideoPlayer url={(album?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (album?.file ? album?.file?.trim() : album?.url?.trim())} controls={true} width="" height="" />
+                                                        <Image className="aspect-video max-h-[472px] max-w-full object-contain rounded-md size-full" src={previewImgUrl + album.file?.trim() || "/default_image.png"} alt={album.name || "Post Image"} width={250} height={330}/>
+                                                        : <div className="[&_video]:m-auto [&_video]:aspect-video h-full [&>div]:size-full [&>div>div]:flex [&>div>div]:size-full [&_video]:max-h-[472px] [&_video]:!w-auto [&_video]:max-w-full" > <ReactVideoPlayer url={(album?.file.endsWith('.m3u8') ? previewVideo : previewVideoSource) + (album?.file ? album?.file?.trim() : album?.url?.trim())} controls={true} width="" height="" /> </div>
                                                         }
                                                 </CarouselItem>
                                             )

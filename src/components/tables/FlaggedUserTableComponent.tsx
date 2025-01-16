@@ -155,9 +155,7 @@ const FlaggedUserTableComponent = () => {
       enableSorting: false,
       enableColumnFilter: true,
       cell: (info:any) => {
-        const reportedUser:any = info.getValue();
-        console.log('reportedUser', reportedUser);
-        
+        const reportedUser:any = info.getValue();        
         const bgColor = color[info?.row?.index % color.length ];
         return (
           <div className="flex">

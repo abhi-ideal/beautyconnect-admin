@@ -78,15 +78,7 @@ export default function TanStackBasicTableFilterComponent<TData>({
       { showDateFilter.includes(pathname) && 
       <>
       <TooltipProvider>
-        <Tooltip delayDuration={100}>
-          <TooltipTrigger>
           <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} open={openDatePicker} setOpen={setOpenDatePicker} />
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>Pick a date</p>
-          </TooltipContent>
-        </Tooltip>
-
         {/* <Tooltip delayDuration={100}>
           <TooltipTrigger>
           <Button disabled={!date} onClick={()=>setDateValue()} >Date Filter</Button>
