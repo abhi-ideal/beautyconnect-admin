@@ -17,6 +17,8 @@ import { Eye, Loader2 } from 'lucide-react';
 import Cookies from 'js-cookie';
 import ReactVideoPlayer from '../demo/ReactVideoPlayer';
 import { Badge } from '../ui/badge';
+import { Separator } from '../ui/separator';
+import moment from 'moment';
 const CourseDetail = (props: any) => {
     const { toast } = useToast();
     const { coursesDetail, contentListApi, courseContentDetail, SignVideoUrl } = CourseApi();
@@ -171,122 +173,108 @@ const CourseDetail = (props: any) => {
         );
     }
 
-    const CourseContents = () => {
-        return (
-            <>
-                <div className="relative overflow-x-auto">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase dark:text-gray-400">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">Course ID</th>
-                                <th scope="col" className="px-6 py-3">Title</th>
-                                <th scope="col" className="px-6 py-3">Description</th>
-                                <th scope="col" className="px-6 py-3">Created At</th>
-                                <th scope="col" className="px-6 py-3">View Detail</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {courseContentList?.map((courseContent: any, index: any) => (
-                                <tr className="border-b dark:border-gray-700 cursor-pointer" onClick={() => contentDetail(courseContent?.id)} key={index}>
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{courseContent.courseId || "-"}</th>
-                                    <td className="px-6 py-4">{courseContent.title || "-"}</td>
-                                    <td className="px-6 py-4">{courseContent.description || "-"}</td>
-                                    <td className="px-6 py-4">{format(new Date(courseContent?.createdAt), "dd MMM, yy 'at' h:mm a") || "-"}</td>
-                                    <td className="px-6 py-4 d-flex"><Eye /> Detail</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </>
-        )
-    };
+
 
     return (
         <>
-            <div className="max-w-12xl flex flex-col gap-6 p-6 sm:p-8">
-                {/* Single Card Design */}
-                <Card className="flex flex-col p-6 space-y-6">
-                    {/* User Details Section */}
-                    {/* <div className="flex flex-col items-center gap-4 border-b pb-6">
-                        <h3 className="text-xl font-semibold">User Details</h3>
-                        <Link href={`/users/${courseInfo?.userDetails?.id}`}>
-                            <Avatar className="w-24 h-24">
-                                <AvatarImage src={courseInfo?.userDetails ? previewImgUrl + courseInfo?.userDetails?.image : ""} />
-                                <AvatarFallback className="bg-orange-500">
-                                    {formatName(courseInfo?.userDetails?.name) || "N/A"}
-                                </AvatarFallback>
-                            </Avatar>
-                            <div className="font-bold text-lg mt-2">
-                                {courseInfo?.userDetails?.name || "N/A"}
+        <div className='pt-8 pb-8' >
+        <Card className="max-w-full mx-auto">
+        <div className="flex flex-col items-center gap-2 p-4 border-b">
+            <div className="relative flex flex-col items-center">
+            <Avatar className="w-20 h-20">
+                <AvatarImage 
+                src={courseInfo ? previewImgUrl+ courseInfo?.media : ""}
+                alt="Course Logo" />
+                <AvatarFallback> {formatName(courseInfo?.title) || "N/A"}</AvatarFallback>
+            </Avatar>
+                        <div className="mt-4">
+                            {courseInfo?.status ? (
+                    <Badge
+                        className={
+                            courseInfo.status.toLowerCase() === "active"
+                            ? "bg-green-500 text-white"
+                            : "bg-red-500 text-white"
+                        }
+                    >
+                        {titleCase(courseInfo.status)}
+                    </Badge>
+                    ) : (
+                    <span className="text-sm text-gray-500">N/A</span>
+                    )}
+
                             </div>
-                        </Link>
-                    </div> */}
+            </div>
+        </div>
+        <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Course Details:</h2>
+            <div className="grid grid-cols-[1fr,2fr] gap-x-8 gap-y-2">
+            {/* Left Column */}
+            <div className="space-y-4">
 
-
-<div className="flex flex-col items-center border-b pb-6">
-                        <Avatar className="w-24 h-24">
-                            <AvatarImage src={courseInfo ? previewImgUrl+ courseInfo?.media : ""} />
-                            <AvatarFallback className="bg-orange-500">
-                                {formatName(courseInfo?.title) || "N/A"}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div className="text-gray-600 mt-4">
-                        {courseInfo?.status ? (
-                  <Badge
-                    className={
-                        courseInfo.status.toLowerCase() === "active"
-                        ? "bg-green-500 text-white"
-                        : "bg-red-500 text-white"
-                    }
-                  >
-                    {titleCase(courseInfo.status)}
-                  </Badge>
-                ) : (
-                  <span className="text-sm text-gray-500">N/A</span>
-                )}
-
-                        </div>
-       
-                    </div>
-
-
-                    {/* Job Details Section - Two Column Layout */}
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold">Course Details:</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <InfoRow label="Title" value={courseInfo?.title || "N/A"} />
-                                {/* <InfoRow label="Status" value={titleCase(courseInfo?.status) || "N/A"} /> */}
-                                <InfoRow label="Amount" value={courseInfo?.amount || 0} />
-                                <InfoRow label="Rating" value={courseInfo?.rating || 0} />
-                                <InfoRow label="Total Lesson" value={courseInfo?.totalLesson || 0} />
-                                <InfoRow label="Total Purchase" value={courseInfo?.totalPurchase || 0} />
-                            </div>
-                            <div>
-                                <InfoRow label="Description" value={courseInfo?.description || "N/A"} />
-                                <InfoRow label="Rating Count" value={courseInfo?.ratingCount?.[0]?.count || 0} />
-                                <InfoRow label="Created At" value={courseInfo?.createdAt ? format(new Date(courseInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"} />
-                                <InfoRow label="Category" value={courseInfo?.category || "N/A"} />
-                            </div>
-                        </div>
-                    </div>
-                </Card>
+            <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Created At:</span>
+                <span className="text-sm">{courseInfo.createdAt ? format(new Date(courseInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
+                </div>
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Amount:</span>
+                <span className="text-sm">{courseInfo.amount ? "$ "+ courseInfo.amount : "N/A"}</span>
+                </div>
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Rating:</span>
+                <span className="text-sm">{courseInfo.rating}</span>
+                </div>
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Total Lesson:</span>
+                <span className="text-sm">{courseInfo.totalLesson || "0"}</span>
+                </div>
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Total Purchase:</span>
+                <span className="text-sm">{courseInfo.totalPurchase || "0"}</span>
+                </div>
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Total Rating:</span>
+                <span className="text-sm">{courseInfo.totalRating || "0"}</span>
+                </div>
             </div>
 
-            {/* Course Content Section */}
+            {/* Right Column */}
+            <div className="space-y-4">
 
-            {/* <div className="max-w-12xl flex-col flex-wrap items-start gap-6 px-6 sm:flex-row sm:px-8">
-                {
-                    courseContentList?.length &&
-                    <>
-                        <Card className="gap-3 p-5">
-                            <div><b>Course Contents:</b></div>
-                            <CourseContents />
-                        </Card>
-                    </>
-                }
-            </div> */}
+                 <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Title:</span>
+                <span className="text-sm">{courseInfo.title ? titleCase(courseInfo.title) : "N/A"}</span>
+                </div>
+
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Description:</span>
+                <span className="text-sm">{courseInfo.description || "N/A"}</span>
+                </div>
+
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Course is for:</span>
+                <span className="text-sm" contentEditable="false" dangerouslySetInnerHTML={{ __html: courseInfo.courseFor || "N/A" }} ></span>
+                </div>
+
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">What You'll Learn:</span>
+                <span className="text-sm" contentEditable="false" dangerouslySetInnerHTML={{ __html: courseInfo.learn || "N/A" }} ></span>
+                </div>
+
+
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Experience:</span>
+                
+                <span className="text-sm">  {courseInfo?.experience ? courseInfo.experience : "N/A"} </span>
+                </div>
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Specialization:</span>
+                <span className="text-sm">  {courseInfo?.category?.length ? courseInfo.category?.join(", "): "N/A"}</span>
+                </div>
+            </div>
+            </div>
+        </CardContent>
+        </Card>
+        </div>
 
         {(courseContentInfo?.[0]?.mediaFile || courseContentInfo?.[0]?.docFile) && (
             <div className="grid md:grid-cols-[1fr_400px] gap-6 p-6  mx-auto">

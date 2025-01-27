@@ -8,6 +8,90 @@ import { useToast } from '@/components/ui/use-toast';
 export default function ChapterApi() {
     const dispatch = useAppDispatch();
     const { toast } = useToast();
+
+
+ //add new Chapter
+ const addChapter = async (info: any, id:any) => {
+    try {
+        const url = routes.ADD_CHAPTER(id);
+        const accessToken = await getAccessToken();
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + accessToken
+            },
+            body: JSON.stringify(info)
+        };
+        const response = await fetch(url, options);            
+        const responseData = await response.json();
+        if (!response.ok) {
+            if (response?.status === 401 || response?.status === 403) {
+                 errorHandle(response?.status);
+            }
+        }
+        return responseData;
+    } catch (error:any) {
+        return { error: true, errorMessage: error?.message };
+      }
+};
+
+//update Chapter
+const updateChapter = async (data: any, id:any) => {
+    try {
+        const url = routes.UPDATE_CHAPTER(id);
+        const accessToken = await getAccessToken();
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + accessToken
+            },
+            body: JSON.stringify(data)
+        };
+        const response = await fetch(url, options);
+        const responseData = await response.json();
+        if (!response.ok) {
+            if (response?.status === 401 || response?.status === 403) {
+                 errorHandle(response?.status);
+            }
+        }
+        return responseData;
+    } catch (error:any) {
+        return { error: true, errorMessage: error?.message };
+      }
+}
+
+//delete Chapter
+const deleteChapter = async (id:string) =>{
+    try {
+        const url = routes.DELETE_CHAPTER(id);
+        const accessToken = await getAccessToken();
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + accessToken
+            },
+        };
+        const response = await fetch(url, options);
+        const responseData = await response.json();
+        if (!response.ok) {
+            if (response?.status === 401 || response?.status === 403) {
+                 errorHandle(response?.status);
+            }
+        }
+        return responseData;
+    } catch (error:any) {
+        return { error: true, errorMessage: error?.message };
+      }
+};
+
+
+
+
+
+
     //get Chapters details
     const chaptersDetail = async (id: string, chapterId: string) => {
         try {
@@ -22,9 +106,8 @@ export default function ChapterApi() {
                     errorHandle(response?.status);                }
             };
             return responseData;
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
+        } catch (error:any) {
+            return { error: true, errorMessage: error?.message };
         }
     };
 
@@ -43,5 +126,5 @@ export default function ChapterApi() {
           });
     }
 
-    return { chaptersDetail }
+    return {addChapter, updateChapter, deleteChapter, chaptersDetail }
 }

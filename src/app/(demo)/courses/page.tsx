@@ -12,7 +12,7 @@ import AddEditCourse from "@/components/form/AddEditCourse";
 
 export default function CoursesPage() {
   const [open, setOpen] = useState(false);
-  const [allCourse, setAllCourse]: any = useState([]);
+  const [allCourses, setAllCourses]: any = useState([]);
   return (
 <ContentLayout title="Courses">
 <div className="flex">
@@ -36,16 +36,16 @@ export default function CoursesPage() {
 
 <div className="text-left">
   <Dialog open={open} onOpenChange={setOpen}>
-    <DialogContent className="sm:max-w-[550px]">
+    <DialogContent className="sm:max-w-[800px]">
       <DialogHeader>
         <DialogTitle>Create Course</DialogTitle>
       </DialogHeader>
-      <AddEditCourse props={{setOpen, allCourse, setAllCourse}}></AddEditCourse>
+      <AddEditCourse props={{setOpen, allCourses, setAllCourses}}></AddEditCourse>
     </DialogContent>
   </Dialog>
 </div>
 <QueryClientProvider client={queryClient}>
-  <CourseTableComponent allCourse={allCourse} setAllCourse={setAllCourse}/>
+  <CourseTableComponent allCourses={allCourses} setAllCourses={setAllCourses}/>
 </QueryClientProvider>
 </ContentLayout>
 

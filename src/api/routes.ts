@@ -46,7 +46,7 @@ const routes = {
       }offset=${params?.offset}&limit=${params?.limit}`,
   
   CHAPTER_LIST: (params: any) =>
-      `${courseHost}admin-chapters?${
+      `${courseHost}admin/lesson-content?${
         params?.lessonId !== "" ? `lessonId=${params?.lessonId}&` : ""}${
         params?.title !== "" ? `title=${params?.title}&` : ""}${
         !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""}${
@@ -161,8 +161,12 @@ const routes = {
   USER_DETAIL: (id: any) => `${userBaseUrl}profile/${id}`,
   USER_DELETE: (id: any) => `${userBaseUrl}user/${id}`,
   CONTENT: (id: string) => `content_pages/${id}`,
+
+  ADD_CHAPTER:(id:any)=>`${courseHost}lesson-content/${id}`,
+  UPDATE_CHAPTER:(id:any)=>`${courseHost}lesson/${id}`,
+  DELETE_CHAPTER:(id:any)=>`${courseHost}lesson-content/${id}`,
+
   CHAPTER_DETAIL:(id:string,chapterId:string)=>`${courseHost}lesson/${id}/chapter/${chapterId}`,
-  LESSON_DETAIL:()=>`${courseHost}lesson-detail/`,
   ADMIN_PROFILE: () => `${userBaseUrl}profile`,
   UPDATE_PROFILE: () => `${userBaseUrl}profile`,
   USER_REPORT:(id:any)=>`${userBaseUrl}users/report/${id}`,
@@ -178,15 +182,15 @@ const routes = {
   FORGOT_PASSWORD:() => `${authBaseUrl}change-password/`,
   CONFIRM_PASSWORD:() => `${authBaseUrl}forgot-password/confirm-code/`,
   SKILL:()=>`${commonBaseUrl}skills`,
-  SKILL_DELETE:(id:any)=>`${userBaseUrl}skills`,
-  SKILL_UPDATE:(id:any)=>`${userBaseUrl}skills`,
   POST:(id:any)=>`${feedBaseUrl}feed/${id}`,
+  COURSE_SKILL_LIST: () => `${commonBaseUrl}skills/`,
   POST_DETAIL:(id:any)=>`${feedBaseUrl}feed/${id}`,
   COURSE:(id:any)=>`${courseHost}course/${id}`,
   ADD_COURSE:()=>`${courseHost}course`,
   ADD_LESSON:()=>`${courseHost}/course-lesson/`,
   UPDATE_LESSON:(id:any)=>`${courseHost}lesson/${id}`,
   DELETE_LESSON:(id:any)=>`${courseHost}lesson/${id}`,
+  LESSON_DETAIL:(id:any)=>`${courseHost}lesson/${id}`,
   SIGN_URL:(id:any)=>`${commonBaseUrl}getSignUrl?url=${id}`,
   COURSECONTENTDETAIL:(param:any)=>`${courseHost}courseContent/${param?.id}?contentId=${param?.contentId}`,
   FLAGGED_REASONS:()=>`${ContentHost}base/dev/base.json`

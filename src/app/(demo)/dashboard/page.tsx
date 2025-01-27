@@ -255,7 +255,7 @@ export default function DashboardPage() {
 
               
 
-              {/* <Link href="/courses"> */}
+              <Link href="/courses">
                 <Card x-chunk="dashboard-01-chunk-3">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
@@ -266,12 +266,12 @@ export default function DashboardPage() {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {dashboardCount?.totalCourse
-                        ? 0
+                        ? dashboardCount?.totalCourse
                         : 0}
                     </div>
                   </CardContent>
                 </Card>
-              {/* </Link> */}
+              </Link>
 
               {/* <Link href="/skills">
             <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">

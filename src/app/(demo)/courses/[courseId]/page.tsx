@@ -37,8 +37,8 @@ const CourseDetailPage = ({ params }: any) => {
 
             <CourseDetail data={{ id: params.courseId, type: "course" }} />
 
-            <div className="mx-8 flex items-center justify-between">
-                <h1 className="text-4xl font-semibold">Lessons</h1>
+            <div className="flex items-center justify-between">
+                <h3 className="text-2xl font-semibold">Lessons:</h3>
             </div>
             <QueryClientProvider client={queryClient}>
                 <LessonTableComponent courseId={params.courseId} allLessons={allLessons}  setAllLessons={setAllLessons} />

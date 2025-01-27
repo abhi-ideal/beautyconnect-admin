@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import TanStackBasicTable from "../TanStackTable/TanStackBasicTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { formatName, shortName, titleCase } from "@/lib/utils";
@@ -16,16 +16,22 @@ import AuthService from "@/api/auth/AuthService";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Chapter } from '@/types/Chapters';
 import { useGetChapters } from '@/api/useGetChapters';
+import { Card } from '../ui/card';
+import AddEditChapter from '../form/AddEditChapter';
+import ChapterApi from '@/api/chapterApi';
 
 const ChapterTableComponent = ({ courseId, lessonId}:any) => {
   const { logout } = AuthService();
   const router = useRouter();
   const { toast } = useToast();
-  const [expandedDesc, setExpandedDesc]: any = useState({});
+    const [type, setType] = useState('add');
+  
   // sorting state of the table
   const [sorting, setSorting] = useState<SortingState>([]);
   const [open, setOpen] = useState(false);
   const [editData, setEditData]: any = useState({});
+  const {deleteChapter, updateChapter } = ChapterApi()
+  
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
 
   // column filters state of the table
@@ -60,9 +66,98 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
   }, [allChaptersData]);
 
 
+  async function updateData(data: any) {
+    const status: any = data.status == "active" ? "inactive" : "active";
+    Swal.fire({
+      text: `Are you sure you want to ${status} this course.`,
+      showCancelButton: true,
+      confirmButtonColor: `#18181B`,
+      cancelButtonColor: "white",
+      icon: "warning",
+      customClass: {
+        cancelButton: `cancel_button`
+      },
+      confirmButtonText: `Confirm ${
+        data.status == "active" ? "Inactive" : "Active"
+      }`
+    }).then(async (result: any) => {
+      if (result.value) {
+        await updateChapter({status: status}, data.id ).then(
+          async (res: any) => {
+            if (!res.error) {       
+              const updatedCategory = allChapters?.results?.map((res: any) => {
+                if (data?.id == res?.id) {
+                  res.status = status;
+                  return res;
+                } else {
+                  return res;
+                }
+              });
+              setAllChapters({ ...allChapters, results: updatedCategory });
+              toast({
+                title: "Status updated sucessfully.",
+                description: res?.message
+              });
+            } else {
+              toast({
+                variant: "destructive",
+                title: res?.errorMessage ? res?.errorMessage : "Uh oh! Something went wrong.",
+                description: res?.error
+              });
+            }
+          }
+        );
+      }
+    });
+  }
+
+
+
+
+  async function deleteData(data: any) {
+    Swal.fire({
+      text: `Are you sure you want to delete this lesson content?`,
+      showCancelButton: true,
+      confirmButtonColor: `#18181B`,
+      cancelButtonColor: "white",
+      icon: "warning",
+      customClass: {
+        cancelButton: `cancel_button`
+      },
+      confirmButtonText: "Confirm Delete"
+    }).then(async (result: any) => {
+      if (result.value) {
+        await deleteChapter(data?.id).then((res: any) => {
+          if (!res?.error) {
+            const deletedData = (allChapters.results =
+              allChapters?.results?.filter(
+                (res: any) => data?.id !== res?.id
+              ));
+              setAllChapters({ ...allChapters, results: deletedData });
+            toast({
+              title: "Lesson Content deleted sucessfully.",
+              description: res?.message
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: res?.errorMessage ? res?.errorMessage : "Uh oh! Something went wrong.",
+              description: res?.error
+            });
+          }
+        });
+      }
+    });
+  }
+
+
+
+
+
   //updates data
   async function update(data: any) {
     setOpen(true);
+    setType('edit');
     setEditData(data);
   }
 
@@ -71,58 +166,41 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
     header != "description" && router.push(`/courses/${courseId}/lesson/${lessonId}/chapter/${data?.id}`);
   };
 
-  const toggleSectionExpanded = (index: any) => {
-    setExpandedDesc((prevState: any) => ({
-      ...prevState,
-      [index]: !prevState[index]
-    }));
-  };
+
 
   const color = ["bg-orange-500", "bg-lime-500", "bg-cyan-500", "bg-blue-500", "bg-rose-500"];
 
   const categoryColumns: ColumnDef<Chapter>[] = [
     {
-      header: "User",
-      accessorFn: (row: Chapter) => row?.userDetails?.image,
-      enableSorting: false,
-      enableColumnFilter: false,
-      cell: (info) => {
-        const imageUrl = info.getValue();
-        const bgColor = color[info?.row?.index % color.length]
-        return (
-          <div className="flex">
-            <Avatar>
-              <AvatarImage
-                src={typeof imageUrl === "string" ? previewImgUrl + imageUrl : undefined}
-              />
-              <AvatarFallback className={bgColor}>
-                {formatName(info.row.original.userDetails?.name) || "N/A"}
-              </AvatarFallback>
-            </Avatar>
-            <p className="m-2">{info.row.original?.userDetails?.name || "N/A"}</p>
-          </div>
-        );
-      }
-    },
-    {
       header: "Title",
       accessorKey: "title",
       cell: (info) => {
         const title: any = info.getValue();
-        return (<div className={`flex m-2`}>{ titleCase(title)}</div>)
+        return (<div className={`flex m-2`}>{ titleCase(title?.trim())}</div>)
       },
       enableSorting: true,
-      enableColumnFilter: true
+      enableColumnFilter: false
     },
     {
-      header: "Status",
-      accessorKey: "status",
-      accessorFn: (row: Chapter) => row.status,
+      header: "File Name",
+      accessorKey: "file",
       cell: (info) => {
-        const Status: any = info.getValue();
-        return (<div className={`flex m-2`}>{titleCase(Status) || "N/A"}</div>)
+        const file: any = info.getValue();
+        return (<div className={`flex m-2`}>{ titleCase(file?.trim())}</div>)
       },
-      enableSorting: false
+      enableSorting: false,
+      enableColumnFilter: false
+    },
+    
+    {
+      header: "Type",
+      accessorKey: "type",
+      cell: (info) => {
+        const type: any = info.getValue();
+        return (<div className={`flex m-2`}>{ titleCase(type?.trim())}</div>)
+      },
+      enableSorting: false,
+      enableColumnFilter: false
     },
     {
       header: "Created At",
@@ -152,20 +230,36 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push(`/courses/${courseId}/lesson/${lessonId}/chapter/${rowData?.id}`)}>
-                View Chapters Details
-              </DropdownMenuItem>
-              {/* 
-              <DropdownMenuItem onClick={() => updateData(rowData)}>
+              {/* <DropdownMenuItem onClick={() => updateData(rowData)} className="flex items-center space-x-2" >
+              {rowData.status == "active" ? 
+                (<LockKeyhole className="h-4 w-4 text-muted-foreground" />) : (
+                <LockKeyholeOpen className="h-4 w-4 text-muted-foreground" />
+                )}
+              
+              <span>
                 {
                   rowData.status ? rowData.status == "active"
                     ? "Inactive" : "Active" : "N/A"
                 }
+                 </span>
+              </DropdownMenuItem> */}
+              <DropdownMenuItem onClick={() => deleteData(rowData)} className="flex items-center space-x-2" >
+              <Trash2 className="h-4 w-4 text-muted-foreground" />
+              <span>Delete</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => deleteData(rowData)}>
-                Delete
-              </DropdownMenuItem>
-              */}
+
+              {/* <DropdownMenuItem onClick={() => update(rowData)} className="flex items-center space-x-2" >
+              <Pencil className="h-4 w-4 text-muted-foreground" />
+              <span>Update</span>
+              </DropdownMenuItem> */}
+
+              {/* <DropdownMenuItem
+                onClick={() => router.push(`/courses/${courseId}/lesson/${lessonId}/chapter/${rowData?.id}`)}
+                className="flex items-center space-x-2"
+              >
+                   <Eye className="h-4 w-4 text-muted-foreground" />
+                   <span>View Detail</span>
+              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -175,7 +269,15 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
 
   return (
     <>
-      <TanStackBasicTable
+{
+      !open ?
+      <div className="relative mt-8">
+        <div className="flex gap-4">
+          <div className="flex items-center">
+            <Button onClick={() => {setType('add');setOpen(true)}}>Add Lesson Content</Button>
+          </div>
+        </div>
+        <TanStackBasicTable
         isTableDataLoading={isAllChaptersDataLoading}
         paginatedTableData={allChapters}
         columns={categoryColumns}
@@ -187,7 +289,19 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
+        hideFilter={true}
       />
+      </div>
+      :
+      <div className='pt-4'>
+        <Card className='p-4'>
+        <div className="text-center text-2xl font-semibold">{type!='edit' ? "Add " : "Edit "}Lesson Content</div>
+        <AddEditChapter props={{ lessonId:lessonId,  setOpen, type: type, editData, setEditData, allChapters, setAllChapters }} />
+        </Card>
+      </div>
+      }
+
+
     </>
   )
 }

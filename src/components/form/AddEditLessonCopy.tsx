@@ -22,15 +22,12 @@ import { Spinner } from "../ui/spinner";
 import LessonApi from "@/api/lessonApi";
 import Image from 'next/image'
 import { CardHeader, Card, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Textarea } from "../ui/textarea";
 
 const formSchema = z.object({
   title: z
     .string().trim().min(1, { message: "Title is required." }),
   image: z
     .string().trim().min(1, { message: "Image is required." }),
-  description: z
-    .string().trim().min(1, { message: "Description is required." }),
 });
 
 const AddEditLesson = (props: any) => {
@@ -44,14 +41,13 @@ const AddEditLesson = (props: any) => {
   const [deleteContent, setDeleteContent]: any = useState([]);
   const { courseId, setOpen, type, editData, setEditData, allLessons, setAllLessons }: any = props?.props;
   const {addLesson, updateLesson } = LessonApi();
-  const imageHaveType = ["jpg", "jpeg", "png"];
+  const imageHaveType = ["jpg", "jpeg", "png", "mp4", "pdf"];
   const { toast } = useToast();
   const [imageContent, setImageContent]: any = useState(null);
-  const [fileContents, setFileContents]: any = useState([]);
+  const [fileContents, setFileContents]: any = useState( editData?.lessonContentInfo?.length ? editData?.lessonContentInfo :  []);
   const [formValues, setFormValues] :any = useState({
     title: editData?.title || "",
-    image: editData?.image || "",
-    description:editData?.description || "",
+    image: editData?.image?.imageUrl || "",
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,14 +56,16 @@ const AddEditLesson = (props: any) => {
   });
 
 
-console.log('editData', editData);
+// console.log('editData', editData);
 
 // console.log('imageContent', imageContent);
 
 
 // console.log('fileContents', fileContents);
 
+  useEffect(() => {
 
+  }, [editData?.id]);
 
   useEffect(() => {
     form.reset(formValues);
@@ -79,17 +77,25 @@ console.log('editData', editData);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const body:any =  {
         title: values?.title,
-        description: values?.description,
         image:  values?.image,
         courseId: courseId,
+        lessonContent: fileContents
     }
      
     if(type == "edit"){
+      // Filter new contents
+      const filterContents = fileContents.filter((file: any) => {
+        const isExistingContent = editData?.lessonContentInfo.some(
+          (existing: any) => existing.id === file.id
+        );
+        return !isExistingContent; 
+      });
 
       const payload={
         ...(editData?.title != values?.title && { "title": values?.title }),
-        ...(editData?.description != values?.description && { "description": values?.description }),
-        ...(editData?.image != values?.image && { "image": values?.image }),
+        ...(editData?.image?.imageUrl != values?.image && { "image": values?.image }),
+        ...(filterContents?.length && { "lessonContents": filterContents }),
+        ...(deleteContent?.length && { "deleteData": [{"lessonContents": deleteContent}]}),
       }
 
       const length = Object.keys(payload).length;
@@ -101,9 +107,8 @@ console.log('editData', editData);
             (res: any) => {
               if (editData?.id == res?.id) {
                 payload?.title && (res.title = payload?.title);
-                payload?.description && (res.description = payload?.description);
-                payload?.image && (res.image = "lesson/"+payload?.image);
-              
+                payload?.image && (res.image = {fileType: "image",imageUrl: "lesson/"+payload?.image,});
+                payload?.lessonContents && (res.lessonContentInfo = fileContents);
                 return res;
               } else {
                 return res;
@@ -136,8 +141,11 @@ console.log('editData', editData);
           const newLesson = {
             id: res?.id,
             title: values.title,
-            description:values?.description,
-            image:"lesson/"+ values.image,
+            image: {
+              fileType: "image",
+              imageUrl: "lesson/"+values.image,
+          },
+          lessonContentInfo: fileContents,
             status: "active",
             createdAt: new Date(),
           }
@@ -242,6 +250,24 @@ const selectFile = async (event:any, type:any) => {
 
 
 
+// Function for removing file content.
+const removeContent = (fileContent: any, index: number) => {
+  // Remove file from `fileContents`
+  setFileContents((prevContents: any[]) => 
+    prevContents.filter((_, i) => i !== index)
+  );
+
+  // Add to `deleteContent` if in edit mode
+  if (type === "edit") {
+    editData?.lessonContentInfo.forEach((data: any) => {
+      if (data.id === fileContent?.id) {
+        setDeleteContent((prev: any[]) => [...prev, fileContent?.id]);
+      }
+    });
+  }
+};
+
+
 return (
   <div className="max-w-2xl mx-auto p-4">
     <Card className="w-full">
@@ -267,7 +293,7 @@ return (
                               src={
                                 imageContent
                                   ? previewTempImgUrl + "public/" + imageContent?.path
-                                  : previewImgUrl + editData?.image
+                                  : previewImgUrl + editData?.image?.imageUrl
                               }
                               alt="Image"
                             />
@@ -314,23 +340,70 @@ return (
                 />
               </div>
 
+              {/* PDF/Video Upload */}
+              <div className="space-y-2">
+                <FormLabel>Upload PDF/Video File</FormLabel>
+                <FormControl>
+                  <div className="flex items-center justify-center w-full">
+                    <label
+                      htmlFor="pdf-video-upload"
+                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                    >
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        { loading ? <Spinner className="mb-4" size="medium" /> : <UploadCloud className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" />}
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                         { loading ? <span className="font-semibold" >Uploading...</span> : <> <span className="font-semibold">Click to upload</span> <span>or drag and drop</span></> } 
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">PDF or Video files</p>
+                      </div>
+                      <Input
+                        id="pdf-video-upload"
+                        type="file"
+                        accept="application/pdf,video/mp4,video/m3u8"
+                        className="hidden"
+                        multiple
+                        onChange={(e) => selectFile(e, "file")}
+                      />
+                    </label>
+                  </div>
+                </FormControl>
+              </div>
 
-
-                            {/* Description Field */}
-                            <div className="space-y-2">
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Enter description" {...field} className="w-full" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Preview Selected Files */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {fileContents?.length > 0 &&
+                  fileContents.map((fileContent: any, index: number) => (
+                    <div
+                      key={index}
+                      className="relative w-full h-28 border border-gray-300 dark:border-gray-700 rounded flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900"
+                    >
+                      {fileContent?.mimeType.includes("video") || fileContent?.mimeType.includes("m3u8") ? (
+                        <>
+                          <SquarePlay className="w-12 h-12 text-muted-foreground" />
+                          <span className="text-xs mt-2 text-center truncate w-full px-2">{fileContent.file}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Image
+                            src="/pdf.png" 
+                            width={48}
+                            height={48}
+                            className="w-12 h-12 dark:invert invert-0"
+                            alt="PDF Preview"
+                          />
+                          <span className="text-xs mt-2 text-center truncate w-full px-2">{fileContent.file}</span>
+                        </>
+                      )}
+                      <button
+                        type="button"
+                        className="absolute top-1 right-1 p-1 rounded-full bg-red-500 text-white hover:bg-red-600"
+                        onClick={() => removeContent(fileContent, index)}
+                        disabled={loading || form.formState.isSubmitting}
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
               </div>
             </div>
 

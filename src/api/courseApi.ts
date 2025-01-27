@@ -36,7 +36,7 @@ export default function CourseApi() {
     };
 
 
-    const updateCourses = async (data: any, id:any) => {
+    const updateCourse = async (data: any, id:any) => {
         try {
             const url = routes.COURSE(id);
             const accessToken = await getAccessToken();
@@ -181,5 +181,5 @@ export default function CourseApi() {
           });
     }
 
-    return {addCourse, updateCourses, coursesDetail, deleteCourse, contentListApi, courseContentDetail, SignVideoUrl }
+    return {addCourse, updateCourse, coursesDetail, deleteCourse, contentListApi, courseContentDetail, SignVideoUrl }
 }

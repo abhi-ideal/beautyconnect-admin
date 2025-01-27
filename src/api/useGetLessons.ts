@@ -18,7 +18,6 @@ const getAllLessonsFn: ({
 
   // set filter
   let title = "",
-    description = "",
     from= "",
     to = "",
     status = ""
@@ -29,9 +28,6 @@ const getAllLessonsFn: ({
     switch (id) {
       case "title":
         title = value as string;
-        break;
-      case "description":
-        description = value as string;
         break;
       case "from":
         from = value as string;
@@ -61,10 +57,10 @@ const getAllLessonsFn: ({
   const offset = (page - 1) * per_page
   const url = routes.LESSON_LIST({
     courseId: courseId,
-    title: title,
+    title: title?.trim(),
     from:from,
     to:to,
-    status: status,
+    status: status?.toLowerCase(),
     sorting_param: sorting_param,
     direction: direction,
     offset: offset,

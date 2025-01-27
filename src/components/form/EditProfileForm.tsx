@@ -197,7 +197,7 @@ const EditProfileForm = () => {
                 <AvatarImage
                   src={showUploadImage?.path ? showUploadImage?.path : previewImgUrl+ user?.profile}
                 />
-                <AvatarFallback>{formatName(user?.name)}</AvatarFallback>
+                <AvatarFallback className="bg-[#FFC1BB]" >{formatName(user?.name) || "Admin" }</AvatarFallback>
               </Avatar>
               <label htmlFor="image-upload" className={`absolute bottom-0 right-0 p-1 ${theme=='dark' ? 'bg-black' : 'bg-white'} rounded-full cursor-pointer`}>
                 <Camera className="w-5 h-5" />

@@ -1,85 +1,111 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import { Card } from '@/components/ui/card';
-import { titleCase } from '@/lib/utils';
-import { useToast } from "../ui/use-toast";
-import { Loader2 } from 'lucide-react';
-import LessonApi from '@/api/lessonApi';
+"use client";
+import React, { useEffect, useState } from "react";
+import { formatName, titleCase } from "@/lib/utils";
+import {  Loader2 } from "lucide-react";
+import LessonApi from "@/api/lessonApi";
+import { CardHeader, Card, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "../ui/badge";
+import { format } from "date-fns";
 
 
-const LessonDetail = ({lessonId}: any) => {
-    const { toast } = useToast();
-    const { lessonsDetail } = LessonApi()
-    const [lesson, setLesson]: any = useState({});
-    const [loading, setLoading]: any = useState(false);
+const LessonDetail = ({ lessonId }: any) => {
+  const { lessonsDetail } = LessonApi();
+  const [lessonInfo, setLessonInfo]: any = useState({});
+  const [loading, setLoading]: any = useState(false);
+  const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
 
-    useEffect(() => {
-        getlessonDetaits(lessonId);
-    }, [lessonId]);
 
-    const getlessonDetaits = async (id: any) => {
-        setLoading(true);
-        await lessonsDetail(id).then((res: any) => {
-            if (!res.error) {
-                setLesson(res?.result)
-                setLoading(false);
-            } else {
-                setLesson({})
-                setLoading(false);
-                toast({
-                    title: res?.errorMessage ? res?.errorMessage : "Uh oh! Something went wrong.",
-                    variant: "destructive", description: res?.error
-                });
-            }
-        })
-    }
+  useEffect(() => {
+    getlessonDetails(lessonId);
+  }, [lessonId]);
 
-    if (loading) {
-        return (
-          <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-            <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
-          </div>
-        );
-    }
+  const getlessonDetails = async (id: any) => {
+    setLoading(true);
+    await lessonsDetail(id).then((res: any) => {
+      if (!res.error) {
+        setLessonInfo(res?.results);
+        setLoading(false);
+      } else {
+        setLessonInfo({});
+        setLoading(false);
+      }
+    });
+  };
 
-    const InfoRow = ({ label, value }: any) => (
-        <div className="flex items-start gap-2">
-            <div className="font-bold min-w-36">{label + " "}:</div>
-            <div>{value}</div>
-        </div>
-    );
+  if (loading) {
     return (
-        <>
-            <div className="max-w-12xl flex flex-col gap-6 p-6 sm:p-8">
-                <Card className="flex flex-col p-6 space-y-6">
-                    {/* <div className="flex flex-col items-center border-b pb-6" onClick={()=>`/users/${lesson?.userDetails?.id}`}>
-                            <Avatar className="w-24 h-24">
-                                <AvatarImage src={lesson?.userDetails ? previewImgUrl + lesson?.userDetails?.image : ""} />
-                                <AvatarFallback className="bg-orange-500">{formatName(lesson?.userDetails?.name) || "N/A"}</AvatarFallback>
-                            </Avatar>
-                            <div className="font-bold text-lg mt-2">{lesson?.userDetails?.name || "N/A"}</div>
-                            <div className="text-gray-600">{lesson?.userDetails?.email || ""}</div>
-                            <div className="text-gray-600">{lesson?.userDetails?.bio || ""}</div>
-                    </div> */}
+      <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
+        <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
+      </div>
+    );
+  }
 
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold">Chapter Details:</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <InfoRow label="Title" value={titleCase(lesson?.title) || "N/A"} />
-                                <InfoRow label="Description" value={lesson?.description || "N/A"} />
-                                <InfoRow label="Status" value={titleCase(lesson?.status) || "N/A"} />
-                                <InfoRow label="Chapter" value={lesson?.totalChapter || 0} />
+  return (
+    <>
+        <div className='pt-8 pb-8' >
+        <Card className="max-w-full mx-auto">
+        <div className="flex flex-col items-center gap-2 p-4 border-b">
+            <div className="relative flex flex-col items-center">
+            <Avatar className="w-20 h-20">
+                <AvatarImage 
+                src={lessonInfo?.image ? previewImgUrl+ lessonInfo?.image : ""}
+                alt="Lesson Logo" />
+                <AvatarFallback> {formatName(lessonInfo?.title) || "N/A"}</AvatarFallback>
+            </Avatar>
+                        <div className="mt-4">
+                            {lessonInfo?.status ? (
+                    <Badge
+                        className={
+                            lessonInfo.status.toLowerCase() === "active"
+                            ? "bg-green-500 text-white"
+                            : "bg-red-500 text-white"
+                        }
+                    >
+                        {titleCase(lessonInfo.status)}
+                    </Badge>
+                    ) : (
+                    <span className="text-sm text-gray-500">N/A</span>
+                    )}
+
                             </div>
-                            <div>
-                                {/* <InfoRow label="Pay" value={lesson?.pay || "N/A"} /> */}
-                            </div>
-                        </div>
-                    </div>
-                </Card>
             </div>
-        </>
-    )
-}
+        </div>
+        <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Lesson Details:</h2>
+            <div className="grid grid-cols-[1fr,2fr] gap-x-8 gap-y-2">
+            {/* Left Column */}
+            <div className="space-y-4">
 
-export default LessonDetail
+
+
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Title:</span>
+                <span className="text-sm">{lessonInfo.title ? titleCase(lessonInfo.title) : "N/A"}</span>
+                </div>
+
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Description:</span>
+                <span className="text-sm">{lessonInfo.description || "N/A"}</span>
+                </div>
+
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Created At:</span>
+                <span className="text-sm">{lessonInfo.createdAt ? format(new Date(lessonInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
+                </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-4">
+
+
+            </div>
+            </div>
+        </CardContent>
+        </Card>
+        </div>
+    </>
+  );
+};
+
+export default LessonDetail;

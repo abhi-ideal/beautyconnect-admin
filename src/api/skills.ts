@@ -105,6 +105,31 @@ export default function SkillsApi() {
           }
     }
 
+
+
+    const skillList = async ()=>{
+        try {
+            const url = await routes.COURSE_SKILL_LIST();
+            const accessToken = await getAccessToken();
+            const options =  {
+                headers: { Authorization: "Bearer " + accessToken },
+              }
+              const response = await fetch(url, options);
+              const responseData = await response.json();
+              if (!response.ok) {
+                if (response?.status === 401 || response?.status === 403) {
+                    errorHandle(response?.status);
+                }
+            }
+              return responseData;
+        } catch (error:any) {
+            return { error: true, errorMessage: error?.message };
+          }
+    }
+
+
+
+
     const errorHandle=(status :any)=>{
         const tokenLocalStorageKey: any = `${appConstant.NEXT_PUBLIC_TOKEN}`;
         const userLocalStorageKey: any = `${appConstant.NEXT_PUBLIC_USER_INFO}`;
@@ -120,5 +145,5 @@ export default function SkillsApi() {
           });
     }
 
-    return { addSkills, updateSkills, deleteSkills, skillsDetail }
+    return { addSkills, updateSkills, deleteSkills, skillsDetail, skillList }
 }

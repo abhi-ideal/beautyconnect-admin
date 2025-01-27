@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import TanStackBasicTable from "../TanStackTable/TanStackBasicTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { LockKeyhole, LockKeyholeOpen, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { formatName, shortName, titleCase } from "@/lib/utils";
@@ -31,6 +31,7 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
   const [type, setType] = useState('add');
   const [editData, setEditData]: any = useState({});
   const {deleteLesson, updateLesson } = LessonApi()
+  const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
 
   // column filters state of the table
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -72,7 +73,7 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
 
   async function deleteData(data: any) {
     Swal.fire({
-      text: `Are you sure you want to delete this Course?`,
+      text: `Are you sure you want to delete this lesson?`,
       showCancelButton: true,
       confirmButtonColor: `#18181B`,
       cancelButtonColor: "white",
@@ -154,14 +155,6 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
 
 
 
-
-
-
-
-
-
-
-
   //updates data
   async function update(data: any) {
     setOpen(true);
@@ -170,7 +163,7 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
   }
 
   const details = (data: any, header: string) => {
-    // header != "description" && router.push(`/courses/${courseId}/lesson/${data?.id}`)
+    router.push(`/courses/${courseId}/lesson/${data?.id}`)
   };
 
   const [expandedDescription, setExpandedDescription]:any = useState({});
@@ -179,45 +172,71 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
       ...prevState, [index]: !prevState[index]
     }));
   };
+  const color=["bg-orange-500","bg-lime-500","bg-cyan-500","bg-blue-500","bg-rose-500"];
 
   const categoryColumns: ColumnDef<Lesson>[] = [
+        {
+          header: "Image",
+          accessorFn: (row: any) => row?.image,
+          enableSorting: false,
+          enableColumnFilter: false,
+          cell: (info:any) => {
+            const imageUrl = info.getValue();
+            const bgColor = color[info?.row?.index % color.length ]
+            return (
+              <div className="flex">
+              <Avatar>
+                <AvatarImage
+                  src={previewImgUrl+imageUrl}
+                />
+                <AvatarFallback className={bgColor}>
+                  {formatName(info.row.original?.title) || "NA"}
+                </AvatarFallback>
+              </Avatar>
+              </div>
+            );
+          }
+        },
     {
       header: "Title",
       accessorKey: "title",
       cell: (info) => {
         const title: any = info.getValue();
-        return (<div className={`flex m-2`}>{ titleCase(title) || "NA"}</div>)
+        return (<div className={`flex m-2`}>{ titleCase(title?.trim()) || "NA"}</div>)
       },
       enableSorting: true,
       enableColumnFilter: true
     },
     {
-      header: "Total Chapter",
-      accessorKey: "totalChapter",
+      header: "Description",
+      accessorKey: "description",
       cell: (info) => {
-        const totalChapter: any = info.getValue();
-        return (<div className={`flex m-2`}>{totalChapter || 0}</div>)
+        const description = info.getValue<string>();
+        return <div className="text-truncate"> {description ? description : 'N/A'} </div>;
       },
-      enableSorting: true,
-      enableColumnFilter: false
+      enableSorting: false,
+      enableColumnFilter: false,
     },
+
     // {
-    //   header: "Description",
-    //   accessorKey: "description",
-    //   accessorFn: (row: Lesson) => row?.description,
+    //   header: "Lesson Content",
+    //   accessorKey: "lessonContentInfo",
     //   cell: (info) => {
-    //     const desc = info.getValue<string>();
-    //     const index = info.row.index;
-    //     const isExpanded = expandedDescription[index] || false;
-    //     return <div className="w-80">{shortName(desc, isExpanded)}
-    //     {desc && desc.length >= 28 && (
-    //       <button className="text-cyan-500" onClick={() => toggleSectionExpanded(index)}>{isExpanded ? "Read less" : "Read more"}</button>
-    //     )}
-    //   </div>
+    //     const lessonContent: any = info.getValue();
+    //     return (<div className={`flex m-2`}>{ lessonContent.length ? lessonContent.length : 0}</div>)
     //   },
-    //   enableSorting: true,
+    //   enableSorting: false,
     //   enableColumnFilter: false
     // },
+    {
+      header: "Created At",
+      accessorKey: "createdAt",
+      cell: (info) => {
+        const createdAt = info.getValue<string>();
+        return format(new Date(createdAt), "dd MMM, yy 'at' h:mm a");
+      },
+      enableColumnFilter: false
+    },
     {
       header: "Status",
       accessorKey: "status",
@@ -228,15 +247,7 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
       },
       enableSorting: false
     },
-    {
-      header: "Created At",
-      accessorKey: "createdAt",
-      cell: (info) => {
-        const createdAt = info.getValue<string>();
-        return format(new Date(createdAt), "dd MMM, yy 'at' h:mm a");
-      },
-      enableColumnFilter: false
-    },
+
     {
       id: "actions",
       header: "Action",
@@ -256,10 +267,6 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {/* <DropdownMenuItem onClick={() => router.push(`/courses/${courseId}/lesson/${rowData?.id}`)}>
-                View Chapters
-              </DropdownMenuItem> */}
-              
               <DropdownMenuItem onClick={() => updateData(rowData)} className="flex items-center space-x-2" >
               {rowData.status == "active" ? 
                 (<LockKeyhole className="h-4 w-4 text-muted-foreground" />) : (
@@ -282,6 +289,14 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
               <Pencil className="h-4 w-4 text-muted-foreground" />
               <span>Update</span>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push(`/courses/${courseId}/lesson/${rowData.id}`)}
+                className="flex items-center space-x-2"
+              >
+                   <Eye className="h-4 w-4 text-muted-foreground" />
+                   <span>View Detail</span>
+              </DropdownMenuItem>
+
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -314,8 +329,8 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
         />
       </div>
       :
-      <div className='py-6'>
-        <Card className='p-6'>
+      <div className='pt-4'>
+        <Card className='p-4'>
         <div className="text-center text-2xl font-semibold">{type!='edit' ? "Add " : "Edit "}Lesson</div>
         <AddEditLesson props={{ courseId:courseId,  setOpen, type: type, editData, setEditData, allLessons, setAllLessons }} />
         </Card>

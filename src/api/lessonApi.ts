@@ -90,7 +90,7 @@ export default function LessonApi() {
     //get Lessons details
     const lessonsDetail = async (id: string) => {
         try {
-            const url = routes.LESSON_DETAIL() + id;
+            const url = routes.LESSON_DETAIL(id);
             const accessToken = await getAccessToken();
             const response: any = (await fetch(
                 url, { headers: { Authorization: 'Bearer ' + accessToken } }

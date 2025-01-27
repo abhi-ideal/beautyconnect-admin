@@ -18,7 +18,6 @@ const getAllChaptersFn: ({
 
   // set filter
   let title = "",
-    description = "",
     from= "",
     to = "",
     status = ""
@@ -29,9 +28,6 @@ const getAllChaptersFn: ({
     switch (id) {
       case "title":
         title = value as string;
-        break;
-      case "description":
-        description = value as string;
         break;
       case "from":
         from = value as string;
@@ -61,7 +57,7 @@ const getAllChaptersFn: ({
   const offset = (page - 1) * per_page
   const url = routes.CHAPTER_LIST({
     lessonId: lessonId,
-    title: title,
+    title: title?.trim(),
     from:from,
     to:to,
     status: status,

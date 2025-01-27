@@ -21,11 +21,11 @@ import { useGetCourses } from '@/api/useGetCourses';
 import CourseApi from '@/api/courseApi';
 import AddEditCourse from '../form/AddEditCourse';
 
-const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
+const CourseTableComponent = ({ allCourses, setAllCourses }: any) => {
   const { logout }=AuthService();
   const router = useRouter();
   const { toast } = useToast();
-  const { updateCourses, deleteCourse } = CourseApi();
+  const { updateCourse, deleteCourse } = CourseApi();
   const [expandedDesc, setExpandedDesc ]:any = useState({});
   // sorting state of the table
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -42,7 +42,6 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
     pageSize: 20 //default page size
   });
 
-  const [ allCourses, setAllCourses ]: any = useState([]);
 
   const { allCoursesData, isAllCoursesDataLoading }: any =
     useGetCourses({
@@ -60,7 +59,9 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
       (allCoursesData?.status==401 || allCoursesData?.status==403 ) && logout('coursetable__');
     }
     setAllCourses(allCoursesData);
+
   }, [allCoursesData]);
+
 
   async function deleteData(data: any) {
     Swal.fire({
@@ -115,7 +116,7 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
       }`
     }).then(async (result: any) => {
       if (result.value) {
-        await updateCourses({status: status}, data.id ).then(
+        await updateCourse({status: status}, data.id ).then(
           async (res: any) => {
             if (!res.error) {       
               const updatedCategory = allCourses?.results?.map((res: any) => {
@@ -196,7 +197,7 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
       accessorFn: (row: Course) => row?.title,
       cell: (info) => {
         const title = info.getValue<string>();
-        return <div className="text-truncate"> {title ? title : 'N/A'} </div>;
+        return <div className="text-truncate"> {title ? titleCase(title?.trim()) : 'N/A'} </div>;
       },
       enableSorting: true,
       enableColumnFilter: true
@@ -211,12 +212,23 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
       enableSorting: false,
       enableColumnFilter: true,
     },
+    
+    {
+      header: "Experience",
+      accessorKey: "experience",
+      cell: (info) => {
+        const experience = info.getValue<string>();
+        return <div className="text-truncate"> {experience ? experience?.trim() : 'N/A'} </div>;
+      },
+      enableSorting: false,
+      enableColumnFilter: false,
+    },
     {
       header: "Amount",
       accessorKey: "amount",
       cell: (info) => {
         const amount:any = info.getValue();
-        return (<div className={`flex m-2`}>{ "$"+amount || 0 }</div>)
+        return (<div className={`flex m-2`}>{ "$ "+amount || 0 }</div>)
       },
       enableSorting: true,
       enableColumnFilter: false
@@ -364,12 +376,12 @@ const CourseTableComponent = ({ allCourse, setAllCourse }: any) => {
         statusFilter={["Active", "Inactive"]}
       />
         <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="sm:max-w-[800px]">
           <DialogHeader>
             <DialogTitle>Edit Course</DialogTitle>
           </DialogHeader>
           <AddEditCourse
-            props={{ setOpen, type: "Edit", editData, setEditData, allCourse, setAllCourse }}
+            props={{ setOpen, type: "Edit", editData, setEditData, allCourses, setAllCourses }}
           ></AddEditCourse>
         </DialogContent>
       </Dialog>
