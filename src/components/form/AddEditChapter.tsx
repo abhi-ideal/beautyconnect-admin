@@ -73,7 +73,7 @@ const AddEditChapter = (props: any) => {
 
   // console.log('editData', editData);
 
-  // console.log("lessonContents", lessonContents);
+  console.log("lessonContents", lessonContents);
 
   useEffect(() => {
     form.reset(formValues);
@@ -158,19 +158,31 @@ const AddEditChapter = (props: any) => {
 
         await getPresignedPostData(sendData).then(async (data: any) => {
           if (data) {
-            await uploadFileToS3(data, selectedFile).then(() => {
+            await uploadFileToS3(data, selectedFile).then(async() => {
               const mimeType = selectedFile?.type;
-              const imageRatio = selectedFile.type.startsWith("video")
-                ? "1280x720"
-                : "50x50";
+        if (selectedFile.type.startsWith("video")) {
+          const videoMetadata = await getVideoMetadata(selectedFile);
+          const { duration, ratio } = videoMetadata;
 
-              handleInputChange(index, "media", {
-                mimeType: mimeType,
-                file: randomFileName,
-                ratio: imageRatio,
-                poster: "",
-                type: mimeType.split("/")[0],
-              });
+          handleInputChange(index, "media", {
+            mimeType: mimeType,
+            file: randomFileName,
+            ratio: ratio,
+            poster: "",
+            type: mimeType.split("/")[0],
+            duration: duration, 
+          });
+        } else {
+          // Default ratio for pdf files
+          handleInputChange(index, "media", {
+            mimeType: mimeType,
+            file: randomFileName,
+            ratio: "50:50",
+            poster: "",
+            type: mimeType.split("/")[0],
+            duration: 0, 
+          });
+        }
 
               setLoading(false);
               toast({ title: "Upload File successfully." });
@@ -195,6 +207,34 @@ const AddEditChapter = (props: any) => {
       }
     }
   };
+
+  //function is for retuning ratio and duration.
+  const getVideoMetadata = (file: File): Promise<{ duration: number; ratio: string }> => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement("video");
+      video.preload = "metadata";
+  
+      video.onloadedmetadata = () => {
+        const duration = Math.round(video.duration); // in seconds
+        const width = video.videoWidth;
+        const height = video.videoHeight;
+  
+        const ratio = width && height ? `${width}:${height}` : "50:50";
+        resolve({ duration, ratio });
+      };
+  
+      video.onerror = () => {
+        // reject(new Error("Failed to load video metadata."));
+        console.error("Failed to load video metadata.");
+        resolve({ duration: 0, ratio: "50:50" });
+      };
+  
+      // Create a blob URL for the video file and set it as the source
+      video.src = URL.createObjectURL(file);
+    });
+  };
+  
+
 
   return (
     <div className="max-w-2xl mx-auto p-4">

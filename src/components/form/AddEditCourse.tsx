@@ -80,22 +80,42 @@ const AddEditCourse = (props: any) => {
 
   const editor = useRef(null);
   const courseConfig = useMemo(() => ({
+    height: 300, // Set a fixed or minimum height
+    minHeight: 300, // Ensures it doesn't shrink too much
+    maxHeight: 300, // Prevents it from expanding too much
+    width: 710,
+    maxWidth: 710,
+    toolbarSticky: false,
+    spellcheck: true,
     readonly: false,
     placeholder: 'Enter course is for...',
     theme: "custom",
     style: {
       backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
       color: theme === "dark" ? "#e5e5e5" : "#000000",
+      overflowWrap: "break-word",
+      wordWrap: "break-word",
+      whiteSpace: "pre-wrap", 
     },
   }), [theme]);
 
   const learnConfig = useMemo(() => ({
+    height: 300, 
+    minHeight: 300, 
+    maxHeight: 300,
+    width: 710,
+    maxWidth: 710,
+    toolbarSticky: false,
+    spellcheck: true,
     readonly: false,
     placeholder: 'Enter What You learn...',
     theme: "custom",
     style: {
       backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
       color: theme === "dark" ? "#e5e5e5" : "#000000",
+      overflowWrap: "break-word",
+      wordWrap: "break-word",
+      whiteSpace: "pre-wrap", 
     },
   }), [theme]);
 
@@ -150,10 +170,7 @@ const AddEditCourse = (props: any) => {
 
 
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-
-    console.log('values', values);
-    
+  async function onSubmit(values: z.infer<typeof formSchema>) {    
     if(type == "Edit"){
       const payload = {
         ...(editData?.title != values?.title && { "title": values?.title }),
@@ -308,7 +325,7 @@ const selectFile = async (event:any) => {
 
 
 return (
-  <div className="relative max-w-8xl mx-auto">
+  <div className="relative mx-auto">
     {loading && (
       <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-black/70">
         <Loader2 className="h-[100px] w-[100px] text-primary dark:text-white animate-spin" />
@@ -458,7 +475,6 @@ return (
               <FormItem>
                 <FormLabel>Course is for</FormLabel>
                 <FormControl>
-                  {/* <Textarea placeholder="Enter course is for" {...field} /> */}
                   {<JoditEditor ref={editor} value={formValues?.courseFor} config={courseConfig} onBlur={field?.onChange} onChange={(newContent) => { }} />}
                 </FormControl>
                 <FormMessage />

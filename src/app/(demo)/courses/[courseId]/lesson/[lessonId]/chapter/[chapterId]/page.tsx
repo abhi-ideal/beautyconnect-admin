@@ -5,19 +5,14 @@ import Link from "next/link";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import CourseDetail from '@/components/details/CourseDetail';
 import ChapterDetail from '@/components/details/ChapterDetail';
+import LessonDetail from '@/components/details/LessonDetail';
 
 const ChapterDetailPage = ({ params }: any) => {
     // courseId,lessonId,chapterId
     return (
-        <ContentLayout title="Course Details">
+        <ContentLayout title="Lesson Content Details">
             <Breadcrumb>
                 <BreadcrumbList>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink asChild>
-                            <Link href="/">Home</Link>
-                        </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
                     <BreadcrumbItem>
                         <BreadcrumbLink asChild>
                             <Link href="/dashboard">Dashboard</Link>
@@ -26,13 +21,13 @@ const ChapterDetailPage = ({ params }: any) => {
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
                         <BreadcrumbLink asChild>
-                            <Link href={`/courses`}>Course</Link>
+                            <Link href={`/courses`}>Courses</Link>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
                         <BreadcrumbLink asChild>
-                            <Link href={`/courses/${params?.courseId}`}>Course Detail</Link>
+                            <Link href={`/courses/${params?.courseId}`}>Course Details</Link>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -43,15 +38,16 @@ const ChapterDetailPage = ({ params }: any) => {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage>Chapter Details</BreadcrumbPage>
+                        <BreadcrumbPage>Lesson Content Details</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
 
-            <CourseDetail data={{ id: params.courseId, type: "course" }} />
+            <LessonDetail lessonId={params?.lessonId} />
+            {/* <CourseDetail data={{ id: params.courseId, type: "course" }} /> */}
 
-            <div className="mx-8 flex items-center justify-between">
-                <h1 className="text-4xl font-semibold">Chapters Details</h1>
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-semibold">Lesson Content Detail:</h1>
             </div>
 
             <ChapterDetail chapterId={params?.chapterId} lessonId={params?.lessonId} />

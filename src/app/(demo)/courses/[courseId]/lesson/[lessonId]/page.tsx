@@ -28,7 +28,7 @@ const LessonDetailPage = ({ params }: any) => {
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
                         <BreadcrumbLink asChild>
-                            <Link href={`/courses/${params?.courseId}`}>Course Detail</Link>
+                            <Link href={`/courses/${params?.courseId}`}>Course Details</Link>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />

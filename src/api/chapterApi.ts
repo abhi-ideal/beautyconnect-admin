@@ -93,9 +93,9 @@ const deleteChapter = async (id:string) =>{
 
 
     //get Chapters details
-    const chaptersDetail = async (id: string, chapterId: string) => {
+    const chapterDetail = async (chapterId: string) => {
         try {
-            const url = routes.CHAPTER_DETAIL(id, chapterId);
+            const url = routes.CHAPTER_DETAIL(chapterId);
             const accessToken = await getAccessToken();
             const response: any = (await fetch(
                 url, { headers: { Authorization: 'Bearer ' + accessToken } }
@@ -126,5 +126,5 @@ const deleteChapter = async (id:string) =>{
           });
     }
 
-    return {addChapter, updateChapter, deleteChapter, chaptersDetail }
+    return {addChapter, updateChapter, deleteChapter, chapterDetail }
 }

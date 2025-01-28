@@ -165,8 +165,7 @@ const routes = {
   ADD_CHAPTER:(id:any)=>`${courseHost}lesson-content/${id}`,
   UPDATE_CHAPTER:(id:any)=>`${courseHost}lesson/${id}`,
   DELETE_CHAPTER:(id:any)=>`${courseHost}lesson-content/${id}`,
-
-  CHAPTER_DETAIL:(id:string,chapterId:string)=>`${courseHost}lesson/${id}/chapter/${chapterId}`,
+  CHAPTER_DETAIL:(id:any)=>`${courseHost}lesson-content/${id}`,
   ADMIN_PROFILE: () => `${userBaseUrl}profile`,
   UPDATE_PROFILE: () => `${userBaseUrl}profile`,
   USER_REPORT:(id:any)=>`${userBaseUrl}users/report/${id}`,

@@ -60,7 +60,7 @@ const AddEditLesson = (props: any) => {
   });
 
 
-console.log('editData', editData);
+// console.log('editData', editData);
 
 // console.log('imageContent', imageContent);
 

@@ -253,13 +253,13 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
               <span>Update</span>
               </DropdownMenuItem> */}
 
-              {/* <DropdownMenuItem
+              <DropdownMenuItem
                 onClick={() => router.push(`/courses/${courseId}/lesson/${lessonId}/chapter/${rowData?.id}`)}
                 className="flex items-center space-x-2"
               >
                    <Eye className="h-4 w-4 text-muted-foreground" />
                    <span>View Detail</span>
-              </DropdownMenuItem> */}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
