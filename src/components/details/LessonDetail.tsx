@@ -73,7 +73,7 @@ const LessonDetail = ({ lessonId }: any) => {
         </div>
         <CardContent className="p-6">
             <h2 className="text-xl font-semibold mb-4">Lesson Details:</h2>
-            <div className="grid grid-cols-[1fr,2fr] gap-x-8 gap-y-2">
+            <div className="grid grid-cols gap-x-8 gap-y-2">
             {/* Left Column */}
             <div className="space-y-4">
 

@@ -331,10 +331,8 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
       </div>
       :
       <div className='pt-4'>
-        <Card className='p-4'>
         <div className="text-center text-2xl font-semibold">{type!='edit' ? "Add " : "Edit "}Lesson</div>
         <AddEditLesson props={{ courseId:courseId,  setOpen, type: type, editData, setEditData, allLessons, setAllLessons }} />
-        </Card>
       </div>
       }
     </>

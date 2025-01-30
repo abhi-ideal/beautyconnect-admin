@@ -149,7 +149,7 @@ const AddEditChapter = (props: any) => {
       if (imageHaveType.includes(selectedFile?.name.split(".").pop())) {
         const epochNow = new Date().getTime();
         const randomFileName =
-          "dev-3U-" + epochNow + "." + selectedFile.name.split(".").pop();
+          "dev-2C-" + epochNow + "." + selectedFile.name.split(".").pop();
 
         const sendData: any = {
           randomFileName: randomFileName,

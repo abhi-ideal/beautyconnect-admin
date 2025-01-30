@@ -29,6 +29,7 @@ import AuthService from "@/api/auth/AuthService";
 import ContactApi from "@/api/contact";
 import { useGetTransactions } from "@/api/useGetTransaction";
 import { Badge } from "../ui/badge";
+import Link from "next/link";
 
 const TransactionTableComponent = () => {
   const { logout }=AuthService();
@@ -154,7 +155,9 @@ const TransactionTableComponent = () => {
             </Avatar>
             <div>
               <div className="font-semibold text-truncate">
+              <Link href={`/users/${info.row.original?.userInfo?.id}`}> 
                 {name ? titleCase(name?.trim()) : "N/A"}
+                </Link>
               </div>
               <div className="text-sm text-muted-foreground text-truncate">
                 {email || "N/A"}

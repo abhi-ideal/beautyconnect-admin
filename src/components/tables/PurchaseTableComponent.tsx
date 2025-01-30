@@ -29,6 +29,7 @@ import AuthService from "@/api/auth/AuthService";
 import ContactApi from "@/api/contact";
 import { Badge } from "../ui/badge";
 import { useGetPurchase } from "@/api/useGetPurchase";
+import Link from "next/link";
 
 const PurchaseTableComponent = () => {
   const { logout }=AuthService();
@@ -154,7 +155,9 @@ const PurchaseTableComponent = () => {
             </Avatar>
             <div>
               <div className="font-semibold text-truncate">
+                <Link href={`/users/${info.row.original?.userInfo?.id}`}> 
                 {name ? titleCase(name?.trim()) : "N/A"}
+                </Link>
               </div>
               <div className="text-sm text-muted-foreground text-truncate">
                 {email || "N/A"}
@@ -188,13 +191,15 @@ const PurchaseTableComponent = () => {
                     ? `${process.env.NEXT_PUBLIC_PREVIEW_IMG_URL}${media}`
                     : ""
                 }
-                alt={title || "User Avatar"}
+                alt={title || "course Avatar"}
               />
               <AvatarFallback className={bgColor} >{formatName(title || "N/A")}</AvatarFallback>
             </Avatar>
             <div>
               <div className="font-semibold text-truncate">
+                <Link href={`/courses/${info.row.original?.coursesInfo?.id}`}> 
                 {title ? titleCase(title?.trim()) : "N/A"}
+                </Link>
               </div>
               <div className="text-sm text-muted-foreground text-truncate">
                 {description || "N/A"}
@@ -228,7 +233,7 @@ const PurchaseTableComponent = () => {
       },
     },
     {
-      header: "Created At",
+      header: "Purchase Date",
       accessorKey: "createdAt",
       cell: (info) => {
         const createdAt = info.getValue<string>();

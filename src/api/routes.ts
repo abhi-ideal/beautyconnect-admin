@@ -79,6 +79,20 @@ const routes = {
           params?.direction !== "" ? `orderType=${params?.direction}&` : ""
         }offset=${params?.offset}&limit=${params?.limit}`,
 
+        
+      PURCHASE_USER_LIST: (params: any) =>
+          `${courseHost}purchaseBy?${
+            params?.courseId !== "" ? `courseId=${params?.courseId}&` : ""}${
+            params?.name !== "" ? `name=${params?.name}&` : ""
+          }${params?.email !== "" ? `email=${params?.email}&` : ""}${
+            !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
+          }${
+            params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
+            params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
+            params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
+          }${
+            params?.direction !== "" ? `orderType=${params?.direction}&` : ""
+          }offset=${params?.offset}&limit=${params?.limit}`,
 
   COURSE_LIST: (params: any) => 
       `${courseHost}admin/courses?${

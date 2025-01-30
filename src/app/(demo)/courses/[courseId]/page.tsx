@@ -8,6 +8,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ChapterTableComponent from '@/components/tables/ChapterTableComponent';
 import LessonTableComponent from '@/components/tables/LessonTableComponent';
 import { ArrowLeft } from 'lucide-react';
+import CoursePurchaseUserComponent from '@/components/tables/CoursePurchaseUserComponent';
+import { Card, CardTitle } from '@/components/ui/card';
 const queryClient = new QueryClient();
 
 const CourseDetailPage = ({ params }: any) => {
@@ -37,11 +39,23 @@ const CourseDetailPage = ({ params }: any) => {
 
             <CourseDetail data={{ id: params.courseId, type: "course" }} />
 
-            <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-semibold">Lessons:</h3>
-            </div>
+
             <QueryClientProvider client={queryClient}>
-                <LessonTableComponent courseId={params.courseId} allLessons={allLessons}  setAllLessons={setAllLessons} />
+                <Card className="mt-4 p-4">
+            <CardTitle className="">
+              <p className="font-semibold">Course Purchase Users:</p>
+            </CardTitle>
+            <CoursePurchaseUserComponent courseId={params.courseId} />
+            </Card>
+
+                <Card className="mt-4 p-4">
+            <CardTitle className="">
+              <p className="font-semibold">Lessons:</p>
+            </CardTitle>
+            <LessonTableComponent courseId={params.courseId} allLessons={allLessons}  setAllLessons={setAllLessons} />
+            </Card>
+           
+           
             </QueryClientProvider>
         </ContentLayout>
     )

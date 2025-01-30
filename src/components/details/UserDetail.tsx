@@ -10,7 +10,7 @@ import moment from 'moment';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Loader2, MapPin, Users, Calendar, Globe2, Flag, MessageSquare, Map, } from 'lucide-react'
+import { Loader2, MapPin, Users, Calendar, Globe2, Flag, MessageSquare, Map, Gem, } from 'lucide-react'
 
 const UserDetail = (props: any) => {
     const { toast } = useToast();
@@ -145,6 +145,13 @@ const UserDetail = (props: any) => {
                     <span className="text-muted-foreground">Posts</span>
                   </div>
                   <span className="font-medium">{userInfo?.totalPost || 0}</span>
+                </div>
+                <div className="flex items-center justify-between w-80">
+                  <div className="flex items-center gap-2">
+                    <Gem className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">Diamonds</span>
+                  </div>
+                  <span className="font-medium">{userInfo?.diamond || 0}</span>
                 </div>
               </div>
             </div>
