@@ -326,6 +326,7 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
+        cursorPointer= {"cursor-pointer"}
         />
       </div>
       :

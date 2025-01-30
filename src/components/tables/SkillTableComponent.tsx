@@ -330,6 +330,7 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
+        cursorPointer= {""}
       />
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">

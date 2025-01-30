@@ -334,6 +334,7 @@ const UserTableComponent = () => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
+        cursorPointer= {"cursor-pointer"}
       />
     </>
   );

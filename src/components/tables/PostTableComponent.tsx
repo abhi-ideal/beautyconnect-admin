@@ -346,6 +346,7 @@ const PostTableComponent = () => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
+        cursorPointer= {"cursor-pointer"}
       />
       
 <Lightbox

@@ -12,10 +12,12 @@ import Image from "next/image";
 interface TanStackBasicTableTableComponentProps<TData> {
   table: TableType<TData>;
   details:any;
+  cursorPointer:any;
 }
 
 export default function TanStackBasicTableTableComponent<TData>({
   details,
+  cursorPointer,
   table
 }: TanStackBasicTableTableComponentProps<TData>) {
   const sortToggler = (header: Header<TData, unknown>) => {
@@ -82,7 +84,7 @@ export default function TanStackBasicTableTableComponent<TData>({
                     (index + 1)}
                 </TableCell>
                 {row.getVisibleCells().map((cell: any) => (
-                  <TableCell key={cell.id} onClick={()=>getDetail(cell )} className="cursor-pointer">
+                  <TableCell key={cell.id} onClick={()=>getDetail(cell )} className={cursorPointer}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

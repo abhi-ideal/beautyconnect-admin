@@ -233,18 +233,18 @@ const CourseTableComponent = ({ allCourses, setAllCourses }: any) => {
       enableSorting: true,
       enableColumnFilter: false
     },
+    // {
+    //   header: "Rating",
+    //   accessorKey: "rating",
+    //   cell: (info) => {
+    //     const rating:any = info.getValue();
+    //     return <div className={`flex m-2`}> {rating || 0 }</div>
+    //   },
+    //   enableSorting: true,
+    //   enableColumnFilter: false
+    // },
     {
-      header: "Rating",
-      accessorKey: "rating",
-      cell: (info) => {
-        const rating:any = info.getValue();
-        return <div className={`flex m-2`}> {rating || 0 }</div>
-      },
-      enableSorting: true,
-      enableColumnFilter: false
-    },
-    {
-      header: "Total Lesson",
+      header: "Lessons",
       accessorKey: "totalLesson",
       cell: (info) => {
         const totalLesson:any = info.getValue();
@@ -254,7 +254,7 @@ const CourseTableComponent = ({ allCourses, setAllCourses }: any) => {
       enableColumnFilter: false
     },
     {
-      header: "Total Purchase",
+      header: "Purchases",
       accessorKey: "totalPurchase",
       cell: (info:any) => {
         const totalPurchase = info.getValue();
@@ -374,6 +374,7 @@ const CourseTableComponent = ({ allCourses, setAllCourses }: any) => {
         setColumnFilters={setColumnFilters}
         details={details}
         statusFilter={["Active", "Inactive"]}
+        cursorPointer= {"cursor-pointer"}
       />
         <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[800px]">

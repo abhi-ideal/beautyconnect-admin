@@ -20,7 +20,8 @@ export interface TableProps<TData, TValue> {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: any;
   hideFilter?:any;
-
+  cursorPointer?:any;
+  
   //Dispatch<SetStateAction<ColumnFiltersState>>;
 }
 
@@ -30,4 +31,5 @@ export interface UseGetTableResponseType<TData> {
   counts: any;
   count:any;
   results: TData[];
+  result: TData[];
 }

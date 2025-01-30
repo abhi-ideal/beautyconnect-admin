@@ -37,9 +37,10 @@ import {
 } from "@/components/ui/select"
 import SkillsApi from "@/api/skills";
 import { Spinner } from "../ui/spinner";
+import JoditEditor from "jodit-react";
+import Editor from "../demo/rich-text/editor";
 
-import dynamic from "next/dynamic";
-const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
+
 
 const formSchema = z.object({
   title: z
@@ -325,7 +326,7 @@ const selectFile = async (event:any) => {
 
 
 return (
-  <div className="relative mx-auto">
+  <div className="relative mx-auto w-full">
     {loading && (
       <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-black/70">
         <Loader2 className="h-[100px] w-[100px] text-primary dark:text-white animate-spin" />
@@ -475,7 +476,8 @@ return (
               <FormItem>
                 <FormLabel>Course is for</FormLabel>
                 <FormControl>
-                  {<JoditEditor ref={editor} value={formValues?.courseFor} config={courseConfig} onBlur={field?.onChange} onChange={(newContent) => { }} />}
+                <Editor content={formValues?.courseFor} onChange={field?.onChange} placeholder="Enter course is for..." />
+                  {/* {<JoditEditor ref={editor} value={formValues?.courseFor} config={courseConfig} onBlur={field?.onChange} onChange={(newContent) => { }} />} */}
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -489,8 +491,9 @@ return (
               <FormItem>
                 <FormLabel>What You'll Learn</FormLabel>
                 <FormControl>
-                  {/* <Textarea placeholder="Enter what You'll learn" {...field} /> */}
-                  {<JoditEditor ref={editor} value={formValues?.learn} config={learnConfig} onBlur={field?.onChange} onChange={(newContent) => { }} />}
+                <Editor content={formValues?.learn} onChange={field?.onChange} placeholder="Enter What You learn..." />
+
+                  {/* {<JoditEditor ref={editor} value={formValues?.learn} config={learnConfig} onBlur={field?.onChange} onChange={(newContent) => { }} />} */}
                 </FormControl>
                 <FormMessage />
               </FormItem>

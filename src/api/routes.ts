@@ -4,7 +4,8 @@ const feedBaseUrl: any = `${process.env.NEXT_PUBLIC_FEED_API}`;
 const commonBaseUrl: any = `${process.env.NEXT_PUBLIC_COMMON_API}`;
 const ContentHost: any = `${process.env.NEXT_PUBLIC_CONENTHOST}`;
 const authBaseUrl: any = `${process.env.NEXT_PUBLIC_AUTH_API}`;
-const courseHost :any= `${process.env.NEXT_PUBLIC_COURSE_API}`
+const courseHost :any= `${process.env.NEXT_PUBLIC_COURSE_API}`;
+const paymentHost :any= `${process.env.NEXT_PUBLIC_PAYMENT_HOST}`;
 
 const routes = {
   USER_LIST: (params: any) =>
@@ -21,19 +22,64 @@ const routes = {
     }${
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""
     }offset=${params?.offset}&limit=${params?.limit}`,
-  FOLLOWER_LIST: (params: any, type:string) =>
-    `${userBaseUrl}${type}?${
+    
+  CONTACT_US_LIST: (params: any) =>
+    `${commonBaseUrl}contact-list?${
       params?.name !== "" ? `name=${params?.name}&` : ""
     }${params?.email !== "" ? `email=${params?.email}&` : ""}${
-      params?.userId !== "" ? `id=${params?.userId}&` : ""}${
       !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
     }${
-      params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
-      params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
       params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
     }${
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""
     }offset=${params?.offset}&limit=${params?.limit}`,
+
+
+    TRANSACTION_LIST: (params: any) =>
+      `${paymentHost}admin/transaction-list?${
+        params?.name !== "" ? `name=${params?.name}&` : ""
+      }${params?.email !== "" ? `email=${params?.email}&` : ""}${
+        !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
+      }${
+        params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
+        params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
+        params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
+      }${
+        params?.direction !== "" ? `orderType=${params?.direction}&` : ""
+      }offset=${params?.offset}&limit=${params?.limit}`,
+
+
+
+      TRANSACTION_HISTORY_LIST: (params: any) =>
+        `${paymentHost}admin/transaction-history?${
+          params?.userId !== "" ? `userId=${params?.userId}&` : ""}${
+            params?.type !== "" ? `type=${params?.type}&` : ""}${
+          params?.name !== "" ? `name=${params?.name}&` : ""
+        }${params?.email !== "" ? `email=${params?.email}&` : ""}${
+          !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
+        }${
+          params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
+          params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
+          params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
+        }${
+          params?.direction !== "" ? `orderType=${params?.direction}&` : ""
+        }offset=${params?.offset}&limit=${params?.limit}`,
+
+      
+      PURCHASE_LIST: (params: any) =>
+        `${courseHost}admin/purchase-list?${
+          params?.name !== "" ? `name=${params?.name}&` : ""
+        }${params?.title !== "" ? `title=${params?.title}&` : ""}${
+          !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
+        }${
+          params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
+          params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
+          params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
+        }${
+          params?.direction !== "" ? `orderType=${params?.direction}&` : ""
+        }offset=${params?.offset}&limit=${params?.limit}`,
+
+
   COURSE_LIST: (params: any) => 
       `${courseHost}admin/courses?${
         params?.title !== "" ? `title=${params?.title}&` : ""}${
@@ -99,29 +145,10 @@ const routes = {
       params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""}${
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""
     }offset=${params?.offset}&limit=${params?.limit}`,
-  COURSE_REPORT_LIST:(params:any)=>
-      `${courseHost}report-list?${
-        params?.name !== "" ? `name=${params?.name}&` : ""}${
-        !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""}${
-        params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
-        params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
-        params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""}${
-        params?.direction !== "" ? `orderType=${params?.direction}&` : ""
-      }offset=${params?.offset}&limit=${params?.limit}`,
-  EMPLOYER_LIST : (params: any) =>
-    `${userBaseUrl}employeeList?${
-      params?.name !== "" ? `name=${params?.name}&` : ""
-    }${params?.email !== "" ? `email=${params?.email}&` : ""}${
-      !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
-    }${
-      params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
-      params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
-      params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
-    }${
-      params?.direction !== "" ? `orderType=${params?.direction}&` : ""
-    }offset=${params?.offset}&limit=${params?.limit}`,
+
+
   SKILL_LIST: (params: any) =>
-    `${commonBaseUrl}admin/skills/?${
+    `${commonBaseUrl}admin/skills?${
       params?.title !== "" ? `title=${params?.title}&` : ""
     }${params?.description !== "" ? `description=${params?.description}&` : ""}${
       !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
@@ -132,24 +159,13 @@ const routes = {
     }${
       params?.direction !== "" ? `orderType=${params?.direction}&` : ""
     }offset=${params?.offset}&limit=${params?.limit}`,
-  CATEGORY_LIST: (params: any) =>
-    `${commonBaseUrl}admin/category?${
-      params?.title !== "" ? `title=${params?.title}&` : ""
-    }${params?.type !== "" ? `type=${params?.type}&` : ""}${
-      params?.description !== "" ? `description=${params?.description}&` : ""}${
-      !(params?.status == "" || params?.status == " ") ? `status=${params?.status}&` : ""
-    }${
-      params?.from !== "" ? `fromDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
-      params?.to !== "" ? `toDate=${moment(params?.to).format('YYYY-MM-DD')}&` : ""}${
-      params?.sorting_param !== "" ? `orderBy=${params?.sorting_param}&` : ""
-    }${
-      params?.direction !== "" ? `orderType=${params?.direction}&` : ""
-    }offset=${params?.offset}&limit=${params?.limit}`,
-  COURSECONTENTLIST: (params: any) => 
-    `${courseHost}courseContent/${params?.id}?offset=${params?.offset}&limit=${params?.limit}`,
+
+
   USERGRAPG: (params: any)=>`${userBaseUrl}userGraph?${
     params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${
     params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}` : ""
+  }`,
+  REVENUE_GRAPH: (params: any) => `${paymentHost}transactionGraph?${params?.from !== "" ? `startDate=${moment(params?.from).format('YYYY-MM-DD')}&` : ""}${params?.to !== "" ? `endDate=${moment(params?.to).format('YYYY-MM-DD')}` : ""
   }`,
   COMMENT_LIST:(params:any)=>
     `${feedBaseUrl}feed/${params?.id}/comment?offset=${params?.offset}&limit=${params?.limit}`,
@@ -190,9 +206,10 @@ const routes = {
   UPDATE_LESSON:(id:any)=>`${courseHost}lesson/${id}`,
   DELETE_LESSON:(id:any)=>`${courseHost}lesson/${id}`,
   LESSON_DETAIL:(id:any)=>`${courseHost}lesson/${id}`,
-  SIGN_URL:(id:any)=>`${commonBaseUrl}getSignUrl?url=${id}`,
-  COURSECONTENTDETAIL:(param:any)=>`${courseHost}courseContent/${param?.id}?contentId=${param?.contentId}`,
-  FLAGGED_REASONS:()=>`${ContentHost}base/dev/base.json`
+  FLAGGED_REASONS:()=>`${ContentHost}base/dev/base.json`,
+  CONTACT_US_DELETE: (id: any) => `${commonBaseUrl}contact/${id}`,
+  PLANS:() => `${paymentHost}plans`,
+
 };
 
 export default routes;

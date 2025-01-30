@@ -12,12 +12,12 @@ import Link from "next/link";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import UserDetail from '@/components/details/UserDetail';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import TransactionHistoryTableComponent from '@/components/tables/TransactionHistoryTableComponent';
 const queryClient = new QueryClient();
 
 const UserDetailPage = ({ params }: any) => {
-    const [type, setType]: any = useState("follower");
     return (
         <ContentLayout title="User Details">
             <Breadcrumb>
@@ -40,6 +40,20 @@ const UserDetailPage = ({ params }: any) => {
                 </BreadcrumbList>
             </Breadcrumb>
             <UserDetail data ={{ id: params.slug, type:"User" }}></UserDetail>
+
+            <QueryClientProvider client={queryClient}>
+        <main className="flex flex-col lg:flex-row gap-6">
+          <div className="w-full lg:w-full">
+            <Card className="mt-4 p-4">
+            <CardTitle className="">
+              <p className="font-semibold">Transaction History:</p>
+            </CardTitle>
+            <TransactionHistoryTableComponent  userId={params.slug} />
+            </Card>
+          </div>
+        </main>
+      </QueryClientProvider>
+
         </ContentLayout>
     )
 }

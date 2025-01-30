@@ -105,66 +105,6 @@ export default function CourseApi() {
           }
     };
 
-    const contentListApi = async (id:string)=>{
-        try {
-            const url = routes.COURSECONTENTLIST({
-                id: id,
-                offset: 0,
-                limit: 20
-              });
-            const accessToken = await getAccessToken();
-            const response :any = (await fetch(
-                url, { headers: { Authorization: 'Bearer ' + accessToken } }
-            ))
-            const responseData = await response.json();
-            if (!response.ok) {
-              if (response?.status === 401 || response?.status === 403) {
-                 errorHandle(response?.status);
-              }
-            };
-            return responseData;
-        } catch (error:any) {
-            return { error: true, errorMessage: error?.message };
-          }
-    };
-
-    const courseContentDetail = async ( data:any)=>{
-        try {
-            const url = routes.COURSECONTENTDETAIL(data);
-            const accessToken = await getAccessToken();
-            const response :any = (await fetch(
-                url, { headers: { Authorization: 'Bearer ' + accessToken } }
-            ))
-            const responseData = await response.json();
-            if (!response.ok) {
-              if (response?.status === 401 || response?.status === 403) {
-                 errorHandle(response?.status);
-              }
-            };
-            return responseData;
-        } catch (error:any) {
-            return { error: true, errorMessage: error?.message };
-          }
-    };
-
-    const SignVideoUrl = async (file:string)=>{
-        try {
-            const url = routes.SIGN_URL(file);
-            const accessToken = await getAccessToken();
-            const response :any = (await fetch(
-                url, { headers: { Authorization: 'Bearer ' + accessToken } }
-            ))
-            const responseData = await response.json();
-            if (!response.ok) {
-              if (response?.status === 401 || response?.status === 403) {
-                 errorHandle(response?.status);
-              }
-            };
-            return responseData;
-        } catch (error:any) {
-            return { error: true, errorMessage: error?.message };
-          }
-    };
 
     const errorHandle=(status :any)=>{
         const tokenLocalStorageKey: any = `${appConstant.NEXT_PUBLIC_TOKEN}`;
@@ -181,5 +121,5 @@ export default function CourseApi() {
           });
     }
 
-    return {addCourse, updateCourse, coursesDetail, deleteCourse, contentListApi, courseContentDetail, SignVideoUrl }
+    return {addCourse, updateCourse, coursesDetail, deleteCourse, }
 }

@@ -45,6 +45,31 @@ export default function dashboardApi() {
     }
   }
 
+  const getRevenueGraphData = async (data:any) => {
+    try{
+      const url = routes.REVENUE_GRAPH(data);
+
+      const accessToken = await getAccessToken(); 
+       const options =  {
+        headers: { Authorization: "Bearer " + accessToken },
+      }
+      const response = await fetch(url, options);
+      const responseData = await response.json();
+      if (!response.ok) {
+        if (response?.status === 401 || response?.status === 403) {
+            errorHandle(response?.status);
+        }
+    }
+      return responseData;
+    }catch (error:any) {
+      return { error: true, errorMessage: error?.message };
+  }
+  }
+
+
+
+
+
   const errorHandle=(status :any)=>{
     const tokenLocalStorageKey: any = `${appConstant.NEXT_PUBLIC_TOKEN}`;
     const userLocalStorageKey: any = `${appConstant.NEXT_PUBLIC_USER_INFO}`;
@@ -60,5 +85,5 @@ export default function dashboardApi() {
       });
 }
 
-  return { getDashboardCount, getGraphData }
+  return { getDashboardCount, getGraphData, getRevenueGraphData }
 }

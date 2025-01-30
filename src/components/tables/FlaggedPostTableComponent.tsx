@@ -319,6 +319,7 @@ const FlaggedPostTableComponent = () => {
         details={details}
         statusFilter={["Active", "Inactive"]}
         hideFilter={false}
+        cursorPointer= {"cursor-pointer"}
       />
     </>
   );

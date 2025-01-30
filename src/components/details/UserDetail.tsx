@@ -10,7 +10,7 @@ import moment from 'moment';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Loader2, MapPin, Users, Calendar, Globe2, Flag, MessageSquare, Map } from 'lucide-react'
+import { Loader2, MapPin, Users, Calendar, Globe2, Flag, MessageSquare, Map, } from 'lucide-react'
 
 const UserDetail = (props: any) => {
     const { toast } = useToast();
@@ -70,7 +70,7 @@ const UserDetail = (props: any) => {
 
     return (
         <>
-   <div className="min-h-screen pt-8">
+   <div className=" pt-8">
       <Card className="mx-auto max-w-full">
         <CardHeader className="flex flex-col items-center space-y-4 pb-8 p-2">
           <Avatar className="h-24 w-24">
@@ -102,7 +102,7 @@ const UserDetail = (props: any) => {
         <Separator/>
 
           <div>
-            <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
+            <h2 className="text-xl font-semibold mb-4">Profile Overview:</h2>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-6">
                 <div className="flex justify-between w-80">
@@ -117,6 +117,12 @@ const UserDetail = (props: any) => {
                   <span className="text-muted-foreground">Date of Birth</span>
                   <span className="font-medium">{userInfo?.dob ? moment(userInfo.dob, "DD/MM/YYYY").format("DD/MMM/YYYY") : "N/A"}</span>
                 </div>
+
+                <div className="flex justify-between w-80">
+                  <span className="text-muted-foreground">Created At</span>
+                  <span className="font-medium">{userInfo?.createdAt ? format(new Date(userInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
+                </div>
+
               </div>
               <div className="space-y-6">
                 <div className="flex items-center justify-between w-80">
@@ -144,9 +150,9 @@ const UserDetail = (props: any) => {
             </div>
           </div>
 
-          <Separator />
+          {/* <Separator /> */}
 
-          <div>
+          {/* <div>
             <h2 className="text-xl font-semibold mb-4">Location Information</h2>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-6">
@@ -205,16 +211,16 @@ const UserDetail = (props: any) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <Separator />
-
-          <div className="flex items-center justify-between w-80">
+  
+          <div className="flex items-center gap-10 w-50">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span className="text-muted-foreground">Created At</span>
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <span className="text-muted-foreground">Address</span>
             </div>
-            <span className="font-medium">{userInfo?.createdAt ? format(new Date(userInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
+            <span className="font-medium">  { userInfo?.address ? `${userInfo?.address?.street ? userInfo?.address?.street+',' : ''} ${userInfo?.address?.city ? userInfo?.address?.city+',' : ''} ${userInfo?.address?.state ? userInfo?.address?.state+',' : ''} ${userInfo?.address?.country ? userInfo?.address?.country : ''}` : "N/A" }</span>
           </div>
         </CardContent>
       </Card>

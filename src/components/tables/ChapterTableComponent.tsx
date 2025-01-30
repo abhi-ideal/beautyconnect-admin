@@ -290,6 +290,7 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
         details={details}
         statusFilter={["Active", "Inactive"]}
         hideFilter={true}
+        cursorPointer= {"cursor-pointer"}
       />
       </div>
       :

@@ -70,7 +70,7 @@ export default function TanStackBasicTableFilterComponent<TData>({
     setDate(null);
     setFilterValue([]);
   }
-  const showDateFilter: any = ["/users", "/debates", "/skills", "/feedback-collection"];
+  const showDateFilter: any = ["/users", "/course-purchase", "/course-transaction",];
 
   return (
     <>
@@ -134,7 +134,7 @@ export default function TanStackBasicTableFilterComponent<TData>({
                         </Label>
 
                         {header.column.columnDef.header === "Status" ||
-                        header.column.columnDef.header === "AnswerType" ||
+                        header.column.columnDef.header === "Transaction Type" ||
                         header.column.columnDef.header === "Type" ? (
                           <Select
                             onValueChange={(e) => {
@@ -163,7 +163,7 @@ export default function TanStackBasicTableFilterComponent<TData>({
                                     ? "Status"
                                     : header.column.columnDef.header === "Type"
                                     ? "Type"
-                                    : "AnswerType"
+                                    : "Transaction Type"
                                 }`}
                               />
                             </SelectTrigger>
@@ -176,7 +176,12 @@ export default function TanStackBasicTableFilterComponent<TData>({
                                         value={status}
                                         key={i}
                                       >
-                                        {status}
+                                      { status === "course_purchase"
+                                          ? "Course Purchase"
+                                          : status === "diamond_purchase"
+                                          ? "Diamond Purchase"
+                                          : status
+                                        }
                                       </SelectItem>
                                   )
                                 })
