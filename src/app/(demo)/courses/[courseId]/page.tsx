@@ -41,6 +41,14 @@ const CourseDetailPage = ({ params }: any) => {
 
 
             <QueryClientProvider client={queryClient}>
+
+            <Card className="mt-4 p-4">
+            <CardTitle className="">
+              <p className="font-semibold">Lessons:</p>
+            </CardTitle>
+            <LessonTableComponent courseId={params.courseId} allLessons={allLessons}  setAllLessons={setAllLessons} />
+            </Card> 
+            
                 <Card className="mt-4 p-4">
             <CardTitle className="">
               <p className="font-semibold">Course Purchase Users:</p>
@@ -48,12 +56,7 @@ const CourseDetailPage = ({ params }: any) => {
             <CoursePurchaseUserComponent courseId={params.courseId} />
             </Card>
 
-                <Card className="mt-4 p-4">
-            <CardTitle className="">
-              <p className="font-semibold">Lessons:</p>
-            </CardTitle>
-            <LessonTableComponent courseId={params.courseId} allLessons={allLessons}  setAllLessons={setAllLessons} />
-            </Card>
+
            
            
             </QueryClientProvider>

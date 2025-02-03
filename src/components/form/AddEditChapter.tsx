@@ -73,7 +73,7 @@ const AddEditChapter = (props: any) => {
 
   // console.log('editData', editData);
 
-  console.log("lessonContents", lessonContents);
+  // console.log("lessonContents", lessonContents);
 
   useEffect(() => {
     form.reset(formValues);
@@ -104,7 +104,8 @@ const AddEditChapter = (props: any) => {
         const newLesson = {
           id: res?.id,
           title: lessonContents[0].title,
-          file: lessonContents?.[0]?.media?.file,
+          file: lessonContents?.[0]?.media?.type == "application" ? "lesson/"+ lessonContents?.[0]?.media?.file : lessonContents?.[0]?.media?.file,
+          mimeType:lessonContents?.[0]?.media?.mimeType,
           type:
             lessonContents?.[0]?.media?.type == "application" ? "pdf" : "video",
           createdAt: new Date(),

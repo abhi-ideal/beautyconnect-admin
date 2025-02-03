@@ -12,7 +12,7 @@ import Image from "next/image";
 import { Badge } from '../ui/badge';
 import ReactVideoPlayer from '../demo/ReactVideoPlayer';
 
-const ChapterDetail = ({ chapterId, lessonId }: any) => {
+const ChapterDetail = ({ chapterId, lessonId, tableRowData }: any) => {
     const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
     const previewVideoSource = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_SOURCE;
     const previewVideo = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_HOST;
@@ -22,9 +22,11 @@ const ChapterDetail = ({ chapterId, lessonId }: any) => {
     const [loading, setLoading]: any = useState(false);
 
     useEffect(() => {
-        getChapterDetails();
+        // getChapterDetails();
+        setChapterInfo(tableRowData);
     }, [chapterId]);
 
+        // console.log('tableRowData', tableRowData);
 
 
     const getChapterDetails = async () => {
@@ -51,7 +53,7 @@ const ChapterDetail = ({ chapterId, lessonId }: any) => {
 
     return (
         <>
-        <Card className="bg-white dark:bg-black mx-auto mt-2">
+        <Card className="w-full bg-white dark:bg-black mx-auto mt-2">
           <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
             {/* <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
               <Image
@@ -63,10 +65,10 @@ const ChapterDetail = ({ chapterId, lessonId }: any) => {
               />
             </div> */}
             <div className="flex-grow">
-              <h2 className="text-xl font-semibold mb-2">{chapterInfo?.title ? titleCase(chapterInfo.title?.trim()) : "N/A"}</h2>
+              <h2 className="text-xl font-semibold mb-2">{chapterInfo?.title ? titleCase(chapterInfo.title?.trim()) : ""}</h2>
               <div className="flex flex-wrap items-center gap-3">
                 <p className="text-sm text-muted-foreground">
-                  {chapterInfo?.createdAt ? format(new Date(chapterInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}
+                  {chapterInfo?.createdAt ? format(new Date(chapterInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : ""}
                 </p>
                 {chapterInfo?.status && (
                   <Badge
@@ -98,7 +100,7 @@ const ChapterDetail = ({ chapterId, lessonId }: any) => {
                           <PdfViewer pdfFileUrl={previewImgUrl + chapterInfo?.file?.trim()} />
                         </div>
                       ) : (
-                        <div className="w-full max-w-[800px] aspect-video [&>div>div]:!size-full">
+                        <div className="w-full max-w-[800px] aspect-video [&>div>div]:!w-full">
                           <ReactVideoPlayer
                             url={
                               (chapterInfo?.file.endsWith(".m3u8") ? previewVideo : previewVideoSource) +

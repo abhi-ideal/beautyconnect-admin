@@ -50,7 +50,7 @@ const ChapterDetailPage = ({ params }: any) => {
                 <h1 className="text-2xl font-semibold">Lesson Content Detail:</h1>
             </div>
 
-            <ChapterDetail chapterId={params?.chapterId} lessonId={params?.lessonId} />
+            {/* <ChapterDetail chapterId={params?.chapterId} lessonId={params?.lessonId} /> */}
 
 
         </ContentLayout>

@@ -5,8 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { formatName, titleCase } from '@/lib/utils';
 import { format } from "date-fns";
 import CourseApi from '@/api/courseApi';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Star } from 'lucide-react';
 import { Badge } from '../ui/badge';
+import { Ratings } from '../demo/ratings';
 
 const CourseDetail = (props: any) => {
     const { coursesDetail} = CourseApi();
@@ -81,17 +82,16 @@ const CourseDetail = (props: any) => {
             {/* Left Column */}
             <div className="space-y-4">
 
-            <div className="grid grid-cols-[180px_1fr] gap-4">
-                <span className="text-sm font-medium">Created At:</span>
-                <span className="text-sm">{courseInfo.createdAt ? format(new Date(courseInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
-                </div>
+
                 <div className="grid grid-cols-[180px_1fr] gap-4">
                 <span className="text-sm font-medium">Amount:</span>
                 <span className="text-sm">{courseInfo.amount ? "$ "+ courseInfo.amount : "N/A"}</span>
                 </div>
                 <div className="grid grid-cols-[180px_1fr] gap-4">
                 <span className="text-sm font-medium">Rating:</span>
-                <span className="text-sm">{courseInfo.rating}</span>
+                <span className="text-sm flex items-center gap-x-1">
+                    <Ratings rating={courseInfo.rating ? courseInfo.rating : 0} /> 
+                </span>
                 </div>
                 <div className="grid grid-cols-[180px_1fr] gap-4">
                 <span className="text-sm font-medium">Total Lesson:</span>
@@ -103,8 +103,16 @@ const CourseDetail = (props: any) => {
                 </div>
                 <div className="grid grid-cols-[180px_1fr] gap-4">
                 <span className="text-sm font-medium">Total Rating:</span>
-                <span className="text-sm">{courseInfo.totalRating || "0"}</span>
+                <span className="text-sm flex items-center gap-x-1">
+                    {courseInfo.totalRating || "0"} 
+                    <Star className="w-5 h-5 fill-black dark:fill-white text-black dark:text-white" />
+                </span>
                 </div>
+                <div className="grid grid-cols-[180px_1fr] gap-4">
+                <span className="text-sm font-medium">Created At:</span>
+                <span className="text-sm">{courseInfo.createdAt ? format(new Date(courseInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
+                </div>
+
             </div>
 
             {/* Right Column */}

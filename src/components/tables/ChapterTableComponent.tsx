@@ -5,8 +5,9 @@ import { ColumnDef, ColumnFiltersState, PaginationState, SortingState } from "@t
 import { useState, useEffect } from "react";
 import TanStackBasicTable from "../TanStackTable/TanStackBasicTable";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, Pencil, SquarePlay, Trash2 } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { formatName, shortName, titleCase } from "@/lib/utils";
@@ -19,6 +20,9 @@ import { useGetChapters } from '@/api/useGetChapters';
 import { Card } from '../ui/card';
 import AddEditChapter from '../form/AddEditChapter';
 import ChapterApi from '@/api/chapterApi';
+import Image from 'next/image'
+import ChapterDetail from '../details/ChapterDetail';
+
 
 const ChapterTableComponent = ({ courseId, lessonId}:any) => {
   const { logout } = AuthService();
@@ -29,10 +33,15 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
   // sorting state of the table
   const [sorting, setSorting] = useState<SortingState>([]);
   const [open, setOpen] = useState(false);
+  const [openDailog, setOpenDailog] = useState(false);
+  const [tableRowData, setTableRowData] = useState({});
+  
   const [editData, setEditData]: any = useState({});
   const {deleteChapter, updateChapter } = ChapterApi()
   
   const previewImgUrl = process.env.NEXT_PUBLIC_PREVIEW_IMG_URL;
+  const previewVideoPoster = process.env.NEXT_PUBLIC_PREVIEW_VIDEO_POSTER;
+
 
   // column filters state of the table
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -162,15 +171,64 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
   }
 
   const details = (data: any, header: string) => {
-    // header != "description" && router.push(`/${data?.id}`)
-    header != "description" && router.push(`/courses/${courseId}/lesson/${lessonId}/chapter/${data?.id}`);
+  //  router.push(`/courses/${courseId}/lesson/${lessonId}/chapter/${data?.id}`);
   };
 
 
 
-  const color = ["bg-orange-500", "bg-lime-500", "bg-cyan-500", "bg-blue-500", "bg-rose-500"];
 
   const categoryColumns: ColumnDef<Chapter>[] = [
+    
+    {
+      header: "Media",
+      accessorKey: "type",
+      cell: (info: any) => {
+        const rowData: any = info.row.original;
+        const handleContent = (row: any) => {
+          setOpenDailog(true);
+          setTableRowData(row);
+        };
+    
+        return (
+          <div className="flex items-center">
+            {rowData.type === "video" ? (
+              rowData?.poster ? (
+                <Image
+                  onClick={() => handleContent(rowData)}
+                  src={previewVideoPoster + rowData?.poster}
+                  width={48}
+                  height={48}
+                  className="w-[45px] h-[45px] cursor-pointer"
+                  alt="video"
+                />
+              ) : (
+                <SquarePlay
+                  onClick={() => handleContent(rowData)}
+                  className="h-14 w-10 text-muted-foreground cursor-pointer"
+                />
+              )
+            ) : (
+              <div className="border-gray-600">
+                <Image
+                  onClick={() => handleContent(rowData)}
+                  src={rowData?.type === "pdf" ? "/pdf.png" : "/default_image.png"}
+                  width={48}
+                  height={48}
+                  className="w-[45px] h-[45px] dark:invert invert-0 cursor-pointer"
+                  alt="pdf"
+                />
+              </div>
+            )}
+            <span className="ml-2">{titleCase(rowData.type)}</span>
+          </div>
+        );
+      },
+      enableSorting: false,
+      enableColumnFilter: false,
+    },
+    
+    
+    
     {
       header: "Title",
       accessorKey: "title",
@@ -181,27 +239,18 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
       enableSorting: true,
       enableColumnFilter: false
     },
-    {
-      header: "File Name",
-      accessorKey: "file",
-      cell: (info) => {
-        const file: any = info.getValue();
-        return (<div className={`flex m-2`}>{ titleCase(file?.trim())}</div>)
-      },
-      enableSorting: false,
-      enableColumnFilter: false
-    },
+    // {
+    //   header: "File Name",
+    //   accessorKey: "file",
+    //   cell: (info) => {
+    //     const file: any = info.getValue();
+    //     return (<div className={`flex m-2`}>{ titleCase(file?.trim())}</div>)
+    //   },
+    //   enableSorting: false,
+    //   enableColumnFilter: false
+    // },
     
-    {
-      header: "Type",
-      accessorKey: "type",
-      cell: (info) => {
-        const type: any = info.getValue();
-        return (<div className={`flex m-2`}>{ titleCase(type?.trim())}</div>)
-      },
-      enableSorting: false,
-      enableColumnFilter: false
-    },
+ 
     {
       header: "Created At",
       accessorKey: "createdAt",
@@ -253,13 +302,13 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
               <span>Update</span>
               </DropdownMenuItem> */}
 
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 onClick={() => router.push(`/courses/${courseId}/lesson/${lessonId}/chapter/${rowData?.id}`)}
                 className="flex items-center space-x-2"
               >
                    <Eye className="h-4 w-4 text-muted-foreground" />
                    <span>View Detail</span>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -290,7 +339,7 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
         details={details}
         statusFilter={["Active", "Inactive"]}
         hideFilter={true}
-        cursorPointer= {"cursor-pointer"}
+        cursorPointer= {""}
       />
       </div>
       :
@@ -302,7 +351,14 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
       </div>
       }
 
-
+    <Dialog open={openDailog} onOpenChange={setOpenDailog}>
+        <DialogContent className="sm:max-w-[800px]">
+          <DialogHeader>
+            {/* <DialogTitle>Lesson Content</DialogTitle> */}
+          </DialogHeader>
+          <ChapterDetail tableRowData={tableRowData}  />
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

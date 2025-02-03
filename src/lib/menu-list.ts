@@ -1,4 +1,4 @@
-import { Users, StickyNote, LayoutGrid, LucideIcon, NotepadText, Flag, BriefcaseBusiness, FileSpreadsheet, Gem, ListOrdered, Contact, BadgeDollarSign, ArrowRightLeft } from "lucide-react";
+import { Users, StickyNote, LayoutGrid, LucideIcon, NotepadText, Flag, BriefcaseBusiness, FileSpreadsheet, Gem, ListOrdered, Contact, ArrowRightLeft, CircleDollarSign, ShoppingCart, Grid2x2Check } from "lucide-react";
 
 type Submenu = {
   href: string;
@@ -49,7 +49,7 @@ export function getMenuList(pathname: string): Group[] {
           active: pathname.includes("/posts"),
           icon: StickyNote,
           submenus: []
-        },
+        }, 
         {
           href: "/courses",
           label: "Courses",
@@ -61,7 +61,7 @@ export function getMenuList(pathname: string): Group[] {
           href: "/skills",
           label: "Specializations",
           active: pathname.includes("/skills"),
-          icon: Gem,
+          icon: Grid2x2Check,
           submenus: []
         },
 
@@ -77,14 +77,14 @@ export function getMenuList(pathname: string): Group[] {
           href: "/course-purchase",
           label: "Course Purchase",
           active: pathname.includes("/course-purchase"),
-          icon: BadgeDollarSign,
+          icon: CircleDollarSign,
           submenus: []
         },
         {
           href: "/plans",
           label: "Plans",
           active: pathname.includes("/plans"),
-          icon: Gem,
+          icon: ShoppingCart,
           submenus: []
         },
 

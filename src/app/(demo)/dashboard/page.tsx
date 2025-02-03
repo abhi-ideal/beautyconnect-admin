@@ -108,6 +108,7 @@ export default function DashboardPage() {
       moment(revenueGraphDate?.to)?.isSame(currentDate, 'day')
     );
 
+    // default called 
   useEffect(() => {
       getData("")
       setCountOpen(false);
@@ -138,6 +139,7 @@ export default function DashboardPage() {
       from: graphDate?.from ? graphDate?.from : '',
       to: graphDate?.to ? graphDate?.to : '',
     }
+    if (graphDate?.from && graphDate?.to){
     await getGraphData(body).then((res: any) => {
       let loop = new Date(body.from);
       const filterDay=[]
@@ -186,6 +188,8 @@ export default function DashboardPage() {
     }
       setChartUser(result);
     })
+    
+  }
   }
 
 
@@ -197,6 +201,7 @@ export default function DashboardPage() {
       to: revenueGraphDate?.to ? revenueGraphDate?.to : ""
     };
 
+    if (revenueGraphDate?.from && revenueGraphDate?.to){
     await getRevenueGraphData(body).then((res: any) => {
       if (!res.error) {
         setRevGraphLoading (false);
@@ -307,6 +312,7 @@ export default function DashboardPage() {
         setChartRevenue([]);
       }
     });
+  }
   };
 
 
