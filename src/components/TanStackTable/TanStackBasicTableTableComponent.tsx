@@ -68,7 +68,7 @@ export default function TanStackBasicTableTableComponent<TData>({
         {table.getRowModel().rows.length === 0 ? (
           <TableRow>
             <TableCell colSpan={100} className="text-center">
-              <div className="inline-block p-20">
+              <div className="inline-block p-20 xl:p-36">
                 <Image src="/no-data.svg" alt="Logo" width={320} height={320} priority className="size-[150px]" />
                 <span className="font-semibold text-lg">No Record Found</span>
               </div>

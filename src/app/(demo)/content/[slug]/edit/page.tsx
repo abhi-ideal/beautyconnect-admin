@@ -126,7 +126,7 @@ const ContentEditorPage = ({ params }: any) => {
 
         {circleLoader ? (
           <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-            <Loader2 className="my-28 dark:text-white h-[100px] w-[100px] text-primary animate-spin" />
+            <Loader2 className="my-28 dark:text-white h-[80px] w-[80px] text-primary animate-spin" />
           </div>
         ) :
          !value ? (
@@ -146,7 +146,7 @@ const ContentEditorPage = ({ params }: any) => {
           <div>
             {showEditor && (
               <>
-                <JoditEditor
+                <JoditEditor 
                   ref={editor}
                   value={value}
                   config={config}

@@ -231,7 +231,7 @@ const PostGrid = (props: any) => {
   if (circleLoader) {
     return (
       <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-        <Loader2 className="my-28 dark:text-white h-[100px] w-[100px] text-primary animate-spin" />
+        <Loader2 className="my-28 dark:text-white h-[80px] w-[80px] text-primary animate-spin" />
       </div>
     );
   }
@@ -259,7 +259,7 @@ const PostGrid = (props: any) => {
       <div className="grid md:grid-cols-[1fr_400px] gap-4 mx-auto">
         <Card className="bg-white dark:bg-black">
           <CardHeader className="flex flex-row items-center gap-4 p-4">
-            <Avatar className="h-14 w-14 border border-gray-700">
+            <Avatar className="h-14 w-14 border border-border">
               <AvatarImage
                 src={ postInfo?.users?.profile?.startsWith("https://") ? postInfo?.users?.profile?.trim()  : previewImgUrl+postInfo?.users?.profile?.trim()}
                 alt={postInfo?.users?.name || "User avatar"}
@@ -338,8 +338,8 @@ const PostGrid = (props: any) => {
               </Carousel>
             </div>
           </CardContent>
-          <CardFooter className="flex items-center justify-between p-4 border-t">
-            <div className="flex items-center gap-6">
+          <CardFooter className="flex flex-wrap items-center justify-between p-4 border-t">
+            <div className="flex items-center gap-6 mb-2 sm:mb-0">
               <div className="flex items-center gap-2">
                 <Heart className="h-5 w-5" />
                 <span>
@@ -364,7 +364,7 @@ const PostGrid = (props: any) => {
                 </span>
               </div> */}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ms-auto mb-2 sm:mb-0">
               {/* <Flag className="h-5 w-5" /> */}
               <span>
                 {postInfo?.status ? (

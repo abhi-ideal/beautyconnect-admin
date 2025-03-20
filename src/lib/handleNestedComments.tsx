@@ -18,7 +18,7 @@ export function renderNestedComments(
   return replies?.parentComment.map((nestedReply: any, index: number) => (
       <div key={index}>
         <div  className="flex gap-3 ml-8">
-          <Avatar className="h-8 w-8 border border-gray-700">
+          <Avatar className="h-8 w-8 border border-border">
             <AvatarImage
               src={nestedReply?.users?.profile}
               alt={nestedReply?.users?.name || "Avatar image"}

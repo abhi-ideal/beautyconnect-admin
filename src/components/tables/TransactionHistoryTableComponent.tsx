@@ -206,6 +206,7 @@ const TransactionHistoryTableComponent = ({userId}:any) => {
         statusFilter={["diamond_purchase", "course_purchase"]}
         hideFilter={false}
         cursorPointer= {""}
+        tableHeight={" max-h-[515px] overflow-auto"}
       />
     </>
   );

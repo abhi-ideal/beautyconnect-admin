@@ -318,7 +318,7 @@ const UserTableComponent = () => {
 
   return (
     <>
-      {timeSinceFetch && <div className="gap-2 flex items-center px-8 justify-end text-sm">
+      {timeSinceFetch && <div className="gap-2 flex items-center  justify-end text-sm">
         Last fetched {timeSinceFetch}
         <Button onClick={() => resetLastTime('restart')} className="p-0 h-6 w-6 flex items-center justify-center text-sm"><RotateCcw /></Button>
       </div>}

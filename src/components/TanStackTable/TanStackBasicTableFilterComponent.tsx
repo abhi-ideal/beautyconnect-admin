@@ -74,7 +74,7 @@ export default function TanStackBasicTableFilterComponent<TData>({
 
   return (
     <>
-    <div className="flex items-center mb-4 gap-3">
+    <div className="flex flex-wrap items-center mb-4 gap-3">
       { showDateFilter.includes(pathname) && 
       <>
       <TooltipProvider>
@@ -228,13 +228,13 @@ export default function TanStackBasicTableFilterComponent<TData>({
 
             <SheetFooter className="pt-4">
               <SheetClose asChild>
-                <Button onClick={() => reset()}>Reset</Button>
+                <Button onClick={() => reset()} className="mb-2">Reset</Button>
               </SheetClose>
 
               <SheetClose asChild>
                 <Button
                   type="submit"
-                  onClick={() => setColumnFilters(filterValue)}
+                  onClick={() => setColumnFilters(filterValue)} className="mb-2"
                 >
                  Search
                 </Button>

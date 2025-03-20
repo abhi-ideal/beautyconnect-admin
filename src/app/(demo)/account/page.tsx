@@ -38,9 +38,9 @@ export default function AccountPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="max-w-12xl flex-col flex-wrap items-start gap-6 p-6 sm:flex-row sm:p-8">
+      <div className="max-w-12xl flex-col flex-wrap items-start gap-6 py-6 sm:flex-row sm:py-8">
         <div className="grid gap-2 md:grid-cols-2 md:gap-4 lg:grid-cols-2">
-        <Card className="flex flex-col items-center p-4">
+        <Card className="flex flex-col items-center p-4 justify-center">
       <CardTitle className="flex flex-col items-center gap-2">
         <Avatar className="w-24 h-24">
           <AvatarImage
@@ -55,13 +55,13 @@ export default function AccountPage() {
         <div className="font-bold text-lg mt-2">
           {user?.name ? user?.name : "N/A"}
         </div>
-        <div className="text-gray-600">{user?.email ? user?.email : "N/A"}</div>
+        <div className="text-gray-600 dark:text-[#aab2bb]">{user?.email ? user?.email : "N/A"}</div>
       </CardTitle>
         </Card>
         <Tabs defaultValue="account">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="account">Account</TabsTrigger>
-              <TabsTrigger value="password">Password</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 !p-2 !h-auto gap-3">
+              <TabsTrigger value="account" className="!p-2.5 border-border">Account</TabsTrigger>
+              <TabsTrigger value="password" className="!p-2.5 border border-border">Password</TabsTrigger>
             </TabsList>
             <TabsContent value="account">
               <EditProfileForm />

@@ -36,7 +36,8 @@ export default function TanStackBasicTable<TData, TValue>({
   details,
   cursorPointer,
   setColumnFilters,
-  hideFilter
+  hideFilter,
+  tableHeight
 }: TableProps<TData, TValue>) {
   const table = useReactTable({
     data: paginatedTableData?.results || paginatedTableData?.result || [],
@@ -143,10 +144,10 @@ export default function TanStackBasicTable<TData, TValue>({
         </div>
       ) : (
         <>
-          <div className="rounded-md border p-4">
+          <div className={`rounded-md border bg-background ${tableHeight}`} >
             <div>
             {/* className="mb-8" */}
-              <TanStackBasicTableTableComponent table={table} details={details} cursorPointer={cursorPointer}/>
+              <TanStackBasicTableTableComponent table={table} details={details} cursorPointer={cursorPointer} />
             </div>
             {(paginatedTableData?.counts > 10 ||
               paginatedTableData?.count > 10) && (

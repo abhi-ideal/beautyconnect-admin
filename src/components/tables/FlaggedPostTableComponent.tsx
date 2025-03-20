@@ -168,10 +168,10 @@ const FlaggedPostTableComponent = () => {
         const imageUrl :any = info.getValue();
         return (
           <>
-           {(imageUrl?.mimeType.includes("video") || imageUrl?.mimeType.includes("m3u8")) ? ( imageUrl?.poster ? <Image src={ previewVideoPoster + imageUrl?.poster } width={50} height={50} className="w-[45px] h-[45px]"  alt="NA"/> : <SquarePlay className="h-14 w-10 text-muted-foreground"/>) : 
+           {(imageUrl?.mimeType.includes("video") || imageUrl?.mimeType.includes("m3u8")) ? ( imageUrl?.poster ? <Image src={ previewVideoPoster + imageUrl?.poster } width={50} height={50} className="size-10 rounded-full"  alt="NA"/> : <SquarePlay className="size-10 text-muted-foreground"/>) : 
             <>
             <div className="border-gray-600">
-              <Image src={ imageUrl?.file ? previewImgUrl + imageUrl?.file : "/default_image.png"} width={50} height={50} className="w-[45px] h-[45px]"  alt="NA"/>
+              <Image src={ imageUrl?.file ? previewImgUrl + imageUrl?.file : "/default_image.png"} width={50} height={50} className="size-10 rounded-full"  alt="NA"/>
             </div> 
             </>}
           </>

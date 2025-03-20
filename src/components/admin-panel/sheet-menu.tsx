@@ -3,6 +3,8 @@ import { MenuIcon, PanelsTopLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/admin-panel/menu";
+import Image from "next/image";
+import { useTheme } from "next-themes";
 import {
   Sheet,
   SheetHeader,
@@ -11,6 +13,7 @@ import {
 } from "@/components/ui/sheet";
 
 export function SheetMenu() {
+  const { theme } = useTheme();
   return (
     <Sheet>
       <SheetTrigger className="lg:hidden" asChild>
@@ -25,9 +28,14 @@ export function SheetMenu() {
             variant="link"
             asChild
           >
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <PanelsTopLeft className="w-6 h-6 mr-1" />
-              <h1 className="font-bold text-lg">Brand</h1>
+            <Link href="/dashboard" className="flex items-center gap-2 mt-2">
+               <Image
+                           src={theme=='light' ? "/logoBlack.png" : "/logoWhite.png"}
+                            alt="Logo"
+                            width={70}
+                            height={70}
+                            priority
+                          />
             </Link>
           </Button>
         </SheetHeader>

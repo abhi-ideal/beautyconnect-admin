@@ -198,7 +198,7 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
                   src={previewVideoPoster + rowData?.poster}
                   width={48}
                   height={48}
-                  className="w-[45px] h-[45px] cursor-pointer"
+                  className="size-10 cursor-pointer"
                   alt="video"
                 />
               ) : (
@@ -214,7 +214,7 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
                   src={rowData?.type === "pdf" ? "/pdf.png" : "/default_image.png"}
                   width={48}
                   height={48}
-                  className="w-[45px] h-[45px] dark:invert invert-0 cursor-pointer"
+                  className="size-10 dark:invert invert-0 cursor-pointer"
                   alt="pdf"
                 />
               </div>
@@ -320,7 +320,7 @@ const ChapterTableComponent = ({ courseId, lessonId}:any) => {
     <>
 {
       !open ?
-      <div className="relative mt-8">
+      <div className="relative mt-4 sm:mt-8">
         <div className="flex gap-4">
           <div className="flex items-center">
             <Button onClick={() => {setType('add');setOpen(true)}}>Add Lesson Content</Button>

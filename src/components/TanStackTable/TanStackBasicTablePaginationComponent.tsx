@@ -9,10 +9,9 @@ export default function TanStackBasicTablePaginationComponent<TData>({
   table
 }: TanStackBasicTablePaginationComponentProps<TData>) {
   return (
-    <div className="">
-      <TanStackBasicTablePaginationNavigationComponent table={table} />
-      <div className="flex flex-row gap-4 justify-center mt-4">
-        <p>Items per page</p>
+    <div className=" flex flex-wrap justify-center sm:justify-between items-center space-y-2 sticky bottom-0 bg-background px-3 py-2">
+       <div className="flex flex-row gap-4 justify-center">
+        <p className="whitespace-nowrap">Items per page</p>
         <select
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
@@ -26,12 +25,14 @@ export default function TanStackBasicTablePaginationComponent<TData>({
             </option>
           ))}
         </select>
-        <p>
+        <p className="whitespace-nowrap">
           {`Page ${
             table.getState().pagination.pageIndex + 1
           } of ${table?.getPageCount()}`}
         </p>
       </div>
+      <TanStackBasicTablePaginationNavigationComponent table={table} />
+     
     </div>
   );
 }

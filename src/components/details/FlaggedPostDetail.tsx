@@ -164,7 +164,7 @@ const FlaggedPostDetail = (props: any) => {
     if (loading) {
         return (
           <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-            <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
+            <Loader2 className="my-28 h-[80px] dark:text-white w-[80px] text-primary animate-spin" />
           </div>
         );
     }
@@ -172,8 +172,8 @@ const FlaggedPostDetail = (props: any) => {
 
     return (
         <>
-        <div className="p-4"></div>
-        <div className="container mx-auto p-4">
+        
+        <div className="py-6">
           <div className="flex flex-col gap-8">
             {/* Post Details */}
             <Card>
@@ -181,7 +181,7 @@ const FlaggedPostDetail = (props: any) => {
                 {/* Author */}
                 <div className="flex items-center gap-4 mb-4">
                   <Link href={ postInfo?.feedData?.users?.id ? `/users/${postInfo?.feedData?.users?.id}` : "#"}>
-                    <Avatar className="border border-gray-700">
+                    <Avatar className="border border-border">
                       <AvatarImage
                         src={
                             postInfo?.feedData?.users?.profile?.startsWith("https://")
@@ -309,8 +309,8 @@ const FlaggedPostDetail = (props: any) => {
                 </div>
                 
                 {/* Post Status */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center justify-between">
+                  <div className="flex items-center gap-4 mb-2">
                     <div className="flex items-center gap-1">
                       <ThumbsUp className="w-5 h-5" />
                       <span>
@@ -327,7 +327,7 @@ const FlaggedPostDetail = (props: any) => {
                 </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 mb-2 ms-auto">
                     {postInfo?.feedData?.status ? (
                       <Badge
                         className={
@@ -389,7 +389,7 @@ const FlaggedPostDetail = (props: any) => {
                               <TableCell>{i + 1}</TableCell>
                               <TableCell className="font-medium">
                                 <div className="flex items-center gap-2">
-                                  <Avatar className="border border-gray-700">
+                                  <Avatar className="border border-border">
                                     <AvatarImage
                                       src={
                                         report?.users?.profile?.startsWith(

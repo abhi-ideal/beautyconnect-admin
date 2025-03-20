@@ -21,7 +21,7 @@ export interface TableProps<TData, TValue> {
   setColumnFilters?: any;
   hideFilter?:any;
   cursorPointer?:any;
-  
+  tableHeight?:any;
   //Dispatch<SetStateAction<ColumnFiltersState>>;
 }
 

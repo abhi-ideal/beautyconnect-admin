@@ -308,7 +308,7 @@ const LessonTableComponent = ({courseId, allLessons, setAllLessons}:any) => {
     <>
     {
       !open ?
-      <div className="relative mt-8">
+      <div className="relative mt-4 md:mt-6">
         <div className="absolute top-0 start-0 flex gap-4">
           <div className="flex items-center">
             <Button onClick={() => {setType('add');setOpen(true)}}>Add Lesson</Button>

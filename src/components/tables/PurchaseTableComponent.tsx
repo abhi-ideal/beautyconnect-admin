@@ -142,7 +142,7 @@ const PurchaseTableComponent = () => {
 
         return (
           <div className="flex items-center">
-            <Avatar className="mr-3 border border-gray-700">
+            <Avatar className="mr-3 border border-border">
               <AvatarImage
                 src={
                   profile
@@ -154,7 +154,7 @@ const PurchaseTableComponent = () => {
               <AvatarFallback className={bgColor} >{formatName(name || "N/A")}</AvatarFallback>
             </Avatar>
             <div>
-              <div className="font-semibold text-truncate">
+              <div className=" text-truncate">
                 <Link href={`/users/${info.row.original?.userInfo?.id}`}> 
                 {name ? titleCase(name?.trim()) : "N/A"}
                 </Link>
@@ -184,7 +184,7 @@ const PurchaseTableComponent = () => {
 
         return (
           <div className="flex items-center">
-            <Avatar className="mr-3 border border-gray-700">
+            <Avatar className="mr-3 border border-border">
               <AvatarImage
                 src={
                   media
@@ -196,7 +196,7 @@ const PurchaseTableComponent = () => {
               <AvatarFallback className={bgColor} >{formatName(title || "N/A")}</AvatarFallback>
             </Avatar>
             <div>
-              <div className="font-semibold text-truncate">
+              <div className=" text-truncate">
                 <Link href={`/courses/${info.row.original?.coursesInfo?.id}`}> 
                 {title ? titleCase(title?.trim()) : "N/A"}
                 </Link>

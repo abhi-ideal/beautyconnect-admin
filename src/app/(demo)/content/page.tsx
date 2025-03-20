@@ -66,7 +66,7 @@ export default function ContentPage() {
                 <CardContent className="space-y-2 h-[calc(100vh_-_374px)] overflow-y-auto">
                   {circleLoader ? (
                     <div className="p-6 h-full flex justify-center items-center">
-                      <Loader2 className="my-28 dark:text-white h-[100px] w-[100px] text-primary animate-spin" />
+                      <Loader2 className="my-28 dark:text-white h-[80px] w-[80px] text-primary animate-spin" />
                     </div>
                   ) : !value ? (
                     <div className="p-6 h-full flex flex-col justify-center items-center">

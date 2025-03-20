@@ -39,21 +39,26 @@ const UserDetailPage = ({ params }: any) => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
+            <div className="flex gap-2 flex-col md:flex-row">
+                <div className="w-full md:w-1/2">
             <UserDetail data ={{ id: params.slug, type:"User" }}></UserDetail>
+            </div>
 
+            <div className="w-full md:w-1/2">
             <QueryClientProvider client={queryClient}>
-        <main className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full lg:w-full">
-            <Card className="mt-4 p-4">
-            <CardTitle className="">
-              <p className="font-semibold">Transaction History:</p>
-            </CardTitle>
-            <TransactionHistoryTableComponent  userId={params.slug} />
-            </Card>
-          </div>
-        </main>
-      </QueryClientProvider>
-
+                <main className="flex flex-col lg:flex-row gap-6 pt-4 ">
+                <div className="w-full lg:w-full">
+                    <Card className="mt-4 p-4 min-h-auto md:min-h-[646px]">
+                    <CardTitle className="">
+                    <p className="font-semibold">Transaction History:</p>
+                    </CardTitle>
+                    <TransactionHistoryTableComponent  userId={params.slug} />
+                    </Card>
+                </div>
+                </main>
+            </QueryClientProvider>
+      </div>
+        </div>
         </ContentLayout>
     )
 }

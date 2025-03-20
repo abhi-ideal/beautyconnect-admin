@@ -63,18 +63,26 @@ export default function OnBoardLayout({
         </footer>
       </div>
  */}
-    <div className="container relative min-h-screen flex-col items-center justify-center flex lg:grid lg:max-w-none lg:grid-cols-2 lg:px-0" >
+    <div className="container relative min-h-screen flex-col items-center justify-center flex lg:grid lg:max-w-none lg:grid-cols-2 !p-0" >
         <div className="justify-center items-center relative lg:h-full flex-col lg:dark:bg-[#161616] lg:bg-black lg:p-10 text-white lg:dark:border-r flex">
           <div className="" />
-          <div className="py-4 lg:py-0">
-          <Image
-              className="mb-3 lg:mb-5 object-contain w-full mx-auto"
-              src="/logoWhite.png"
-              alt="Logo"
-              width={400}
-              height={100}
-            
-            />
+          <div className="py-4 lg:py-0 mt-10 lg:mt-0">
+           <Image
+                       className="mb-3 lg:mb-5 object-contain w-full  mx-auto hidden lg:block"
+                       src="/logoWhite.png"
+                       alt="Logo"
+                       width={400}
+                       height={100}
+                     
+                     />
+                       <Image
+                        className="block lg:hidden max-w-[250px]"
+                         src={theme=='light' ? "/logoBlack.png" : "/logoWhite.png"}
+                         alt="Logo"
+                         width={400}
+                         height={100}
+                         priority
+                               />
             {/* <Image
               className="object-contain w-full max-w-[200px] dark:invert-0 invert lg:invert-0"
               // src={theme=='light' ? "/logo_name.svg" : "/logo_name 1.svg"}

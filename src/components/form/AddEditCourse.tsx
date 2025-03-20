@@ -328,8 +328,8 @@ const selectFile = async (event:any) => {
 return (
   <div className="relative mx-auto w-full">
     {loading && (
-      <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-black/70">
-        <Loader2 className="h-[100px] w-[100px] text-primary dark:text-white animate-spin" />
+      <div className="absolute inset-0 z-[99] flex items-center justify-center bg-white/70 dark:bg-black/70">
+        <Loader2 className="h-[80px] w-[80px] text-primary dark:text-white animate-spin" />
       </div>
     )}
 
@@ -345,13 +345,13 @@ return (
               <FormItem>
                 <FormControl>
                   <div className="relative w-20 h-20">
-                    <Avatar className="w-full h-full rounded-full border border-gray-700">
+                    <Avatar className="w-full h-full rounded-full border">
                       <AvatarImage
                         src={imageContent?.length ? imageContent[0]?.path : previewImgUrl + editData?.media}
                         alt="Cover Image"
                         className="object-cover rounded-full"
                       />
-                      <AvatarFallback className="rounded-full bg-[#FFC1BB]">Image</AvatarFallback>
+                      <AvatarFallback className="rounded-full">Image</AvatarFallback>
                     </Avatar>
                     <label
                       htmlFor="image-upload"
@@ -475,7 +475,7 @@ return (
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Course is for</FormLabel>
-                <FormControl>
+                <FormControl >
                 <Editor content={formValues?.courseFor} onChange={field?.onChange} placeholder="Enter course is for..." />
                   {/* {<JoditEditor ref={editor} value={formValues?.courseFor} config={courseConfig} onBlur={field?.onChange} onChange={(newContent) => { }} />} */}
                 </FormControl>

@@ -228,7 +228,7 @@ const AddEditSkill = (props: any) => {
                     <FormLabel>Image</FormLabel>
                     <FormControl>
                       <div className="relative w-20 h-20">
-                        <Avatar className="w-20 h-20 border border-gray-700">
+                        <Avatar className="w-20 h-20 border border-border">
                           <AvatarImage
                             src={
                               showUploadImage?.path
@@ -278,7 +278,7 @@ const AddEditSkill = (props: any) => {
                     <FormLabel>Icon</FormLabel>
                     <FormControl>
                       <div className="relative w-20 h-20">
-                        <Avatar className="w-20 h-20 border border-gray-700">
+                        <Avatar className="w-20 h-20 border border-border">
                           <AvatarImage
                             src={
                               showUploadIcon?.path

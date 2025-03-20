@@ -138,7 +138,7 @@ const FlaggedUserDetail = (props: any) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-        <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
+        <Loader2 className="my-28 h-[80px] dark:text-white w-[80px] text-primary animate-spin" />
       </div>
     );
   }
@@ -236,15 +236,15 @@ const FlaggedUserDetail = (props: any) => {
                       : "N/A"}
                   </div>
                 </Link>
-                <div className="text-gray-600 pt-2">
+                <div className="text-gray-600 dark:text-[#aab2bb] pt-2">
                   {userInfo?.userData?.email
                     ? userInfo?.userData?.email?.trim()
                     : "N/A"}
                 </div>
-                <div className="text-gray-600 pt-2">
+                <div className="text-gray-600 dark:text-[#aab2bb] pt-2">
                   {userInfo?.userData?.about || ""}
                 </div>
-                <div className="text-gray-600 pt-2">
+                <div className="text-gray-600 dark:text-[#aab2bb] pt-2">
                   {userInfo?.userData.status ? (
                     <Badge
                       className={
@@ -300,7 +300,7 @@ const FlaggedUserDetail = (props: any) => {
                             <TableCell>{i + 1}</TableCell>
                             <TableCell className="font-medium">
                               <div className="flex items-center gap-2">
-                                <Avatar className="border border-gray-700">
+                                <Avatar className="border border-border">
                                   <AvatarImage
                                     src={
                                       report?.users?.profile?.startsWith(

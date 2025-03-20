@@ -27,7 +27,7 @@ export default function TransactionPage() {
       </div>
 
       <QueryClientProvider client={queryClient}>
-        <div className="mt-8" >
+        <div className="mt-4 md:mt-6" >
         <TransactionTableComponent/>
         </div>
       </QueryClientProvider>

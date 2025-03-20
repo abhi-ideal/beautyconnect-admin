@@ -39,7 +39,7 @@ const CourseDetail = (props: any) => {
     if (loading) {
         return (
           <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-            <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
+            <Loader2 className="my-28 h-[80px] dark:text-white w-[80px] text-primary animate-spin" />
           </div>
         );
     }
@@ -78,9 +78,9 @@ const CourseDetail = (props: any) => {
         </div>
         <CardContent className="p-6">
             <h2 className="text-xl font-semibold mb-4">Course Details:</h2>
-            <div className="grid grid-cols-[1fr,2fr] gap-x-8 gap-y-2">
+            <div className="flex flex-col md:flex-row gap-5">
             {/* Left Column */}
-            <div className="space-y-4">
+            <div className="space-y-2 w-full md:w-1/2">
 
 
                 <div className="grid grid-cols-[180px_1fr] gap-4">
@@ -110,13 +110,13 @@ const CourseDetail = (props: any) => {
                 </div>
                 <div className="grid grid-cols-[180px_1fr] gap-4">
                 <span className="text-sm font-medium">Created At:</span>
-                <span className="text-sm">{courseInfo.createdAt ? format(new Date(courseInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
+                <span className="text-sm whitespace-nowrap">{courseInfo.createdAt ? format(new Date(courseInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
                 </div>
 
             </div>
 
             {/* Right Column */}
-            <div className="space-y-4">
+            <div className="space-y-2 w-full md:w-1/2">
 
                  <div className="grid grid-cols-[180px_1fr] gap-4">
                 <span className="text-sm font-medium">Title:</span>
@@ -125,7 +125,7 @@ const CourseDetail = (props: any) => {
 
                 <div className="grid grid-cols-[180px_1fr] gap-4">
                 <span className="text-sm font-medium">Description:</span>
-                <span className="text-sm">{courseInfo.description || "N/A"}</span>
+                <span className="text-sm truncate">{courseInfo.description || "N/A"}</span>
                 </div>
 
                 <div className="grid grid-cols-[180px_1fr] gap-4">

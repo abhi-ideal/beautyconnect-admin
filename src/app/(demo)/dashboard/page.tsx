@@ -372,7 +372,7 @@ export default function DashboardPage() {
       <main className="flex flex-1 flex-col gap-4 pb-4 md:gap-4">
 
         <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <h2 className="text-[26px] font-bold tracking-tight">Dashboard</h2>
 
           <div className="hidden items-center space-x-2 md:flex">
             <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} open={openCount} setOpen={setCountOpen} />
@@ -383,7 +383,7 @@ export default function DashboardPage() {
         </div>
 
         {loading ? (
-          <div className="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 md:gap-4 xl:grid-cols-4">
             {shimmer.map((index, i) => (
               <Card key={i} x-chunk="dashboard-01-chunk-3">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -396,55 +396,57 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 md:gap-4 xl:grid-cols-4">
           <Link href="/users">
             <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
+              <CardHeader className="flex flex-row items-center justify-between ">
+                <div>
+                <CardTitle className="text-sm font-medium pb-2">Total Users</CardTitle>
                 <div className="text-2xl font-bold">{dashboardCount?.totalUsers || 0}</div>
-              </CardContent>
+                </div>
+                <div className="p-4 bg-secondary rounded-full">
+              <Users className="h-4 w-4 text-muted-foreground" />
+              </div>
+              </CardHeader>
             </Card>
             </Link>
 
 
             <Link href="/posts">
-                <Card x-chunk="dashboard-01-chunk-3">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total Posts
-                    </CardTitle>
-                    <StickyNote className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {dashboardCount?.totalFeeds
-                        ? dashboardCount?.totalFeeds
-                        : 0}
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              
-
-              <Link href="/courses">
-                <Card x-chunk="dashboard-01-chunk-3">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total Courses
-                    </CardTitle>
-                    <StickyNote className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
+            <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
+                <CardHeader className="flex flex-row items-center justify-between ">
+                  <div>
+                  <CardTitle className="text-sm font-medium pb-2"> Total Courses</CardTitle>
+                <div className="text-2xl font-bold">
                       {dashboardCount?.totalCourse
                         ? dashboardCount?.totalCourse
                         : 0}
                     </div>
-                  </CardContent>
+                  </div>
+                  <div className="p-4 bg-secondary rounded-full">
+                <StickyNote className="h-4 w-4 text-muted-foreground" />
+                </div>
+                </CardHeader>
+              </Card>
+            </Link>
+
+              
+
+              <Link href="/courses">
+                <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
+                  <CardHeader className="flex flex-row items-center justify-between ">
+                    <div>
+                    <CardTitle className="text-sm font-medium pb-2"> Total Courses</CardTitle>
+                  <div className="text-2xl font-bold">
+                        {dashboardCount?.totalCourse
+                          ? dashboardCount?.totalCourse
+                          : 0}
+                      </div>
+                    </div>
+                    <div className="p-4 bg-secondary rounded-full">
+                  <StickyNote className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  </CardHeader>
                 </Card>
               </Link>
 
@@ -459,15 +461,17 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
             </Link> */}
-            <Card x-chunk="dashboard-01-chunk-1">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Course Revenue</CardTitle>
+           <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
+                <CardHeader className="flex flex-row items-center justify-between ">
+                  <div>
+                  <CardTitle className="text-sm font-medium pb-2">Total Course Revenue</CardTitle>
+                 <div className="text-2xl font-bold">{dashboardCount?.totalRevenue ? "$ "+ dashboardCount?.totalRevenue : 0}</div>
+                  </div>
+                  <div className="p-4 bg-secondary rounded-full">
                 <Gem className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent> 
-                <div className="text-2xl font-bold">{dashboardCount?.totalRevenue ? "$ "+ dashboardCount?.totalRevenue : 0}</div>
-              </CardContent>
-            </Card>
+                </div>
+                </CardHeader>
+              </Card>
 
   
           </div>)}
@@ -477,15 +481,16 @@ export default function DashboardPage() {
       </main>
 
               {/* user graph code  */}
-              <div className="w-full flex flex-col gap-6 pt-5">
-                <div className="grid w-full gap-4 md:gap-6">
+              <div className="flex flex-col lg:flex-row gap-4">
+              <div className="w-full lg:w-1/2 pt-5 ">
+                <div className="grid w-full gap-4 md:gap-6 min-h-auto md:min-h-[517px]">
                   <Card className="w-full">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
+                   <CardHeader className="border-b border-b-border">
+                      <div className="flex flex-wrap items-center justify-between space-y-2 xl:space-y-0">
                         <CardTitle className="font-bold tracking-tight">Chart</CardTitle>
-                        <Badge className={`bg-${userChartConfig?.users?.color}-500`}>{userChartConfig?.users?.label}</Badge>
-                        <Badge className={`bg-${userChartConfig?.feeds?.color}-500`}>{userChartConfig?.feeds?.label}</Badge>
-                        <Badge className={`bg-${userChartConfig?.courses?.color}-500`}>{userChartConfig?.courses?.label}</Badge>
+                        <Badge className={`!mt-0 bg-${userChartConfig?.users?.color}-500`}>{userChartConfig?.users?.label}</Badge>
+                        <Badge className={`!mt-0 bg-${userChartConfig?.feeds?.color}-500`}>{userChartConfig?.feeds?.label}</Badge>
+                        <Badge className={`!mt-0 bg-${userChartConfig?.courses?.color}-500`}>{userChartConfig?.courses?.label}</Badge>
                         {/* <Badge className={`bg-${userChartConfig?.jobs?.color}-500`}>{userChartConfig?.jobs?.label}</Badge> */}
                         <div className="hidden items-center space-x-2 md:flex">
                           <CalendarDateRangePicker date={graphDate} setDate={setGraphDate} disabledDates={disabledDates} open={openGraph} setOpen={setGraphOpen} />
@@ -493,7 +498,7 @@ export default function DashboardPage() {
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="!p-2">
                       {!chartUser.length ? (
                         <div className="flex justify-center py-20">
                           <Image src="/no-data.svg" alt="No Data" width={320} height={320} priority className="size-[150px]"/>
@@ -598,9 +603,9 @@ export default function DashboardPage() {
 
               {/* revenvue graph code  */}
 
-              <div className="w-full mt-8">
-              <Card className="lg:col-span-3">
-                <CardHeader>
+              <div className="w-full lg:w-1/2 pt-5">
+              <Card className="lg:col-span-3 min-h-auto md:min-h-[517px]">
+                <CardHeader className="border-b border-b-border">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <CardTitle className="font-bold tracking-tight text-nowrap">
                     Revenue Chart
@@ -618,7 +623,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="p-4">
+                <CardContent className="p-2">
                   {!chartRevenue.length ? (
                     <div className="flex justify-center py-20">
                       <Image
@@ -712,7 +717,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
               </div>
-          
+              </div>
     </ContentLayout>
   );
 }

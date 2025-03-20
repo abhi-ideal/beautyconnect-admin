@@ -82,7 +82,7 @@ const FlaggedCourseDetail = (props: any) => {
     if (loading) {
         return (
           <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-            <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
+            <Loader2 className="my-28 h-[80px] dark:text-white w-[80px] text-primary animate-spin" />
           </div>
         );
     }

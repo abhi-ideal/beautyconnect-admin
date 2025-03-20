@@ -12,19 +12,23 @@ import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 import { formatName, shortName, titleCase } from "@/lib/utils";
 import Swal from "sweetalert2";
-import { format } from "date-fns";
-import SkillsApi from '@/api/skills';
+import { format } from "date-fns"; 
 import AuthService from "@/api/auth/AuthService";
 import AddEditSkill from '../form/AddEditSkill';
 import { Skill } from '@/types/Skills';
-import { useGetSkills } from '@/api/useGetSkills';
+// import { useGetSkills } from '@/api/useGetSkills';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGetCourseCategory } from '@/api/useGetCourseCategory';
+import CourseCategoryApi from '@/api/courseCategory';
+import { CourseCategory } from '@/types/CourseCategory';
+import { log } from 'console';
+import AddEditCoursecategory from '../form/AddEditCourseCategory';
 
-const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
+const CourseCategoryTableComponent = ({ allCourseCategory, setAllCourseCategory }: any) => {
   const { logout }=AuthService();
   const router = useRouter();
   const { toast } = useToast();
-  const { deleteSkills, updateSkills } = SkillsApi();
+  const { deleteCourseCategory, updateCourseCategory } = CourseCategoryApi();
   const [expandedDesc, setExpandedDesc ]:any = useState({});
   // sorting state of the table
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -41,28 +45,32 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
     pageIndex: 0, //initial page index
     pageSize: 20 //default page size
   });
+  const refreshPage = () => {
+    window.location.reload();
+  };
+  
 
-  const { allSkillsData, isAllSkillsDataLoading }: any =
-    useGetSkills({
+  const { allCourseCategoryData, isAllCourseCategoryDataLoading }: any =
+  useGetCourseCategory({
       sorting,
       columnFilters: debouncedColumnFilters,
       pagination
     });
-
+console.log("allCourseCategoryData",allCourseCategoryData)
   useEffect(() => {
-    if(allSkillsData?.error){
-      404 !=allSkillsData?.status && toast({
-        title: allSkillsData?.errorMessage ? allSkillsData?.errorMessage : "Uh oh! Something went wrong.",
-        variant: "destructive", description: allSkillsData?.error
+    if(allCourseCategoryData?.error){
+      404 !=allCourseCategoryData?.status && toast({
+        title: allCourseCategoryData?.errorMessage ? allCourseCategoryData?.errorMessage : "Uh oh! Something went wrong.",
+        variant: "destructive", description: allCourseCategoryData?.error
       });
-      (allSkillsData?.status==401 || allSkillsData?.status==403 ) && logout('skilltable');
+      (allCourseCategoryData?.status==401 || allCourseCategoryData?.status==403 ) && logout('courseCategorytable');
     }
-    setAllSkills(allSkillsData);
-  }, [allSkillsData]);
+    setAllCourseCategory(allCourseCategoryData);
+  }, [allCourseCategoryData]);
 
   async function deleteData(data: any) {
     Swal.fire({
-      text: `Are you sure you want to delete this Specialization?`,
+      text: `Are you sure you want to delete this Course Category?`,
       showCancelButton: true,
       confirmButtonColor: `#18181B`,
       cancelButtonColor: "white",
@@ -73,15 +81,17 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
       confirmButtonText: "Confirm Delete"
     }).then(async (result: any) => {
       if (result.value) {
-        await deleteSkills(data?.id).then((res: any) => {
+        console.log('value',result?.value);
+        
+        await deleteCourseCategory(data?.id).then((res: any) => {
           if (!res?.error) {
-            const deletedData = (allSkillsData.results =
-              allSkillsData?.results?.filter(
+            const deletedData = (allCourseCategoryData.results =
+              allCourseCategoryData?.results?.filter(
                 (res: any) => data?.id !== res?.id
               ));
-            setAllSkills({ ...allSkills, results: deletedData });
+            setAllCourseCategory({ ...allCourseCategory, results: deletedData });
             toast({
-              title: "Specialization deleted sucessfully.",
+              title: "Course Category deleted sucessfully.",
               description: res?.message
             });
           } else {
@@ -100,7 +110,7 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
   async function updateData(data: any) {
     const status: any = data.status == "active" ? "inactive" : "active";
     Swal.fire({
-      text: `Are you sure you want to ${status} this Specialization.`,
+      text: `Are you sure you want to ${status} this Course Category.`,
       showCancelButton: true,
       confirmButtonColor: `#18181B`,
       cancelButtonColor: "white",
@@ -113,10 +123,10 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
       }`
     }).then(async (result: any) => {
       if (result.value) {
-        await updateSkills({status: status}, data.id ).then(
+        await updateCourseCategory({status: status}, data.id ).then(
           async (res: any) => {
             if (!res.error) {       
-              const updatedSkill = allSkills?.results?.map((res: any) => {
+              const updatedSkill = allCourseCategory?.results?.map((res: any) => {
                 if (data?.id == res?.id) {
                   res.status = status;
                   return res;
@@ -124,7 +134,7 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
                   return res;
                 }
               });
-              setAllSkills({ ...allSkills, results: updatedSkill });
+              setAllCourseCategory({ ...allCourseCategory, results: updatedSkill });
               toast({
                 title: "Status updated sucessfully.",
                 description: res?.message
@@ -140,7 +150,10 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
         );
       }
     });
-  } 
+  }
+
+
+
   //updates data
   async function update(data: any) {
     setOpen(true);
@@ -158,59 +171,37 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
     }));
   };
 
-  const skillColumns: ColumnDef<Skill>[] = [
+  const courseCategoryColumns: ColumnDef<CourseCategory>[] = [
 
-    {
-      header: "Image",
-      accessorFn: (row: any) => row.image,
-      enableSorting: false,
-      enableColumnFilter: false,
-      cell: (info:any) => {
-        const imageUrl = info.getValue();
-        const resolvedImageUrl = imageUrl?.startsWith("https://")
-        ? imageUrl
-        : previewImgUrl + imageUrl;  
-        return (
-          <Avatar className="border border-border" >
-            <AvatarImage
-              src={resolvedImageUrl} 
-            />
-            <AvatarFallback className="bg-secondary" >
-              {formatName(info.row.original.title) || "DI"}
-            </AvatarFallback>
-          </Avatar>
-        );
-      }
-    },
     {
       header: "Title",
       accessorKey: "title",
       accessorFn: (row: any) => ({
-        icon: row?.icon,
+        image: row?.image,
         title: row?.title,
       }),
       enableSorting: false,
-      enableColumnFilter: true,
-      cell: (info: any) => {
-        const { icon, title } = info.getValue();
+      enableColumnFilter:  true,
+      cell: (info:any) => {
+        const data = info.getValue();
+     
         const color=["bg-[#FFC1BB]","bg-orange-500","bg-lime-500","bg-cyan-500","bg-blue-500","bg-rose-500"];
         const bgColor = color[info?.row?.index % color.length ]
+        const resolvedImageUrl = data?.image?.startsWith("https://")
+        ? data?.image
+        : previewImgUrl +  data?.image;   
         return (
           <div className="flex items-center">
             <Avatar className="mr-3 border border-border">
               <AvatarImage
-                src={
-                  icon
-                    ? previewImgUrl+icon
-                    : ""
-                }
-                alt={title || "icon"}
+                 src={resolvedImageUrl} 
+                alt={data?.title}
               />
-              <AvatarFallback className={bgColor}>{formatName(title || "N/A")}</AvatarFallback>
+              <AvatarFallback className={bgColor}>{formatName(data?.title || "N/A")}</AvatarFallback>
             </Avatar>
             <div>
               <div className=" text-truncate">
-                {title ? titleCase(title?.trim()) : "N/A"}
+                {data?.title ? titleCase(data?.title?.trim()) : "N/A"}
               </div>
              
             </div>
@@ -218,8 +209,18 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
         );
       }
     },
-   
+     
     {
+      header: "Total Courses",
+      accessorKey: "totalCourses",
+      cell: (info) => {
+        const  totalCourses = info?.getValue<string>();
+        return  <div> {totalCourses ? totalCourses : 0}</div>
+      },
+      enableColumnFilter: false
+    }
+,
+   {
       header: "Created At",
       accessorKey: "createdAt",
       cell: (info) => {
@@ -284,14 +285,13 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
         );
       }
     }
-  ];
-
+  ]; 
   return (
     <>
       <TanStackBasicTable
-        isTableDataLoading={isAllSkillsDataLoading}
-        paginatedTableData={allSkills}
-        columns={skillColumns}
+        isTableDataLoading={isAllCourseCategoryDataLoading}
+        paginatedTableData={allCourseCategory}
+        columns={courseCategoryColumns}
         pagination={pagination}
         setPagination={setPagination}
         sorting={sorting}
@@ -305,15 +305,15 @@ const SkillsTableComponent = ({ allSkills, setAllSkills }: any) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit Specialization</DialogTitle>
+            <DialogTitle>Edit Course Category </DialogTitle>
           </DialogHeader>
-          <AddEditSkill
-            props={{ setOpen, type: "Edit", editData, setEditData, allSkills, setAllSkills }}
-          ></AddEditSkill>
+          <AddEditCoursecategory
+            props={{ setOpen, type: "Edit", editData, setEditData, allCourseCategory, setAllCourseCategory }}
+          ></AddEditCoursecategory>
         </DialogContent>
       </Dialog>
     </>
   )
 }
 
-export default SkillsTableComponent
+export default  CourseCategoryTableComponent

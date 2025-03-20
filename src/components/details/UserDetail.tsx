@@ -43,7 +43,7 @@ const UserDetail = (props: any) => {
     if (loading) {
         return (
           <div className="flex justify-center items-center p-20 h-[calc(100vh_-_182px)]">
-          <Loader2 className="my-28 h-[100px] dark:text-white w-[100px] text-primary animate-spin" />
+          <Loader2 className="my-28 h-[80px] dark:text-white w-[80px] text-primary animate-spin" />
           </div>
         );
       }
@@ -98,55 +98,56 @@ const UserDetail = (props: any) => {
                 )}
           </div>
         </CardHeader>
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-4">
         <Separator/>
 
           <div>
             <h2 className="text-xl font-semibold mb-4">Profile Overview:</h2>
-            <div className="grid gap-8 md:grid-cols-2">
-              <div className="space-y-6">
-                <div className="flex justify-between w-80">
+            <div className="">
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between ">
                   <span className="text-muted-foreground">Gender</span>
                   <span className="font-medium">{titleCase(userInfo?.gender) || "N/A"}</span>
                 </div>
-                <div className="flex justify-between w-80">
+                <div className="flex justify-between ">
                   <span className="text-muted-foreground">Mobile</span>
                   <span className="font-medium">{userInfo?.mobileNumber ? formatMobileNumber(userInfo.mobileNumber) : 'N/A'}</span>
                 </div>
-                <div className="flex justify-between w-80">
+                <div className="flex justify-between ">
                   <span className="text-muted-foreground">Date of Birth</span>
                   <span className="font-medium">{userInfo?.dob ? moment(userInfo.dob, "DD/MM/YYYY").format("DD/MMM/YYYY") : "N/A"}</span>
                 </div>
 
-                <div className="flex justify-between w-80">
+                <div className="flex justify-between ">
                   <span className="text-muted-foreground">Created At</span>
                   <span className="font-medium">{userInfo?.createdAt ? format(new Date(userInfo?.createdAt), "dd MMM, yy 'at' h:mm a") : "N/A"}</span>
                 </div>
 
               </div>
-              <div className="space-y-6">
-                <div className="flex items-center justify-between w-80">
+              
+              <div className="space-y-2">
+                <div className="flex items-center justify-between ">
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Following</span>
                   </div>
                   <span className="font-medium">{userInfo?.totalFollowing || 0}</span>
                 </div>
-                <div className="flex items-center justify-between w-80">
+                <div className="flex items-center justify-between ">
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Followers</span>
                   </div>
                   <span className="font-medium">{userInfo?.totalFollower || 0}</span>
                 </div>
-                <div className="flex items-center justify-between w-80">
+                <div className="flex items-center justify-between ">
                   <div className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Posts</span>
                   </div>
                   <span className="font-medium">{userInfo?.totalPost || 0}</span>
                 </div>
-                <div className="flex items-center justify-between w-80">
+                <div className="flex items-center justify-between ">
                   <div className="flex items-center gap-2">
                     <Gem className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Diamonds</span>
@@ -163,7 +164,7 @@ const UserDetail = (props: any) => {
             <h2 className="text-xl font-semibold mb-4">Location Information</h2>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-6">
-                <div className="flex items-center justify-between w-80">
+                <div className="flex items-center justify-between ">
                   <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     <span className="text-muted-foreground">Street</span>
@@ -222,7 +223,7 @@ const UserDetail = (props: any) => {
 
           <Separator />
   
-          <div className="flex items-center gap-10 w-50">
+          <div className="flex items-center gap-10 justify-between">
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-muted-foreground" />
               <span className="text-muted-foreground">Address</span>

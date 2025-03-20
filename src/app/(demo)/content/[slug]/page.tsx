@@ -53,10 +53,10 @@ export default function ContentDetailPage({ params }: any) {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="hidden space-y-6 p-3 md:block pt-8">
+        <div className="space-y-6 pt-5 sm:pt-8">
           {/* <Separator /> */}
-          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <aside className="-mx-4 lg:w-1/5">
+          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-6 lg:space-y-0">
+            <aside className="lg:w-1/5">
               <SidebarNav items={sidebarNavItems} />
             </aside>
             <div className="flex-[1_0_0%] [&>div>*:nth-last-child(-n_+_1)]:justify-end">
@@ -66,10 +66,10 @@ export default function ContentDetailPage({ params }: any) {
                     { sidebarNavItems.find((item: any) => item.id == id)?.title || "Default Title"}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2 h-[calc(100vh_-_374px)] overflow-y-auto">
+                <CardContent className="space-y-2 h-[calc(100vh_-_374px)] overflow-y-auto [&>div>p]:!bg-content [&>div>p]:!text-foreground [&>div>p>span]:!bg-content [&>div>p>span]:!text-foreground">
                   {circleLoader ? (
                     <div className="p-6 h-full flex justify-center items-center">
-                      <Loader2 className="my-28 dark:text-white h-[100px] w-[100px] text-primary animate-spin" />
+                      <Loader2 className="my-28 dark:text-white h-[80px] w-[80px] text-primary animate-spin" />
                     </div>
                   ) : !value ? (
                     <div className="p-6 h-full flex flex-col justify-center items-center">
@@ -85,7 +85,7 @@ export default function ContentDetailPage({ params }: any) {
                 </CardContent>
 
                 <Separator className="my-2" />
-                <CardFooter>
+                <CardFooter className="!pt-2">
                   <Link href={!circleLoader ? `${id}/edit` : "#"}>
                     <Button disabled={circleLoader} >Edit { sidebarNavItems.find((item: any) => item.id == id)?.title || "Default Title"}</Button>
                   </Link>

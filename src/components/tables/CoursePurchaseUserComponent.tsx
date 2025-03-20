@@ -139,7 +139,7 @@ const CoursePurchaseUserComponent = ({courseId }:any) => {
             ? imageUrl
             : previewImgUrl + imageUrl;  
             return (
-              <Avatar className="border border-gray-700" >
+              <Avatar className="border border-border" >
                 <AvatarImage
                   src={resolvedImageUrl} 
                 />
