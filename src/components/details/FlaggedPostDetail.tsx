@@ -132,9 +132,15 @@ const FlaggedPostDetail = (props: any) => {
       cancelButtonColor: "white",
       confirmButtonText: "Confirm",
       icon: "warning",
-      customClass: {
-        cancelButton: `cancel_button`
-      },
+          customClass: { 
+        popup: "max-w-[393px] px-8 py-4 !rounded-[20px]",
+        icon: "text-[9.275px] mt-[0!important]",
+        htmlContainer:
+          "px-[0!important] pb-[0!important] [font-size:16px!important]",
+        actions: "-mx-5",
+        confirmButton: "[flex:0_0_auto] w-[calc(50%_-10px)] px-[0!important] !bg-btn !rounded-[20px]",
+        cancelButton: `w-[calc(50%_-10px)] text-black border border-[#000000B2] border-solid px-[0!important] !rounded-[20px]`,
+       },
     }).then(async (result: any) => {
       if (result.value) {
         await deleteFlaggedPost(data?.actionId).then((res: any) => {
@@ -275,7 +281,7 @@ const FlaggedPostDetail = (props: any) => {
                 {/* Carousel */}
                 <div className="relative mb-6 max-w-4xl mx-auto">
                   <Carousel className="select-none relative w-full">
-                    <div className="relative border border-gray-300 rounded-lg overflow-hidden">
+                    <div className="relative border border-input rounded-lg overflow-hidden">
                       <CarouselContent>
                         {postInfo?.feedData?.contents?.length > 0 ? (
                                         postInfo?.feedData?.contents?.map((album: any, i: number) => {

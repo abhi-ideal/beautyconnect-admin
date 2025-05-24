@@ -372,7 +372,7 @@ export default function DashboardPage() {
       <main className="flex flex-1 flex-col gap-4 pb-4 md:gap-4">
 
         <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-[26px] font-bold tracking-tight">Dashboard</h2>
+        <h2 className="text-[26px] font-semibold tracking-tight">Dashboard</h2>
 
           <div className="hidden items-center space-x-2 md:flex">
             <CalendarDateRangePicker date={date} setDate={setDate} disabledDates={disabledDates} open={openCount} setOpen={setCountOpen} />
@@ -401,8 +401,8 @@ export default function DashboardPage() {
             <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between ">
                 <div>
-                <CardTitle className="text-sm font-medium pb-2">Total Users</CardTitle>
-                <div className="text-2xl font-bold">{dashboardCount?.totalUsers || 0}</div>
+                <CardTitle className="text-base font-medium pb-2">Total Users</CardTitle>
+                <div className="text-2xl font-semibold">{dashboardCount?.totalUsers || 0}</div>
                 </div>
                 <div className="p-4 bg-secondary rounded-full">
               <Users className="h-4 w-4 text-muted-foreground" />
@@ -416,8 +416,8 @@ export default function DashboardPage() {
             <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
                 <CardHeader className="flex flex-row items-center justify-between ">
                   <div>
-                  <CardTitle className="text-sm font-medium pb-2"> Total Courses</CardTitle>
-                <div className="text-2xl font-bold">
+                  <CardTitle className="text-base font-medium pb-2"> Total Courses</CardTitle>
+                <div className="text-2xl font-semibold">
                       {dashboardCount?.totalCourse
                         ? dashboardCount?.totalCourse
                         : 0}
@@ -436,8 +436,8 @@ export default function DashboardPage() {
                 <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
                   <CardHeader className="flex flex-row items-center justify-between ">
                     <div>
-                    <CardTitle className="text-sm font-medium pb-2"> Total Courses</CardTitle>
-                  <div className="text-2xl font-bold">
+                    <CardTitle className="text-base font-medium pb-2"> Total Courses</CardTitle>
+                  <div className="text-2xl font-semibold">
                         {dashboardCount?.totalCourse
                           ? dashboardCount?.totalCourse
                           : 0}
@@ -464,8 +464,8 @@ export default function DashboardPage() {
            <Card x-chunk="dashboard-01-chunk-1" className="cursor-pointer">
                 <CardHeader className="flex flex-row items-center justify-between ">
                   <div>
-                  <CardTitle className="text-sm font-medium pb-2">Total Course Revenue</CardTitle>
-                 <div className="text-2xl font-bold">{dashboardCount?.totalRevenue ? "$ "+ dashboardCount?.totalRevenue : 0}</div>
+                  <CardTitle className="text-base font-medium pb-2">Total Course Revenue</CardTitle>
+                 <div className="text-2xl font-semibold">{dashboardCount?.totalRevenue ? "$ "+ dashboardCount?.totalRevenue : 0}</div>
                   </div>
                   <div className="p-4 bg-secondary rounded-full">
                 <Gem className="h-4 w-4 text-muted-foreground" />

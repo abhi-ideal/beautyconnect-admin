@@ -217,7 +217,7 @@ const AddEditSkill = (props: any) => {
                 )}
               />
             </div>
-<div className="flex justify-between" >
+<div className="flex gap-5" >
             {/* Image */}
             <div className="space-y-2">
               <FormField
@@ -340,7 +340,7 @@ const AddEditSkill = (props: any) => {
               <Button
                 disabled={form.formState.isSubmitting}
                 type="submit"
-                className="w-full sm:w-auto min-w-[150px]"
+                className="w-full sm:w-auto min-w-[150px] bg-btn"
               >
                 {form.formState.isSubmitting ? (
                   <Spinner size="small" />

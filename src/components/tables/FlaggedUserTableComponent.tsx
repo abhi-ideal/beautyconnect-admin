@@ -70,9 +70,15 @@ const FlaggedUserTableComponent = () => {
       confirmButtonColor: `#18181B`,
       cancelButtonColor: "white",
       icon: "warning",
-      customClass: {
-        cancelButton: `cancel_button`
-      },
+          customClass: { 
+        popup: "max-w-[393px] px-8 py-4 !rounded-[20px]",
+        icon: "text-[9.275px] mt-[0!important]",
+        htmlContainer:
+          "px-[0!important] pb-[0!important] [font-size:16px!important]",
+        actions: "-mx-5",
+        confirmButton: "[flex:0_0_auto] w-[calc(50%_-10px)] px-[0!important] !bg-btn !rounded-[20px]",
+        cancelButton: `w-[calc(50%_-10px)] text-black border border-[#000000B2] border-solid px-[0!important] !rounded-[20px]`,
+       },
       confirmButtonText: `Confirm ${
         data?.userData?.status == "active" ? "Inactive" : "Active"
       }`
@@ -116,9 +122,15 @@ const FlaggedUserTableComponent = () => {
       cancelButtonColor: "white",
       confirmButtonText: "Confirm Delete",
       icon: "warning",
-      customClass: {
-        cancelButton: `cancel_button`
-      },
+          customClass: { 
+        popup: "max-w-[393px] px-8 py-4 !rounded-[20px]",
+        icon: "text-[9.275px] mt-[0!important]",
+        htmlContainer:
+          "px-[0!important] pb-[0!important] [font-size:16px!important]",
+        actions: "-mx-5",
+        confirmButton: "[flex:0_0_auto] w-[calc(50%_-10px)] px-[0!important] !bg-btn !rounded-[20px]",
+        cancelButton: `w-[calc(50%_-10px)] text-black border border-[#000000B2] border-solid px-[0!important] !rounded-[20px]`,
+       },
     }).then(async (result: any) => {
       if (result.value) {
         await deleteFlaggedUser(data?.actionId).then((res: any) => {
@@ -217,7 +229,7 @@ const FlaggedUserTableComponent = () => {
       header: "Marks",
       accessorKey: "mark",
       cell:(info) =>{
-        return <Button className="dark:bg-white bg-[#18181B]" onClick={() => deleteData(info.row.original)}>Mark Us UnFlagged</Button>
+        return <Button className="dark:bg-white bg-btn h-9" onClick={() => deleteData(info.row.original)}>Mark Us UnFlagged</Button>
       },
       enableSorting: true,
       enableColumnFilter: false

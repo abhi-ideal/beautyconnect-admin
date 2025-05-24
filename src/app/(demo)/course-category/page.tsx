@@ -29,7 +29,7 @@ export default function CourseCategoryPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Button className="ml-auto" onClick={() => setOpen(true)}>Add Course Category</Button>
+        <Button className="ml-auto !bg-btn" onClick={() => setOpen(true)}>Add Course Category</Button>
       </div>
 
       <div className="text-left">

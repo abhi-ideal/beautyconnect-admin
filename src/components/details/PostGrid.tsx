@@ -306,7 +306,7 @@ const PostGrid = (props: any) => {
             </p>
             <div className="relative aspect-video">
               <Carousel className="relative w-full">
-                <div className="relative border border-gray-300 rounded-lg overflow-hidden">
+                <div className="relative border border-input rounded-lg overflow-hidden">
                   <CarouselContent>
                     {postInfo?.contents?.length > 0 ? (
                              postInfo.contents.map((data: any, i: any) => {

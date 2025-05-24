@@ -29,7 +29,7 @@ export default function SkillsPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Button className="ml-auto" onClick={() => setOpen(true)}>Add Specialization</Button>
+        <Button className="ml-auto !bg-btn" onClick={() => setOpen(true)} >Add Specialization</Button>
       </div>
 
       <div className="text-left">

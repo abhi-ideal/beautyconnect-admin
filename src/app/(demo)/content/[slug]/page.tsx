@@ -87,7 +87,7 @@ export default function ContentDetailPage({ params }: any) {
                 <Separator className="my-2" />
                 <CardFooter className="!pt-2">
                   <Link href={!circleLoader ? `${id}/edit` : "#"}>
-                    <Button disabled={circleLoader} >Edit { sidebarNavItems.find((item: any) => item.id == id)?.title || "Default Title"}</Button>
+                    <Button disabled={circleLoader} className="bg-btn" >Edit { sidebarNavItems.find((item: any) => item.id == id)?.title || "Default Title"}</Button>
                   </Link>
                 </CardFooter>
               </Card>

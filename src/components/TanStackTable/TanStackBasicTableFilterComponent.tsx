@@ -228,13 +228,13 @@ export default function TanStackBasicTableFilterComponent<TData>({
 
             <SheetFooter className="pt-4">
               <SheetClose asChild>
-                <Button onClick={() => reset()} className="mb-2">Reset</Button>
+                <Button onClick={() => reset()} className="mb-2 !bg-btn px-8">Reset</Button>
               </SheetClose>
 
               <SheetClose asChild>
                 <Button
                   type="submit"
-                  onClick={() => setColumnFilters(filterValue)} className="mb-2"
+                  onClick={() => setColumnFilters(filterValue)} className="mb-2 !bg-transparent !text-black dark:!text-white border !border-black dark:!border-white px-8"
                 >
                  Search
                 </Button>

@@ -69,8 +69,8 @@ const Page = () => {
     <>
       <div className="mx-auto max-w-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Forgot Password</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl font-bold text-center !mb-3">Forgot Password</CardTitle>
+          <CardDescription className="!text-center">
             No worries, we’ll send you reset instructions.
           </CardDescription>
         </CardHeader>
@@ -96,7 +96,7 @@ const Page = () => {
                 <Button
                   type="submit"
                   disabled={form.formState.isSubmitting}
-                  className="w-full"
+                  className="w-full !bg-btn"
                 >
                   {form.formState.isSubmitting ? (
                     <Spinner size="small" />

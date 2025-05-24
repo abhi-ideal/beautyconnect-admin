@@ -339,7 +339,7 @@ return (
               <Button
                 type="button"
                 variant="outline"
-                className="w-full sm:w-auto min-w-[100px]"
+                className="w-full sm:w-auto min-w-[100px] rounded-[20px]"
                 onClick={() => {
                   setEditData({});
                   setOpen(false);
@@ -350,7 +350,7 @@ return (
               </Button>
               <Button
                 type="submit"
-                className="w-full sm:w-auto min-w-[100px]"
+                className="w-full sm:w-auto min-w-[100px] bg-btn"
                 disabled={loading || form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting ? (

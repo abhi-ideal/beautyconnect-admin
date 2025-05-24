@@ -64,7 +64,7 @@ export default function OnBoardLayout({
       </div>
  */}
     <div className="container relative min-h-screen flex-col items-center justify-center flex lg:grid lg:max-w-none lg:grid-cols-2 !p-0" >
-        <div className="justify-center items-center relative lg:h-full flex-col lg:dark:bg-[#161616] lg:bg-black lg:p-10 text-white lg:dark:border-r flex">
+         <div className="justify-center items-center relative lg:h-full flex-col bg-mainBg lg:p-10 text-white lg:dark:border-r hidden lg:flex">
           <div className="" />
           <div className="py-4 lg:py-0 mt-10 lg:mt-0">
            <Image
@@ -97,7 +97,7 @@ export default function OnBoardLayout({
             <blockquote className="space-y-2">
               <footer className="text-sm">
                 <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
-                  <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
+                  <p className="text-balance text-center text-sm leading-loose text-white">
                     © {currentYear}, Beauty Connect Admin
                   </p>
                 </div>
@@ -117,8 +117,8 @@ export default function OnBoardLayout({
             <ModeToggle />
           </div>
 
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <section className="lg:mt-6 max-w-[980px] flex-col items-center gap-2 pb-8 md:pb-8 lg:pt-24 lg:pb-6">
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[450px] ">
+          <section className="lg:mt-4 max-w-[980px] flex-col items-center gap-2 py-5  lg:py-8  shadow-none lg:shadow-[2px_2px_2px_2px_#0000000F] bg-[#FFF] dark:bg-[#000] rounded-[10px] border border-[#c9c9c96e]">
               {/* <h1 className="text-center text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]">
                 Admin Panel
               </h1> */}
@@ -126,11 +126,11 @@ export default function OnBoardLayout({
             </section>
           </div>
         </div>
-        <div className="z-20 justify-center w-full mt-auto sticky bottom-0 flex lg:hidden dark:bg-black bg-white">
+        <div className="z-20 justify-center w-full lg:mt-auto sticky bottom-0 flex lg:hidden dark:bg-black bg-white mt-5">
             <blockquote className="space-y-2">
               <footer className="text-sm">
                 <div className="container flex flex-col items-center justify-center gap-4 lg:h-24 md:flex-row">
-                  <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
+                  <p className="text-balance text-center text-sm leading-loose text-white">
                     © {currentYear}, Beauty Connect Admin
                   </p>
                 </div>

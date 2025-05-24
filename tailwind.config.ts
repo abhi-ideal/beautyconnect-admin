@@ -18,6 +18,11 @@ const config = {
       }
     },
     extend: {
+        backgroundImage: {
+        mainBg: 'linear-gradient(to bottom, #000000, #7068F4);',
+        btn:' linear-gradient(90deg, #D804F9 0%, #0649FF 100%)',
+         
+      },
       colors: {
         content:"var(--content)",
         border: "hsl(var(--border))",

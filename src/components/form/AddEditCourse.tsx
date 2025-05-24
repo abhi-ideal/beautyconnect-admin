@@ -503,7 +503,7 @@ return (
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" className="w-full sm:w-auto min-w-[150px]" disabled={form.formState.isSubmitting}>
+          <Button type="submit" className="w-full sm:w-auto min-w-[150px] !bg-btn" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? <Spinner size="small" /> : `${type === "Edit" ? "Edit" : "Add"} Course`}
           </Button>
         </div>

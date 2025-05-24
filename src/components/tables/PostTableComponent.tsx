@@ -71,9 +71,15 @@ const PostTableComponent = () => {
       confirmButtonColor: `#18181B`,
       cancelButtonColor: "white",
       icon: "warning",
-      customClass: {
-        cancelButton: `cancel_button`
-      },
+      customClass: { 
+        popup: "max-w-[393px] px-8 py-4 !rounded-[20px]",
+        icon: "text-[9.275px] mt-[0!important]",
+        htmlContainer:
+          "px-[0!important] pb-[0!important] [font-size:16px!important]",
+        actions: "-mx-5",
+        confirmButton: "[flex:0_0_auto] w-[calc(50%_-10px)] px-[0!important] !bg-btn !rounded-[20px]",
+        cancelButton: `w-[calc(50%_-10px)] text-black border border-[#000000B2] border-solid px-[0!important] !rounded-[20px]`,
+       },
       confirmButtonText: `Confirm ${data.status == "active" ? "Inactive" : "Active"}`
     }).then(async (result: any) => {
       if (result.value) {
@@ -121,10 +127,20 @@ const PostTableComponent = () => {
       confirmButtonColor: `#18181B`,
       cancelButtonColor: "white",
       confirmButtonText: "Confirm Delete",
-      icon: "warning",
-      customClass: {
-        cancelButton: `cancel_button`
-      },
+      // icon: "warning",
+      imageUrl: '/dlt.svg', 
+                      imageAlt: 'Custom image',
+                      imageWidth: 90,
+                      imageHeight: 90,
+           customClass: { 
+        popup: "max-w-[393px] px-8 py-4 !rounded-[20px]",
+        icon: "text-[9.275px] mt-[0!important]",
+        htmlContainer:
+          "px-[0!important] pb-[0!important] [font-size:16px!important]",
+        actions: "-mx-5",
+        confirmButton: "[flex:0_0_auto] w-[calc(50%_-10px)] px-[0!important] !bg-btn !rounded-[20px]",
+        cancelButton: `w-[calc(50%_-10px)] text-black border border-[#000000B2] border-solid px-[0!important] !rounded-[20px]`,
+       },
     }).then(async (result: any) => {
       if (result.value) {
         await deletePost(data?.id).then((res: any) => {
